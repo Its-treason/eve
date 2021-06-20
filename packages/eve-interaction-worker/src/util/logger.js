@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = class {
   /**
    * @private
@@ -63,4 +65,4 @@ module.exports = class {
   static critical(message, context = {}) {
     this.log(message, context, 500);
   }
-}
+};

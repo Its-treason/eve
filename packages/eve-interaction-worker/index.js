@@ -1,3 +1,5 @@
+'use strict';
+
 const logger = require('./src/util/logger');
 const discordClientConfig = require('./src/config/discordClientConfig');
 

@@ -1,3 +1,5 @@
+'use strict';
+
 const formatSeconds = require('../util/formatSeconds');
 const embedFactory = require('../util/embedFactory');
 const getUserFromMention = require('../util/getUserFromMention');
@@ -32,11 +34,32 @@ module.exports = {
 
 async function sendWhoIs(user, client, message) {
   const answer = embedFactory(client);
-  answer.setAuthor(user.username + (user.bot ? ' [BOT]' : ''), user.avatarURL());
+  answer.setAuthor(user.username, user.avatarURL());
   answer.addField('ID:', user.id);
   answer.addField('Account Created:', user.createdAt.toUTCString());
   answer.addField('Account Age:', formatSeconds(Math.floor((Date.now() - user.createdTimestamp) / 1000)));
+  getAttributes(user, answer, message);
   await message.channel.send(answer);
+}
+
+function getAttributes(user, answer, message) {
+  const attributes = [];
+
+  if (user.bot === true) {
+    attributes.push('- Bot Account');
+  }
+  if (user.system === true) {
+    attributes.push('- Offical Discord System User');
+  }
+  if (user.id === message.guild.ownerID) {
+    attributes.push('- Owner of this Server');
+  }
+
+  if (attributes.length === 0) {
+    return;
+  }
+
+  answer.addField('Attributes:', '```yml\n' + attributes.join('\n') + '```');
 }
 
 async function sendWhoIsError(arg, user, client, message) {

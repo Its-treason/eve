@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = (mention, client) => {
   if (!mention) return null;
 
@@ -12,4 +14,4 @@ module.exports = (mention, client) => {
   }
 
   return null;
-}
+};

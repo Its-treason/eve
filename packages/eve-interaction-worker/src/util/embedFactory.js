@@ -1,3 +1,5 @@
+'use strict';
+
 const discord = require('discord.js');
 
 module.exports = (client) => {
@@ -7,4 +9,4 @@ module.exports = (client) => {
   answer.setFooter(`${client.user.username} - Util`, client.user.avatarURL());
 
   return answer;
-}
+};

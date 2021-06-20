@@ -1,3 +1,5 @@
+'use strict';
+
 const logger = require('../util/logger');
 const discord = require('discord.js');
 const fs = require('fs');

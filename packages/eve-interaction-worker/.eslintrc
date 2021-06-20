@@ -19,7 +19,8 @@
     "space-before-blocks": ["error"],
     "no-multi-spaces": ["error", {"exceptions": {"VariableDeclarator": false, "Property": false}}],
     "block-spacing": "error",
-    "keyword-spacing": ["error", {"after": true, "before": true}]
+    "keyword-spacing": ["error", {"after": true, "before": true}],
+    "strict": ["error", "global"]
   },
   "ignorePatterns": []
 }
