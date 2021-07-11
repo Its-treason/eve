@@ -39,7 +39,7 @@ async function sendWhoIs(user, client, message) {
   answer.addField('Account Created:', user.createdAt.toUTCString());
   answer.addField('Account Age:', formatSeconds(Math.floor((Date.now() - user.createdTimestamp) / 1000)));
   getAttributes(user, answer, message);
-  await message.channel.send(answer);
+  await message.channel.send({embeds: [answer]});
 }
 
 function getAttributes(user, answer, message) {
@@ -60,11 +60,4 @@ function getAttributes(user, answer, message) {
   }
 
   answer.addField('Attributes:', '```yml\n' + attributes.join('\n') + '```');
-}
-
-async function sendWhoIsError(arg, user, client, message) {
-  const answer = embedFactory(client);
-  answer.setTitle('Error');
-  answer.setDescription(`\`${arg}\` could be resolved into an UserId`);
-  message.reply(answer);
 }

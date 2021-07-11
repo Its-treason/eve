@@ -22,5 +22,5 @@
     "keyword-spacing": ["error", {"after": true, "before": true}],
     "strict": ["error", "global"]
   },
-  "ignorePatterns": []
+  "ignorePatterns": ["ecosystem.*.config.js"]
 }

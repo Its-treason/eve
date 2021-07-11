@@ -1,6 +1,6 @@
 module.exports = {
     apps : [{
-        name: 'eve-util',
+        name: 'eve',
         cwd: './',
         script: './index.js',
         env: {

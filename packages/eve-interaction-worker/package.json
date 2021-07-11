@@ -9,7 +9,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^12.5.3"
+    "discord.js": "dev",
+    "mariadb": "^2.5.4"
   },
   "devDependencies": {
     "eslint": "^7.28.0"

@@ -4,7 +4,11 @@ const logger = require('../util/logger');
 const discord = require('discord.js');
 const fs = require('fs');
 
-const client = new discord.Client();
+const intents = new discord.Intents();
+intents.add('GUILDS');
+intents.add('GUILD_MESSAGES');
+
+const client = new discord.Client({intents});
 
 client.commands = new discord.Collection();
 const commandFiles = fs.readdirSync('./src/commands');
@@ -17,7 +21,7 @@ for (const file of commandFiles) {
   command.alias.forEach(commandAlias => client.commands.set(commandAlias, command));
 }
 
-client.on('message', message => {
+client.on('messageCreate', message => {
   if (!message.content.startsWith(`<@!${client.user.id}>`) || message.author.bot) return;
 
   const args = message.content.slice(22).trim().split(/ +/);
