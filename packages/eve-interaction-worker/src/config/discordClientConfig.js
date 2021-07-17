@@ -3,6 +3,7 @@
 const logger = require('../util/logger');
 const discord = require('discord.js');
 const fs = require('fs');
+const commandHandler = require('../commandHandler');
 
 const intents = new discord.Intents();
 intents.add('GUILDS');
@@ -25,13 +26,22 @@ client.on('messageCreate', message => {
   if (!message.content.startsWith(`<@!${client.user.id}>`) || message.author.bot) return;
 
   const args = message.content.slice(22).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
+  let commandString = args.shift().toLowerCase();
 
-  if (!client.commands.has(command)) return;
+  if (!client.commands.has(commandString)) return;
 
-  client.commands.get(command).execute(message, args, client).catch(error => {
+  let command;
+  try {
+    command = client.commands.get(commandString);
+
+    commandHandler(command, message, args, client).then(parsedArgs => {
+      if (parsedArgs !== false) {
+        command.execute(message, parsedArgs, client);
+      }
+    });
+  } catch (error) {
     logger.error('Error while executing command', {command, error});
-  });
+  }
 });
 
 module.exports = client;

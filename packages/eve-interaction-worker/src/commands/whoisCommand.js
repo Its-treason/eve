@@ -2,11 +2,13 @@
 
 const formatSeconds = require('../util/formatSeconds');
 const embedFactory = require('../util/embedFactory');
-const getUserFromMention = require('../util/getUserFromMention');
+const {User} = require('discord.js');
+const {GuildMember} = require('discord.js');
 
 module.exports = {
   name: 'whois',
   alias: [],
+  permissions: [],
   async execute(message, args, client) {
     let user = message.author;
 
@@ -16,18 +18,17 @@ module.exports = {
     }
 
     for (const arg of args) {
-      try {
-        user = getUserFromMention(arg, client);
-
-        if (user === null) {
-          user = await client.users.fetch(arg);
-        }
-      } catch (e) {
-        await sendWhoIsError(arg, user, client, message);
+      if (arg instanceof GuildMember) {
+        await sendWhoIs(arg.user, client, message);
         continue;
       }
 
-      await sendWhoIs(user, client, message);
+      if (arg instanceof User) {
+        await sendWhoIs(arg, client, message);
+        continue;
+      }
+
+      await sendWhoIsError(arg, client, message);
     }
   },
 };
@@ -39,7 +40,7 @@ async function sendWhoIs(user, client, message) {
   answer.addField('Account Created:', user.createdAt.toUTCString());
   answer.addField('Account Age:', formatSeconds(Math.floor((Date.now() - user.createdTimestamp) / 1000)));
   getAttributes(user, answer, message);
-  await message.channel.send({embeds: [answer]});
+  await message.reply({embeds: [answer]});
 }
 
 function getAttributes(user, answer, message) {
@@ -60,4 +61,11 @@ function getAttributes(user, answer, message) {
   }
 
   answer.addField('Attributes:', '```yml\n' + attributes.join('\n') + '```');
+}
+
+function sendWhoIsError(arg, client, message) {
+  const answer = embedFactory(client);
+  answer.setTitle('Error');
+  answer.setDescription(`\`${arg}\` could be resolved into an UserId`);
+  message.reply({embeds: [answer]});
 }

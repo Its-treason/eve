@@ -2,40 +2,28 @@
 
 const embedFactory = require('../util/embedFactory');
 const getUserFromString = require('../util/getUserFromString');
+const {GuildMember} = require('discord.js');
 const {MessageActionRow, MessageButton} = require('discord.js');
 
 module.exports = {
   name: 'kick',
   alias: [],
-  permissions: ['BAN_MEMBERS'],
+  permissions: ['KICK_MEMBERS'],
   async execute(message, args, client) {
-    const authorPerms = message.channel.permissionsFor(message.author);
-    if (!authorPerms || !await authorPerms.has('KICK_MEMBERS')) {
+    /** @var user GuildMember */
+    const user = args[0];
+
+    if (!(user instanceof GuildMember)) {
       const answer = embedFactory(client);
       answer.setTitle('Error');
-      answer.setDescription('You dont have permissions to execute this Command!');
+      answer.setDescription('No or invalid user to kick provided!');
       message.reply({embeds: [answer]});
-      return;
-    }
-
-    if (args[0] === undefined) {
-      const answer = embedFactory(client);
-      answer.setTitle('Error');
-      answer.setDescription('No user to kick provided!');
-      message.reply({embeds: [answer]});
-      return;
-    }
-
-    const user = await getUserFromString(args[0], client);
-
-    if (user === null) {
-      await sendUserNotFoundError(args[0], user, client, message);
       return;
     }
 
     const answer = embedFactory(client);
     answer.setTitle('Kick');
-    answer.setDescription(`Are u sure u want to kick \`${user.username}\`?`);
+    answer.setDescription(`Are u sure u want to kick \`${user.user.username}\`?`);
 
     const row = new MessageActionRow()
       .addComponents(new MessageButton()
@@ -59,7 +47,7 @@ module.exports = {
       }
 
       const reason = args.slice(1).join(' ') || 'No reason given';
-      await message.guild.members.kick(user, `"${reason}" by "${message.author.username}" using EVE`);
+      await message.guild.members.kick(user.user, `"${reason}" by "${message.author.username}" using EVE`);
 
       const row = new MessageActionRow()
         .addComponents(new MessageButton()
@@ -88,10 +76,3 @@ module.exports = {
     });
   },
 };
-
-async function sendUserNotFoundError(arg, user, client, message) {
-  const answer = embedFactory(client);
-  answer.setTitle('Error');
-  answer.setDescription(`"${arg}" could be resolved into an UserId`);
-  message.reply({embeds: [answer]});
-}

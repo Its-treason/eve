@@ -1,7 +1,7 @@
 'use strict';
 
 const embedFactory = require('../util/embedFactory');
-const getUserFromString = require('../util/getUserFromString');
+const {GuildMember, User} = require('discord.js');
 const {MessageActionRow, MessageButton} = require('discord.js');
 
 module.exports = {
@@ -9,28 +9,18 @@ module.exports = {
   alias: [],
   permissions: ['BAN_MEMBERS'],
   async execute(message, args, client) {
-    const authorPerms = message.channel.permissionsFor(message.author);
-    if (!authorPerms || !await authorPerms.has('BAN_MEMBERS')) {
+    let user = args[0];
+
+    if (!(user instanceof GuildMember) && !(user instanceof User)) {
       const answer = embedFactory(client);
       answer.setTitle('Error');
-      answer.setDescription('You dont have permissions to execute this Command!');
+      answer.setDescription('No user to Ban provided!');
       message.reply({embeds: [answer]});
       return;
     }
 
-    if (args[0] === undefined) {
-      const answer = embedFactory(client);
-      answer.setTitle('Error');
-      answer.setDescription('No user to pardon provided!');
-      message.reply({embeds: [answer]});
-      return;
-    }
-
-    const user = await getUserFromString(args[0], client);
-
-    if (user === null) {
-      await sendUserNotFoundError(args[0], user, client, message);
-      return;
+    if (user instanceof GuildMember) {
+      user = user.user;
     }
 
     let banInfo;
