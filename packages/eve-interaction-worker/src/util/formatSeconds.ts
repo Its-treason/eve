@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = seconds => {
+export default (seconds: number): string => {
   seconds = Number(seconds);
   const y = Math.floor(seconds / (3600*24*365));
   const d = Math.floor(seconds / (3600*24) % 365);

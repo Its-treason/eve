@@ -1,8 +1,7 @@
-'use strict';
+import discord, {MessageEmbed} from 'discord.js';
+import client from '../structures/client';
 
-const discord = require('discord.js');
-
-module.exports = client => {
+export default (): MessageEmbed => {
   const answer = new discord.MessageEmbed();
   answer.setColor('#b4dbe0');
   answer.setTimestamp(new Date());

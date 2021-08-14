@@ -1,16 +1,16 @@
-'use strict';
+import formatSeconds from '../util/formatSeconds';
+import embedFactory from '../util/embedFactory';
+import {Message, User} from 'discord.js';
+import {GuildMember} from 'discord.js';
+import {EveClient, EveCommand, ParsedArg} from '../types';
 
-const formatSeconds = require('../util/formatSeconds');
-const embedFactory = require('../util/embedFactory');
-const {User} = require('discord.js');
-const {GuildMember} = require('discord.js');
-
-module.exports = {
+const whoisCommand: EveCommand = {
   name: 'whois',
   alias: [],
   permissions: [],
-  async execute(message, args, client) {
-    let user = message.author;
+  allowDms: true,
+  async execute(message: Message, args: ParsedArg[], client: EveClient) {
+    const user = message.author;
 
     if (args[0] === undefined) {
       await sendWhoIs(user, client, message);
@@ -28,13 +28,13 @@ module.exports = {
         continue;
       }
 
-      await sendWhoIsError(arg, client, message);
+      await sendWhoIsError(arg, message);
     }
   },
 };
 
 async function sendWhoIs(user, client, message) {
-  const answer = embedFactory(client);
+  const answer = embedFactory();
   answer.setAuthor(user.username, user.avatarURL());
   answer.addField('ID:', user.id);
   answer.addField('Account Created:', user.createdAt.toUTCString());
@@ -63,8 +63,10 @@ function getAttributes(user, answer, message) {
   answer.addField('Attributes:', '```yml\n' + attributes.join('\n') + '```');
 }
 
-function sendWhoIsError(arg, client, message) {
-  const answer = embedFactory(client);
+export default whoisCommand;
+
+function sendWhoIsError(arg: ParsedArg, message: Message) {
+  const answer = embedFactory();
   answer.setTitle('Error');
   answer.setDescription(`\`${arg}\` could be resolved into an UserId`);
   message.reply({embeds: [answer]});

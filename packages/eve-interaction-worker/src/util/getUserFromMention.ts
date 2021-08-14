@@ -1,8 +1,7 @@
-'use strict';
+import {User} from 'discord.js';
+import client from '../structures/client';
 
-module.exports = (mention, client) => {
-  if (!mention) return null;
-
+export default (mention: string): (null|User) => {
   if (mention.startsWith('<@') && mention.endsWith('>')) {
     mention = mention.slice(2, -1);
 
@@ -10,7 +9,7 @@ module.exports = (mention, client) => {
       mention = mention.slice(1);
     }
 
-    return client.users.cache.get(mention) || null;
+    return client.users.cache.get(`${BigInt(mention)}`) || null;
   }
 
   return null;

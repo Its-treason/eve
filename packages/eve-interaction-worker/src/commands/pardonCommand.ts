@@ -1,44 +1,43 @@
-'use strict';
+import embedFactory from '../util/embedFactory';
+import {GuildMember, User} from 'discord.js';
+import {MessageActionRow, MessageButton} from 'discord.js';
+import {EveCommand} from '../types';
 
-const embedFactory = require('../util/embedFactory');
-const {GuildMember, User} = require('discord.js');
-const {MessageActionRow, MessageButton} = require('discord.js');
-
-module.exports = {
+const pardonCommand: EveCommand = {
   name: 'pardon',
   alias: [],
   permissions: ['BAN_MEMBERS'],
+  allowDms: false,
   async execute(message, args, client) {
-    let user = args[0];
-
-    if (!(user instanceof GuildMember) && !(user instanceof User)) {
-      const answer = embedFactory(client);
+    if (!(args[0] instanceof GuildMember) && !(args[0] instanceof User)) {
+      const answer = embedFactory();
       answer.setTitle('Error');
-      answer.setDescription('No user to Ban provided!');
+      answer.setDescription('No user or invalid to Ban provided!');
       message.reply({embeds: [answer]});
       return;
     }
 
-    if (user instanceof GuildMember) {
-      user = user.user;
+    if (args[0] instanceof GuildMember) {
+      args[0] = args[0].user;
     }
+    const user = args[0];
 
     let banInfo;
     try {
-      // This will throw error when user is not Banned
       banInfo = await message.guild.bans.fetch({user, force: true});
     } catch (e) {
       if (e.message !== 'Unknown Ban') {
         throw e;
       }
 
-      const answer = embedFactory(client);
+      const answer = embedFactory();
       answer.setTitle('Error');
       answer.setDescription(`"${user.username}" is currently not Banned on this Guild!`);
       message.reply({embeds: [answer]});
+      return;
     }
 
-    const answer = embedFactory(client);
+    const answer = embedFactory();
     answer.setTitle('Ban');
     answer.setDescription(`Are u sure u want to revoke the Ban of \`${user.username}\`?`);
     answer.addField('Ban reason', banInfo.reason);
@@ -94,9 +93,4 @@ module.exports = {
   },
 };
 
-async function sendUserNotFoundError(arg, user, client, message) {
-  const answer = embedFactory(client);
-  answer.setTitle('Error');
-  answer.setDescription(`"${arg}" could be resolved into an UserId`);
-  message.reply({embeds: [answer]});
-}
+export default pardonCommand;

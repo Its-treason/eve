@@ -1,27 +1,25 @@
-'use strict';
+import embedFactory from '../util/embedFactory';
+import {ButtonInteraction, GuildMember} from 'discord.js';
+import {MessageActionRow, MessageButton} from 'discord.js';
+import {EveCommand} from '../types';
 
-const embedFactory = require('../util/embedFactory');
-const getUserFromString = require('../util/getUserFromString');
-const {GuildMember} = require('discord.js');
-const {MessageActionRow, MessageButton} = require('discord.js');
-
-module.exports = {
+const kickCommand: EveCommand = {
   name: 'kick',
   alias: [],
   permissions: ['KICK_MEMBERS'],
+  allowDms: false,
   async execute(message, args, client) {
-    /** @var user GuildMember */
     const user = args[0];
 
     if (!(user instanceof GuildMember)) {
-      const answer = embedFactory(client);
+      const answer = embedFactory();
       answer.setTitle('Error');
       answer.setDescription('No or invalid user to kick provided!');
       message.reply({embeds: [answer]});
       return;
     }
 
-    const answer = embedFactory(client);
+    const answer = embedFactory();
     answer.setTitle('Kick');
     answer.setDescription(`Are u sure u want to kick \`${user.user.username}\`?`);
 
@@ -34,7 +32,7 @@ module.exports = {
 
     const kickMessage = await message.reply({embeds: [answer], components: [row]});
 
-    const filter = i => i.customId === `kick-${user.id}`;
+    const filter = (i: ButtonInteraction): boolean => i.customId === `kick-${user.id}`;
 
     const collector = message.channel.createMessageComponentCollector({filter, time: 60000});
 
@@ -76,3 +74,5 @@ module.exports = {
     });
   },
 };
+
+export default kickCommand;

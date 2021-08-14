@@ -1,31 +1,29 @@
-'use strict';
+import embedFactory from '../util/embedFactory';
+import {User} from 'discord.js';
+import {GuildMember} from 'discord.js';
+import {MessageActionRow, MessageButton} from 'discord.js';
+import {EveCommand} from '../types';
 
-const embedFactory = require('../util/embedFactory');
-const getUserFromString = require('../util/getUserFromString');
-const {User} = require('discord.js');
-const {GuildMember} = require('discord.js');
-const {MessageActionRow, MessageButton} = require('discord.js');
-
-module.exports = {
+const banCommand: EveCommand = {
   name: 'ban',
   alias: [],
   permissions: ['BAN_MEMBERS'],
+  allowDms: false,
   async execute(message, args, client) {
-    let user = args[0];
-
-    if (!(user instanceof GuildMember) && !(user instanceof User)) {
-      const answer = embedFactory(client);
+    if (!(args[0] instanceof GuildMember) && !(args[0] instanceof User)) {
+      const answer = embedFactory();
       answer.setTitle('Error');
-      answer.setDescription('No user to Ban provided!');
+      answer.setDescription('No or invalid user to Ban provided!');
       message.reply({embeds: [answer]});
       return;
     }
 
-    if (user instanceof GuildMember) {
-      user = user.user;
+    if (args[0] instanceof GuildMember) {
+      args[0] = args[0].user;
     }
+    const user: User = args[0];
 
-    const answer = embedFactory(client);
+    const answer = embedFactory();
     answer.setTitle('Ban');
     answer.setDescription(`Are u sure u want to Ban \`${user.username}\`?`);
 
@@ -40,7 +38,7 @@ module.exports = {
 
     const filter = i => i.customId === `ban-${user.id}`;
 
-    const collector = message.channel.createMessageComponentCollector({filter, time: 60000});
+    const collector = banMessage.channel.createMessageComponentCollector({filter, message, time: 60000});
 
     collector.on('collect', async interaction => {
       if (interaction.user.id !== message.author.id) {
@@ -80,3 +78,5 @@ module.exports = {
     });
   },
 };
+
+export default banCommand;
