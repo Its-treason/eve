@@ -3,8 +3,6 @@ import discord from 'discord.js';
 import {readdirSync} from 'fs';
 import {EveClient, EveEvent} from '../types';
 
-console.log('evalutate client');
-
 const intents = new discord.Intents();
 intents.add('GUILDS');
 intents.add('GUILD_MESSAGES');

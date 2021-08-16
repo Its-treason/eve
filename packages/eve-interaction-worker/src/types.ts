@@ -1,7 +1,12 @@
-import {Channel, Client, Collection, GuildMember, Message, PermissionString, Role, User} from 'discord.js';
+import {Channel, Client, Collection, GuildMember, Interaction, Message, PermissionString, Role, User} from 'discord.js';
 
 export interface EveClient extends Client {
   commands?: Collection<string, EveCommand>;
+}
+
+export interface EveInteraction {
+  name: string,
+  execute: (args: string[], interaction: Interaction) => Promise<void>
 }
 
 export interface EveEvent {

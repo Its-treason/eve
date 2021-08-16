@@ -37,7 +37,7 @@ const messageCreate: EveEvent = {
           }
         });
     } catch (error) {
-      logger.error('Error while executing command', {command, error});
+      logger.error('Error while executing command', {commandName: command.name, error});
     }
   },
 };
