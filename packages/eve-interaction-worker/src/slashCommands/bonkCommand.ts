@@ -3,11 +3,7 @@ import {tmpdir} from 'os';
 import {unlinkSync} from 'fs';
 import {MessageAttachment, User} from 'discord.js';
 import generateRandomString from '../util/generateRandomString';
-import webshot from 'node-webshot';
-import validateInput from '../Validation/validateInput';
-import notEquals from '../Validation/Validators/notEquals';
-import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
-import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
+import puppeteer from 'puppeteer';
 
 const command: EveSlashCommand = {
   data: {
@@ -55,39 +51,35 @@ const command: EveSlashCommand = {
     }
 
     const bonkHtml = `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-          </head>
-          <body>
-            <p>
-              <img style="position: fixed; top: 0;left: 0;" src="https://i.imgflip.com/4aylx8.jpg" />
-              
-              <span style="position: fixed; top: 0;left: 0;width: 720px;text-align: center;font-size: 45px; font-family: Impact,Arial,Ubuntu,sans-serif;">
-                  ${title}
-              </span>
-              ${bonkerHtml}
-              <img
-                style="position: fixed; width: 150px; top: 250px; left: 460px; border-radius: 50%;"
-                src="https://cdn.discordapp.com/avatars/${bonkee.id}/${bonkee.avatar}.png?size=128"
-              />
-            </p>
-          </body>
-        </html>
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        </head>
+        <body>
+          <p>
+            <img style="position: fixed; top: 0;left: 0;" src="https://i.imgflip.com/4aylx8.jpg" />
+            
+            <span style="position: fixed; top: 0;left: 0;width: 720px;text-align: center;font-size: 45px; font-family: Impact,Arial,Ubuntu,sans-serif;">
+                ${title}
+            </span>
+            ${bonkerHtml}
+            <img
+              style="position: fixed; width: 150px; top: 250px; left: 460px; border-radius: 50%;"
+              src="https://cdn.discordapp.com/avatars/${bonkee.id}/${bonkee.avatar}.png?size=128"
+            />
+          </p>
+        </body>
+      </html>
     `;
 
-    const generateImage = new Promise<void>((resolve, reject) => {
-      webshot(bonkHtml, imageFilename, {siteType: 'html', shotSize: {width: 720, height: 492} }, (err) => {
-        if (err) {
-          reject(err);
-        }
-        resolve();
-      });
-    });
-
     try {
-      await generateImage;
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.setViewport({width: 720, height: 492});
+      await page.setContent(bonkHtml);
+      await page.screenshot({path: imageFilename});
+      await browser.close();
 
       const attachment = new MessageAttachment(imageFilename);
       await interaction.editReply({files: [attachment]});
