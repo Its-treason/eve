@@ -38,8 +38,16 @@ const rest = new REST({version: '9'}).setToken(process.env.DISCORD_TOKEN);
   }
 
   try {
+    if (process.env.NODE_ENV === 'development') {
+      await rest.put(
+        Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
+        {body: slashCommands},
+      );
+      return;
+    }
+
     await rest.put(
-      Routes.applicationGuildCommands('605426789396774912', '558316518602178561'),
+      Routes.applicationCommands(process.env.CLIENT_ID),
       {body: slashCommands},
     );
   } catch (error) {

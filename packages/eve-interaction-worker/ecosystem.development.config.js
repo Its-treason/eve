@@ -15,6 +15,8 @@ module.exports = {
             DB_USER: 'someone-forgot-to-change-this-value',
             DB_PASSWORD: 'someone-forgot-to-change-this-value',
             DB_DATABASE: 'someone-forgot-to-change-this-value',
+            CLIENT_ID: 'someone-forgot-to-change-this-value',
+            GUILD_ID: 'someone-forgot-to-change-this-value',
         },
     }],
 };
