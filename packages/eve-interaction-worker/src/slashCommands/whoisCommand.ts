@@ -15,8 +15,6 @@ const whoisCommand: EveSlashCommand = {
       },
     ],
   },
-  permissions: [],
-  allowDms: true,
   async execute(interaction: CommandInteraction) {
     const user = interaction.user;
 

@@ -4,6 +4,11 @@ import {MessageActionRow, MessageButton} from 'discord.js';
 import {EveSlashCommand} from '../types';
 import {EventStore} from '../eventStore/EventStore';
 import {Aggregate} from '../eventStore/Aggregate';
+import validateInput from '../Validation/validateInput';
+import notEquals from '../Validation/Validators/notEquals';
+import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
+import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
+import hasPermissions from '../Validation/Validators/hasPermissions';
 
 const pardonCommand: EveSlashCommand = {
   data: {
@@ -18,10 +23,18 @@ const pardonCommand: EveSlashCommand = {
       },
     ],
   },
-  permissions: ['BAN_MEMBERS'],
-  allowDms: false,
   async execute(interaction: CommandInteraction) {
     const user = interaction.options.get('user').user;
+
+    const inputValidationResult = await validateInput(
+      interaction.guild,
+      interaction,
+      isNotDmChannel('This command cannot be used in a DMs!'),
+      hasPermissions(interaction.user, 'BAN_MEMBERS', 'You dont have the permission to ban/unban member!'),
+    );
+    if (inputValidationResult === false) {
+      return;
+    }
 
     let banInfo;
     try {

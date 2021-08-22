@@ -3,6 +3,11 @@ import {EveSlashCommand} from '../types';
 import embedFactory from '../util/embedFactory';
 import {Aggregate} from '../eventStore/Aggregate';
 import {EventStore} from '../eventStore/EventStore';
+import validateInput from '../Validation/validateInput';
+import notEquals from '../Validation/Validators/notEquals';
+import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
+import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
+import hasPermissions from '../Validation/Validators/hasPermissions';
 
 const banCommand: EveSlashCommand = {
   data: {
@@ -22,11 +27,21 @@ const banCommand: EveSlashCommand = {
       },
     ],
   },
-  permissions: ['BAN_MEMBERS'],
-  allowDms: false,
   async execute(interaction: CommandInteraction) {
     const user = interaction.options.get('user').user;
     const reason = interaction.options.get('reason')?.value as string || 'No reason given';
+
+    const inputValidationResult = await validateInput(
+      interaction.guild,
+      interaction,
+      notEquals(interaction.user.id, user.id, 'You cannot ban yourself!'),
+      isNotGuildOwner(user.id, 'The owner of this server cannot be banned!'),
+      isNotDmChannel('This command cannot be used in a DMs!'),
+      hasPermissions(interaction.user, 'BAN_MEMBERS', 'You dont have the permission to ban member!'),
+    );
+    if (inputValidationResult === false) {
+      return;
+    }
 
     let banInfo;
     try {

@@ -4,6 +4,11 @@ import {MessageActionRow, MessageButton} from 'discord.js';
 import {EveSlashCommand} from '../types';
 import {EventStore} from '../eventStore/EventStore';
 import {Aggregate} from '../eventStore/Aggregate';
+import validateInput from '../Validation/validateInput';
+import notEquals from '../Validation/Validators/notEquals';
+import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
+import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
+import hasPermissions from '../Validation/Validators/hasPermissions';
 
 const kickCommand: EveSlashCommand = {
   data: {
@@ -23,11 +28,21 @@ const kickCommand: EveSlashCommand = {
       },
     ],
   },
-  permissions: ['KICK_MEMBERS'],
-  allowDms: false,
   async execute(interaction: CommandInteraction) {
     const user = interaction.options.get('user').user;
     const reason = interaction.options.get('reason')?.value as string || 'No reason given';
+
+    const inputValidationResult = await validateInput(
+      interaction.guild,
+      interaction,
+      notEquals(interaction.user.id, user.id, 'You cannot kick yourself!'),
+      isNotGuildOwner(user.id, 'The owner of this server cannot be kicked!'),
+      isNotDmChannel('This command cannot be used in a DMs!'),
+      hasPermissions(interaction.user, 'KICK_MEMBERS', 'You dont have the permission to kick member!'),
+    );
+    if (inputValidationResult === false) {
+      return;
+    }
 
     const answer = embedFactory();
     answer.setTitle('Kick');

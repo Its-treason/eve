@@ -4,6 +4,10 @@ import {unlinkSync} from 'fs';
 import {MessageAttachment, User} from 'discord.js';
 import generateRandomString from '../util/generateRandomString';
 import webshot from 'node-webshot';
+import validateInput from '../Validation/validateInput';
+import notEquals from '../Validation/Validators/notEquals';
+import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
+import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
 
 const command: EveSlashCommand = {
   data: {
@@ -30,8 +34,6 @@ const command: EveSlashCommand = {
       },
     ],
   },
-  permissions: [],
-  allowDms: true,
   execute: async (interaction) => {
     const bonkee = interaction.options.get('bonkee').user;
     const bonker = interaction.options.get('bonker')?.user;

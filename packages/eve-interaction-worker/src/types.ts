@@ -1,4 +1,4 @@
-import {Channel, Client, Collection, CommandInteraction, GuildMember, Interaction, Message, PermissionString, Role, User} from 'discord.js';
+import {Channel, Client, Collection, CommandInteraction, Guild, GuildMember, Interaction, Message, PermissionString, Role, User} from 'discord.js';
 import {APIApplicationCommandOption} from 'discord-api-types/v9';
 
 export interface EveClient extends Client {
@@ -18,15 +18,11 @@ export interface EveEvent {
 export interface EveCommand {
   name: string;
   alias: string[];
-  permissions: PermissionString[];
-  allowDms: boolean;
   execute: (message: Message, args: ParsedArg[]) => Promise<void>;
 }
 
 export interface EveSlashCommand {
   data: {name: string, description: string, options: APIApplicationCommandOption[]},
-  permissions: PermissionString[];
-  allowDms: boolean;
   execute: (interaction: CommandInteraction) => Promise<void>;
 }
 
@@ -40,5 +36,8 @@ export type EventTopic = 'ban-interaction.create'
   | 'pardon-interaction.executed'
   | 'pardon-interaction.timedOut'
 
+export type Validator = (guild: Guild) => Promise<{valid: boolean, msg?: string}>
+
+export type ValidatorWrapper = (...args: unknown[]) => Validator;
 
 export type ParsedArg = (string|User|GuildMember|Channel|Role);
