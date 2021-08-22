@@ -38,8 +38,6 @@ const command: EveSlashCommand = {
     // Generating the image takes a few seconds, so we need to defer the reply
     await interaction.deferReply();
 
-    const imageFilename = `${tmpdir()}/bonk_${generateRandomString()}.png`;
-
     let bonkerHtml = '';
     if (bonker instanceof User) {
       bonkerHtml = `
@@ -78,16 +76,19 @@ const command: EveSlashCommand = {
       const page = await browser.newPage();
       await page.setViewport({width: 720, height: 492});
       await page.setContent(bonkHtml);
-      await page.screenshot({path: imageFilename});
+      const attachment = await page.screenshot();
       await browser.close();
 
-      const attachment = new MessageAttachment(imageFilename);
+      if (!(attachment instanceof Buffer)) {
+        throw new Error('Invalid Buffer');
+      }
+
       await interaction.editReply({files: [attachment]});
     } catch (error) {
       await interaction.editReply(`${interaction.user} there was an error while creating the image`);
-    }
 
-    unlinkSync(imageFilename);
+      throw error;
+    }
   },
 };
 

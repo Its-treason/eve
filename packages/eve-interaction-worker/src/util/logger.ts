@@ -10,7 +10,7 @@ export default class {
     return {
       message: error.message,
       name: error.name,
-      location: error.stack?.split('\n')[4].trim() || 'Unknown',
+      location: error.stack?.split('\n')[2].trim() || 'Unknown',
     };
   }
 
