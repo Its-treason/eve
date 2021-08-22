@@ -13,7 +13,8 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "discord-api-types": "^0.22.0",
     "discord.js": "dev",
-    "mariadb": "^2.5.4"
+    "mariadb": "^2.5.4",
+    "node-webshot": "^1.0.4"
   },
   "devDependencies": {
     "@types/node": "^16.6.1",

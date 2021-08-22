@@ -6,10 +6,11 @@ export default class {
     return (new Error()).stack?.split('\n')[4].trim() || null;
   }
 
-  private static formatError(error: Error): {message: string, name: string} {
+  private static formatError(error: Error): {message: string, name: string, location: string} {
     return {
       message: error.message,
       name: error.name,
+      location: error.stack?.split('\n')[4].trim() || 'Unknown',
     };
   }
 
