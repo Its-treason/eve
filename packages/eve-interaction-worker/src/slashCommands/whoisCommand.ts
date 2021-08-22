@@ -16,14 +16,14 @@ const whoisCommand: EveSlashCommand = {
     ],
   },
   async execute(interaction: CommandInteraction) {
-    const user = interaction.user;
+    const targetUser = interaction.options.getUser('user', false);
 
-    if (interaction.options.has('user') === false) {
-      await sendWhoIs(user, interaction);
+    if (!(targetUser instanceof User)) {
+      await sendWhoIs(interaction.user, interaction);
       return;
     }
 
-    await sendWhoIs(interaction.options.get('user').user, interaction);
+    await sendWhoIs(targetUser, interaction);
   },
 };
 

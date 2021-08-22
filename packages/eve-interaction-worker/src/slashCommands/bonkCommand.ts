@@ -36,7 +36,7 @@ const command: EveSlashCommand = {
     const title = interaction.options.get('title')?.value || '';
 
     // Generating the image takes a few seconds, so we need to defer the reply
-    await interaction.defer();
+    await interaction.deferReply();
 
     const imageFilename = `${tmpdir()}/bonk_${generateRandomString()}.png`;
 
