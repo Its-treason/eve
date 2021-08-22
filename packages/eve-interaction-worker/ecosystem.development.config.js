@@ -11,6 +11,10 @@ module.exports = {
         env: {
             NODE_ENV: 'testing',
             DISCORD_TOKEN: 'someone-forgot-to-change-this-value',
+            DB_HOST: 'someone-forgot-to-change-this-value',
+            DB_USER: 'someone-forgot-to-change-this-value',
+            DB_PASSWORD: 'someone-forgot-to-change-this-value',
+            DB_DATABASE: 'someone-forgot-to-change-this-value',
         },
     }],
 };

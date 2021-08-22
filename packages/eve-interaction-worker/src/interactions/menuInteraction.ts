@@ -2,7 +2,7 @@ import {EveInteraction} from '../types';
 import {ButtonInteraction, Interaction} from 'discord.js';
 import embedFactory from '../util/embedFactory';
 
-const menu: EveInteraction = {
+const interaction: EveInteraction = {
   name: 'menu',
   execute: async (args, interaction: Interaction) => {
     if (!(interaction instanceof ButtonInteraction)) {
@@ -39,4 +39,4 @@ const menu: EveInteraction = {
   },
 };
 
-export default menu;
+export default interaction;
