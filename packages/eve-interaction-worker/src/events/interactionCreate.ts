@@ -12,6 +12,7 @@ import kickCommand from '../slashCommands/kickCommand';
 import pardonCommand from '../slashCommands/pardonCommand';
 import whoisCommand from '../slashCommands/whoisCommand';
 import bonkCommand from '../slashCommands/bonkCommand';
+import avatarCommand from '../slashCommands/avatarCommand';
 
 const interactions = new Collection<string, EveInteraction>();
 interactions.set(banInteraction.name, banInteraction);
@@ -25,6 +26,7 @@ slashCommands.set(kickCommand.data.name, kickCommand);
 slashCommands.set(pardonCommand.data.name, pardonCommand);
 slashCommands.set(whoisCommand.data.name, whoisCommand);
 slashCommands.set(bonkCommand.data.name, bonkCommand);
+slashCommands.set(avatarCommand.data.name, avatarCommand);
 
 const interactionCreate: EveEvent = {
   name: 'interactionCreate',
