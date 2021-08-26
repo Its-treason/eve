@@ -4,6 +4,7 @@ import {unlinkSync} from 'fs';
 import {MessageAttachment, User} from 'discord.js';
 import generateRandomString from '../util/generateRandomString';
 import puppeteer from 'puppeteer';
+import BrowserFactory from '../Factory/browserFactory';
 
 const command: EveSlashCommand = {
   data: {
@@ -72,7 +73,7 @@ const command: EveSlashCommand = {
     `;
 
     try {
-      const browser = await puppeteer.launch();
+      const browser = await BrowserFactory();
       const page = await browser.newPage();
       await page.setViewport({width: 720, height: 492});
       await page.setContent(bonkHtml);

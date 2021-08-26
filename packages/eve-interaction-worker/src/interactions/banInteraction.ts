@@ -1,6 +1,6 @@
 import {EveInteraction} from '../types';
 import {ButtonInteraction, MessageActionRow, MessageButton} from 'discord.js';
-import embedFactory from '../util/embedFactory';
+import embedFactory from '../Factory/messageEmbedFactory';
 import {EventStore} from '../eventStore/EventStore';
 import {Id} from '../Value/Id';
 

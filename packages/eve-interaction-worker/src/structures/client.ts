@@ -1,9 +1,18 @@
 import logger from '../util/logger';
 import discord from 'discord.js';
-import {readdirSync} from 'fs';
-import {EveClient, EveEvent, EveSlashCommand} from '../types';
+import {EveClient} from '../types';
 import {REST} from '@discordjs/rest';
 import {Routes} from 'discord-api-types/v9';
+// Import all EventFiles
+import interactionCreate from '../events/interactionCreate';
+// Import all SlashCommands
+import banCommand from '../slashCommands/banCommand';
+import kickCommand from '../slashCommands/kickCommand';
+import pardonCommand from '../slashCommands/pardonCommand';
+import whoisCommand from '../slashCommands/whoisCommand';
+import bonkCommand from '../slashCommands/bonkCommand';
+import avatarCommand from '../slashCommands/avatarCommand';
+import inviteCommand from '../slashCommands/inviteCommand';
 
 const intents = new discord.Intents();
 intents.add('GUILDS');
@@ -11,31 +20,19 @@ intents.add('GUILD_MESSAGES');
 
 const client: EveClient = new discord.Client({intents});
 
-const eventFiles = readdirSync('./src/events');
+client.on(interactionCreate.name, interactionCreate.execute);
 
-eventFiles.forEach((eventFile) => {
-  import(`../events/${eventFile}`).then((importedEvent: {default: EveEvent}) => {
-    const event = importedEvent.default;
-
-    client.on(event.name, event.execute);
-  });
-});
-
+// Register Slash Commands
 const rest = new REST({version: '9'}).setToken(process.env.DISCORD_TOKEN);
-
 (async () => {
-  const slashCommandFiles = readdirSync('./src/slashCommands');
   const slashCommands = [];
-
-  for (let i = 0; i < slashCommandFiles.length; i++) {
-    const slashCommandFile = slashCommandFiles[i];
-
-    const importedSlashCommand: {default: EveSlashCommand} = await import(`../slashCommands/${slashCommandFile}`);
-
-    const slashCommand = importedSlashCommand.default;
-
-    slashCommands.push(slashCommand.data);
-  }
+  slashCommands.push(banCommand.data);
+  slashCommands.push(kickCommand.data);
+  slashCommands.push(pardonCommand.data);
+  slashCommands.push(whoisCommand.data);
+  slashCommands.push(bonkCommand.data);
+  slashCommands.push(avatarCommand.data);
+  slashCommands.push(inviteCommand.data);
 
   try {
     if (process.env.NODE_ENV === 'development') {

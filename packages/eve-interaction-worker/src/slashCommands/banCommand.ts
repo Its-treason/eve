@@ -1,6 +1,6 @@
 import {CommandInteraction, MessageActionRow, MessageButton} from 'discord.js';
 import {EveSlashCommand} from '../types';
-import embedFactory from '../util/embedFactory';
+import embedFactory from '../Factory/messageEmbedFactory';
 import {Aggregate} from '../eventStore/Aggregate';
 import {EventStore} from '../eventStore/EventStore';
 import validateInput from '../Validation/validateInput';

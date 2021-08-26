@@ -1,32 +1,30 @@
 {
-    "compilerOptions": {
-      "target": "ES2020",
-      "lib": [
-        "dom",
-        "dom.iterable",
-        "esnext"
-      ],
-      "allowJs": true,
-      "skipLibCheck": true,
-      "strict": false,
-      "forceConsistentCasingInFileNames": true,
-      "noEmit": true,
-      "esModuleInterop": true,
-      "module": "CommonJS",
-      "moduleResolution": "Node",
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "jsx": "preserve"
-    },
-    "include": [
-      "**/*.ts",
-      "index.ts"
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "exclude": [
-      "node_modules",
-      ".idea",
-      "build",
-      "dist"
-    ],
-  }
-  
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "**/*.ts",
+    "index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".idea",
+    "build",
+    "dist"
+  ],
+}

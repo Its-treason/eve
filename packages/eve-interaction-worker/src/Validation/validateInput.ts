@@ -1,6 +1,6 @@
 import {Validator} from '../types';
 import {CommandInteraction, Guild, Message} from 'discord.js';
-import embedFactory from '../util/embedFactory';
+import embedFactory from '../Factory/messageEmbedFactory';
 
 export default async function validateInput(
   guild: Guild,

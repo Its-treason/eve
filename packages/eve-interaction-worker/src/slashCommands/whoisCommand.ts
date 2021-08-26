@@ -1,5 +1,5 @@
 import formatSeconds from '../util/formatSeconds';
-import embedFactory from '../util/embedFactory';
+import embedFactory from '../Factory/messageEmbedFactory';
 import {CommandInteraction, MessageEmbed, User} from 'discord.js';
 import {EveSlashCommand} from '../types';
 

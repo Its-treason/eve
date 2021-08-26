@@ -1,8 +1,6 @@
 import {CommandInteraction} from 'discord.js';
 import {EveSlashCommand} from '../types';
-import embedFactory from '../util/embedFactory';
-
-const allowedSizes = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096];
+import embedFactory from '../Factory/messageEmbedFactory';
 
 const avatarCommand: EveSlashCommand = {
   data: {
@@ -59,7 +57,7 @@ const avatarCommand: EveSlashCommand = {
 
     const answer = embedFactory();
     answer.setTitle(`Avatar of ${user.username}`);
-    answer.addField('Link', `\`\`\`\n${link}\n\`\`\``);
+    answer.addField('Link', link);
     answer.setImage(link);
     await interaction.reply({embeds: [answer]});
   },

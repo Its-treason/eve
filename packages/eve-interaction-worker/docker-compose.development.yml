@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+      target: development
+    command:
+      - "node"
+      - "./node_modules/ts-node/dist/bin.js"
+      - "index.ts"
+    environment:
+      NODE_ENV: "development"
+    env_file:
+      - ".env"
+    volumes:
+      - ./:/app:rw

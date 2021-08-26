@@ -1,6 +1,6 @@
 import {EveInteraction} from '../types';
 import {ButtonInteraction, Interaction} from 'discord.js';
-import embedFactory from '../util/embedFactory';
+import embedFactory from '../Factory/messageEmbedFactory';
 
 const interaction: EveInteraction = {
   name: 'menu',

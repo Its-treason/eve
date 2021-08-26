@@ -1,4 +1,4 @@
-import embedFactory from '../util/embedFactory';
+import embedFactory from '../Factory/messageEmbedFactory';
 import {CommandInteraction} from 'discord.js';
 import {MessageActionRow, MessageButton} from 'discord.js';
 import {EveSlashCommand} from '../types';

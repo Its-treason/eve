@@ -31,7 +31,7 @@
     "block-spacing": "error",
     "keyword-spacing": ["error", {"after": true, "before": true}]
   },
-  "ignorePatterns": ["ecosystem.*.config.js"],
+  "ignorePatterns": ["webpack.config.js"],
   "plugins": [
     "@typescript-eslint"
   ],
