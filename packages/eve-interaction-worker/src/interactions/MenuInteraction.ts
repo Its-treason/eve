@@ -1,14 +1,18 @@
 import {EveInteraction} from '../types';
 import {ButtonInteraction, Interaction} from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
+import AbstractInteraction from './AbstractInteraction';
 
-const interaction: EveInteraction = {
-  name: 'menu',
-  execute: async (args, interaction: Interaction) => {
-    if (!(interaction instanceof ButtonInteraction)) {
-      return;
-    }
+export default class MenuInteraction extends AbstractInteraction {
+  name;
 
+  constructor() {
+    super();
+
+    this.name = 'menu';
+  }
+
+ async execute(args: string[], interaction: ButtonInteraction): Promise<void> {
     const answer = embedFactory();
     const guild = interaction.guild;
 
@@ -36,7 +40,5 @@ const interaction: EveInteraction = {
       embeds: [answer],
       ephemeral: true,
     });
-  },
-};
-
-export default interaction;
+  }
+}

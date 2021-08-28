@@ -1,7 +1,7 @@
 type LogLevel = (100|200|250|300|400|500);
 type Context = {[key: string]: (string|number|Error)};
 
-export default class {
+export default class Logger {
   private static getLocation(): (string|null) {
     return (new Error()).stack?.split('\n')[4].trim() || null;
   }

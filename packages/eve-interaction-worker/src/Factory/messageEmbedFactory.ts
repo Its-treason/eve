@@ -1,5 +1,5 @@
 import discord, {MessageEmbed} from 'discord.js';
-import client from '../structures/client';
+import client from '../structures/Client';
 
 export default (): MessageEmbed => {
   const answer = new discord.MessageEmbed();

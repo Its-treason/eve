@@ -1,43 +1,41 @@
-import {CommandInteraction, MessageActionRow, MessageButton} from 'discord.js';
-import {EveSlashCommand} from '../types';
 import embedFactory from '../Factory/messageEmbedFactory';
-import {Aggregate} from '../eventStore/Aggregate';
+import {CommandInteraction} from 'discord.js';
+import {MessageActionRow, MessageButton} from 'discord.js';
 import {EventStore} from '../eventStore/EventStore';
+import {Aggregate} from '../eventStore/Aggregate';
 import validateInput from '../Validation/validateInput';
-import notEquals from '../Validation/Validators/notEquals';
-import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
 import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
 import hasPermissions from '../Validation/Validators/hasPermissions';
+import AbstractSlashCommand from './AbstractSlashCommand';
 
-const banCommand: EveSlashCommand = {
-  data: {
-    name: 'ban',
-    description: 'Ban a user',
-    options: [
-      {
-        name: 'user',
-        description: 'User to Ban',
-        type: 6,
-        required: true,
-      },
-      {
-        name: 'reason',
-        description: 'Ban reason',
-        type: 3,
-      },
-    ],
-  },
-  async execute(interaction: CommandInteraction) {
+export default class PardonCommand extends AbstractSlashCommand {
+  data;
+
+  constructor() {
+    super();
+
+    this.data = {
+      name: 'pardon',
+      description: 'Revoke a users ban',
+      options: [
+        {
+          name: 'user',
+          description: 'User to unban',
+          type: 6,
+          required: true,
+        },
+      ],
+    };
+  }
+
+  async execute(interaction: CommandInteraction): Promise<void> {
     const user = interaction.options.get('user').user;
-    const reason = interaction.options.get('reason')?.value as string || 'No reason given';
 
     const inputValidationResult = await validateInput(
       interaction.guild,
       interaction,
-      notEquals(interaction.user.id, user.id, 'You cannot ban yourself!'),
-      isNotGuildOwner(user.id, 'The owner of this server cannot be banned!'),
       isNotDmChannel('This command cannot be used in a DMs!'),
-      hasPermissions(interaction.user, 'BAN_MEMBERS', 'You dont have the permission to ban member!'),
+      hasPermissions(interaction.user, 'BAN_MEMBERS', 'You dont have the permission to ban/unban member!'),
     );
     if (inputValidationResult === false) {
       return;
@@ -50,31 +48,29 @@ const banCommand: EveSlashCommand = {
       if (e.message !== 'Unknown Ban') {
         throw e;
       }
-    }
 
-    if (banInfo !== undefined) {
       const answer = embedFactory();
       answer.setTitle('Error');
-      answer.setDescription(`${user} is already banned in this guild!`);
-      answer.addField('Ban reason', banInfo.reason);
+      answer.setDescription(`${user} is currently not banned in this guild!`);
       await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true} });
       return;
     }
 
     const aggregate = Aggregate.createNew();
     const event = await aggregate.record(
-      'ban-interaction.create',
-      {userId: interaction.user.id, targetUserId: user.id, reason: reason},
+      'pardon-interaction.create',
+      {userId: interaction.user.id, targetUserId: user.id},
     );
 
     const answer = embedFactory();
-    answer.setTitle('Ban');
-    answer.setDescription(`Are u sure u want to ban ${user}?`);
+    answer.setTitle('Pardon');
+    answer.setDescription(`Are u sure u want to revoke the ban of ${user}?`);
+    answer.addField('Ban reason', banInfo.reason);
 
     const row = new MessageActionRow()
       .addComponents(new MessageButton()
-          .setCustomId(`ban-${event.getEventId()}`)
-          .setLabel('Ban')
+          .setCustomId(`pardon-${event.getEventId().toString()}`)
+          .setLabel('Revoke')
           .setStyle('DANGER'),
       );
 
@@ -84,11 +80,11 @@ const banCommand: EveSlashCommand = {
       (async () => {
         const aggregate = await EventStore.loadAggregate(event.getEventId());
 
-        if (await aggregate.getEventByTopic('ban-interaction.executed') !== null) {
+        if (await aggregate.getEventByTopic('pardon-interaction.executed') !== null) {
           return;
         }
 
-        await aggregate.record('ban-interaction.timedOut', {});
+        await aggregate.record('pardon-interaction.timedOut', {});
 
         const row = new MessageActionRow()
           .addComponents(new MessageButton()
@@ -101,7 +97,5 @@ const banCommand: EveSlashCommand = {
         await interaction.editReply({components: [row]});
       })();
     }, 60000);
-  },
-};
-
-export default banCommand;
+  }
+}

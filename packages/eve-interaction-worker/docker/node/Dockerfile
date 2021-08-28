@@ -1,4 +1,6 @@
-FROM node:16.7.0-buster AS base
+ARG ARCH=arm/v7
+
+FROM ${ARCH}/node:16.7.0-buster AS base
 
 RUN mkdir /app
 
@@ -28,6 +30,6 @@ COPY . /build
 RUN rm -rf /build/node_modules \
     && npm i --only=prod \
     && mv /build/node_modules /app/ \
-    && rm -rf /build \
+    && rm -rf /build
 
 WORKDIR /app

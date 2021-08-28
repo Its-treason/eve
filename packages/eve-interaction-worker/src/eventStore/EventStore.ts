@@ -1,6 +1,6 @@
 import {Id} from '../Value/Id';
 import {Aggregate} from './Aggregate';
-import pool from '../structures/pool';
+import pool from '../structures/Pool';
 import {Event} from '../Value/Event';
 
 export class EventStore {

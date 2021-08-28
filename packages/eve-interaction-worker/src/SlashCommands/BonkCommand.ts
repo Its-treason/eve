@@ -1,37 +1,40 @@
-import {EveSlashCommand} from '../types';
-import {tmpdir} from 'os';
-import {unlinkSync} from 'fs';
-import {MessageAttachment, User} from 'discord.js';
-import generateRandomString from '../util/generateRandomString';
-import puppeteer from 'puppeteer';
+import {CommandInteraction, User} from 'discord.js';
 import BrowserFactory from '../Factory/browserFactory';
+import AbstractSlashCommand from './AbstractSlashCommand';
 
-const command: EveSlashCommand = {
-  data: {
-    name: 'bonk',
-    description: 'Send a image of the "Go to Horny Jail" meme with users Avatars',
-    options: [
-      {
-        name: 'bonkee',
-        description: 'User to Bonk',
-        type: 6,
-        required: true,
-      },
-      {
-        name: 'bonker',
-        description: 'User thats Bonks',
-        type: 6,
-        required: false,
-      },
-      {
-        name: 'title',
-        description: 'A title for the image',
-        type: 3,
-        required: false,
-      },
-    ],
-  },
-  execute: async (interaction) => {
+export default class BonkCommand extends AbstractSlashCommand {
+  data;
+
+  constructor() {
+    super();
+
+    this.data = {
+      name: 'bonk',
+      description: 'Send a image of the "Go to Horny Jail" meme with users Avatars',
+      options: [
+        {
+          name: 'bonkee',
+          description: 'User to Bonk',
+          type: 6,
+          required: true,
+        },
+        {
+          name: 'bonker',
+          description: 'User thats Bonks',
+          type: 6,
+          required: false,
+        },
+        {
+          name: 'title',
+          description: 'A title for the image',
+          type: 3,
+          required: false,
+        },
+      ],
+    };
+  }
+
+  async execute(interaction: CommandInteraction): Promise<void> {
     const bonkee = interaction.options.get('bonkee').user;
     const bonker = interaction.options.get('bonker')?.user;
     const title = interaction.options.get('title')?.value || '';
@@ -90,7 +93,5 @@ const command: EveSlashCommand = {
 
       throw error;
     }
-  },
-};
-
-export default command;
+  }
+}

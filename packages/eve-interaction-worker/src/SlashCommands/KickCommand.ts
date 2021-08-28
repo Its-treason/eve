@@ -9,26 +9,34 @@ import notEquals from '../Validation/Validators/notEquals';
 import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
 import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
 import hasPermissions from '../Validation/Validators/hasPermissions';
+import AbstractSlashCommand from './AbstractSlashCommand';
 
-const kickCommand: EveSlashCommand = {
-  data: {
-    name: 'kick',
-    description: 'Kick a user',
-    options: [
-      {
-        name: 'user',
-        description: 'User to kick',
-        type: 6,
-        required: true,
-      },
-      {
-        name: 'reason',
-        description: 'Kick reason',
-        type: 3,
-      },
-    ],
-  },
-  async execute(interaction: CommandInteraction) {
+export default class KickCommand extends AbstractSlashCommand {
+  data;
+
+  constructor() {
+    super();
+
+    this.data = {
+      name: 'kick',
+      description: 'Kick a user',
+      options: [
+        {
+          name: 'user',
+          description: 'User to kick',
+          type: 6,
+          required: true,
+        },
+        {
+          name: 'reason',
+          description: 'Kick reason',
+          type: 3,
+        },
+      ],
+    };
+  }
+
+  async execute(interaction: CommandInteraction): Promise<void> {
     const user = interaction.options.get('user').user;
     const reason = interaction.options.get('reason')?.value as string || 'No reason given';
 
@@ -84,7 +92,5 @@ const kickCommand: EveSlashCommand = {
         await interaction.editReply({components: [row]});
       })();
     }, 60000);
-  },
-};
-
-export default kickCommand;
+  }
+}

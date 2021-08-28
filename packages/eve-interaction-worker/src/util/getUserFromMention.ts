@@ -1,5 +1,5 @@
 import {User} from 'discord.js';
-import client from '../structures/client';
+import client from '../structures/Client';
 
 export default (mention: string): (null|User) => {
   if (mention.startsWith('<@') && mention.endsWith('>')) {

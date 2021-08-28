@@ -3,20 +3,23 @@ import {ButtonInteraction, MessageActionRow, MessageButton} from 'discord.js';
 import {EventStore} from '../eventStore/EventStore';
 import {Id} from '../Value/Id';
 import embedFactory from '../Factory/messageEmbedFactory';
+import AbstractInteraction from './AbstractInteraction';
 
-const interaction: EveInteraction = {
-  name: 'kick',
-  execute: async (args, buttonInteraction) => {
-    if (!(buttonInteraction instanceof ButtonInteraction)) {
-      return;
-    }
+export default class PardonInteraction extends AbstractInteraction {
+  name;
 
+  constructor() {
+    super();
+
+    this.name = 'pardon';
+  }
+
+  async execute(args: string[], buttonInteraction: ButtonInteraction): Promise<void> {
     const aggregate = await EventStore.loadAggregate(Id.fromString(args[0]));
-    const event = aggregate.getEventByTopic('kick-interaction.create');
+    const event = aggregate.getEventByTopic('pardon-interaction.create');
 
     const user = await buttonInteraction.client.users.fetch(`${BigInt(event.getPayload().userId)}`);
     const targetUser = await buttonInteraction.client.users.fetch(`${BigInt(event.getPayload().targetUserId)}`);
-    const reason = event.getPayload().reason;
 
     if (buttonInteraction.user.id !== user.id) {
       const answer = embedFactory();
@@ -26,23 +29,18 @@ const interaction: EveInteraction = {
       return;
     }
 
-    await buttonInteraction.guild.members.kick(
-      targetUser,
-      `"${reason}" by "${user.username}#${user.discriminator}" using EVE`,
-    );
+    await buttonInteraction.guild.bans.remove(targetUser);
 
     const row = new MessageActionRow()
       .addComponents(new MessageButton()
-        .setCustomId('kicked')
-        .setLabel('Kicked')
+        .setCustomId('revoked')
+        .setLabel('Revoked')
         .setStyle('SUCCESS')
         .setDisabled(true),
       );
 
     await buttonInteraction.update({components: [row]});
 
-    await aggregate.record('kick-interaction.executed', {});
-  },
-};
-
-export default interaction;
+    await aggregate.record('pardon-interaction.executed', {});
+  }
+}
