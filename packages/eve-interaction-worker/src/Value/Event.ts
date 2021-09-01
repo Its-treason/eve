@@ -25,7 +25,7 @@ export class Event {
     this.payload = payload;
   }
 
-  public static fromRow(row: string[]): Event
+  public static fromRow(row: {[string: string]: string, topic: EventTopic}): Event
   {
     return new this(
       Id.fromString(row['event_id']),

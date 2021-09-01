@@ -12,12 +12,8 @@ import hasPermissions from '../Validation/Validators/hasPermissions';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
 export default class KickCommand extends AbstractSlashCommand {
-  data;
-
   constructor() {
-    super();
-
-    this.data = {
+    super({
       name: 'kick',
       description: 'Kick a user',
       options: [
@@ -33,7 +29,7 @@ export default class KickCommand extends AbstractSlashCommand {
           type: 3,
         },
       ],
-    };
+    });
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {

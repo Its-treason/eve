@@ -1,4 +1,4 @@
-import {CommandInteraction, MessageActionRow, MessageButton} from 'discord.js';
+import {ApplicationCommandData, CommandInteraction, MessageActionRow, MessageButton} from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
 import {Aggregate} from '../eventStore/Aggregate';
 import {EventStore} from '../eventStore/EventStore';
@@ -10,12 +10,8 @@ import hasPermissions from '../Validation/Validators/hasPermissions';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
 export default class BanCommand extends AbstractSlashCommand {
-  public readonly data;
-
   constructor() {
-    super();
-
-    this.data = {
+    super({
       name: 'ban',
       description: 'Ban a user',
       options: [
@@ -31,7 +27,7 @@ export default class BanCommand extends AbstractSlashCommand {
           type: 3,
         },
       ],
-    };
+    });
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {

@@ -3,12 +3,8 @@ import embedFactory from '../Factory/messageEmbedFactory';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
 export default class AvatarCommand extends AbstractSlashCommand {
-  data;
-
   constructor() {
-    super();
-
-    this.data = {
+    super({
       name: 'avatar',
       description: 'Get a users Avatar',
       options: [
@@ -45,7 +41,7 @@ export default class AvatarCommand extends AbstractSlashCommand {
           ],
         },
       ],
-    };
+    });
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {

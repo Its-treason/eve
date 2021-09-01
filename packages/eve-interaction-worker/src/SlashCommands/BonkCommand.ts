@@ -3,12 +3,8 @@ import BrowserFactory from '../Factory/browserFactory';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
 export default class BonkCommand extends AbstractSlashCommand {
-  data;
-
   constructor() {
-    super();
-
-    this.data = {
+    super({
       name: 'bonk',
       description: 'Send a image of the "Go to Horny Jail" meme with users Avatars',
       options: [
@@ -31,7 +27,7 @@ export default class BonkCommand extends AbstractSlashCommand {
           required: false,
         },
       ],
-    };
+    });
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {

@@ -1,4 +1,4 @@
-import {Channel, Client, Collection, CommandInteraction, Guild, GuildMember, Interaction, Message, PermissionString, Role, User} from 'discord.js';
+import {Channel, Client, Collection, CommandInteraction, Guild, GuildMember, Interaction, Message, Role, User} from 'discord.js';
 import {APIApplicationCommandOption} from 'discord-api-types/v9';
 
 export interface EveClient extends Client {
@@ -41,3 +41,22 @@ export type Validator = (guild: Guild) => Promise<{valid: boolean, msg?: string}
 export type ValidatorWrapper = (...args: unknown[]) => Validator;
 
 export type ParsedArg = (string|User|GuildMember|Channel|Role);
+
+export interface YtResult {
+  url: string,
+  uploader: string,
+  title: string,
+  ytId: string,
+  requestedBy: string,
+}
+
+export interface QueueItem {
+  url: string,
+  downloaded: boolean,
+  id: string,
+  title: string,
+  uploader: string,
+  ytId: string,
+  requestedBy: string,
+  downloading: null|Promise<never>
+}

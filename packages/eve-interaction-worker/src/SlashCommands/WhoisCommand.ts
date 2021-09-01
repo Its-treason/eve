@@ -4,12 +4,8 @@ import {CommandInteraction, MessageEmbed, User} from 'discord.js';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
 export default class WhoisCommand extends AbstractSlashCommand {
-  data;
-
   constructor() {
-    super();
-
-    this.data = {
+    super({
       name: 'whois',
       description: 'Get info about user',
       options: [
@@ -19,7 +15,7 @@ export default class WhoisCommand extends AbstractSlashCommand {
           type: 6,
         },
       ],
-    };
+    });
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {

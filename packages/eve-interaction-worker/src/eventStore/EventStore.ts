@@ -2,6 +2,12 @@ import {Id} from '../Value/Id';
 import {Aggregate} from './Aggregate';
 import pool from '../structures/Pool';
 import {Event} from '../Value/Event';
+import {EventTopic} from '../types';
+
+interface EventsRow {
+  [string: string]: string,
+  topic: EventTopic,
+}
 
 export class EventStore {
   public static async loadAggregate(id: Id): Promise<Aggregate> {
@@ -16,7 +22,7 @@ export class EventStore {
 
     const result = await pool.query('SELECT * FROM events WHERE correlation_id = ?', correlationId);
 
-    const events = result.map(row => {
+    const events = result.map((row: EventsRow) => {
       return Event.fromRow(row);
     });
 

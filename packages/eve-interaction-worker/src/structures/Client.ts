@@ -1,16 +1,18 @@
 import logger from '../util/Logger';
-import discord from 'discord.js';
+import {Intents, Client} from 'discord.js';
 import {EveClient} from '../types';
 import {REST} from '@discordjs/rest';
 import {Routes} from 'discord-api-types/v9';
 import interactionCreate from '../events/interactionCreate';
 import slashCommandArrayFactory from '../Factory/slashCommandArrayFactory';
 
-const intents = new discord.Intents();
+const intents = new Intents();
 intents.add('GUILDS');
 intents.add('GUILD_MESSAGES');
+intents.add('GUILD_VOICE_STATES');
+intents.add('GUILD_BANS');
 
-const client: EveClient = new discord.Client({intents});
+const client: EveClient = new Client({intents});
 
 client.on(interactionCreate.name, interactionCreate.execute);
 

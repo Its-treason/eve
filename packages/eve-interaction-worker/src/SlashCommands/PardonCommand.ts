@@ -9,12 +9,8 @@ import hasPermissions from '../Validation/Validators/hasPermissions';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
 export default class PardonCommand extends AbstractSlashCommand {
-  data;
-
   constructor() {
-    super();
-
-    this.data = {
+    super({
       name: 'pardon',
       description: 'Revoke a users ban',
       options: [
@@ -25,7 +21,7 @@ export default class PardonCommand extends AbstractSlashCommand {
           required: true,
         },
       ],
-    };
+    });
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {

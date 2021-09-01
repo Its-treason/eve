@@ -3,16 +3,12 @@ import AbstractSlashCommand from './AbstractSlashCommand';
 import {CommandInteraction} from 'discord.js';
 
 export default class InviteCommand extends AbstractSlashCommand {
-  data;
-
   constructor() {
-    super();
-
-    this.data = {
+    super({
       name: 'invite',
       description: 'Create an invite to invite the bot to your server',
       options: [],
-    };
+    });
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
