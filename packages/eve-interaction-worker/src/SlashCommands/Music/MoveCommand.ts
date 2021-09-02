@@ -1,9 +1,7 @@
 import {CommandInteraction} from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
-import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import validateInput from '../../Validation/validateInput';
-import isNotDmChannel from '../../Validation/Validators/isNotDmChannel';
+import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
 
 export default class MoveCommand extends AbstractSlashCommand {
   constructor() {
@@ -28,41 +26,17 @@ export default class MoveCommand extends AbstractSlashCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const inputValidationResult = await validateInput(
-      interaction.guild,
-      interaction,
-      isNotDmChannel('This command cannot be used in a DMs!'),
-    );
-    if (inputValidationResult === false) {
-      return;
-    }
-
-    if (MusicPlayerRepository.has(interaction.guild.id) === false) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
-      answer.setDescription('Iam currently not playing any music');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
-      return;
-    }
-
-    const player = MusicPlayerRepository.get(interaction.guild.id);
-
-    const member = await interaction.guild.members.fetch(interaction.user);
-
-    if (member.voice?.channelId !== player.getVoiceChannelId()) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
-      answer.setDescription('You must be in the same voice channel as iam in');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
+    const player = await validateCanGetPlayer(interaction);
+    if (player === false) {
       return;
     }
 
     const item = interaction.options.getInteger('item', true).valueOf();
     const newPosition = interaction.options.getInteger('new_position', true).valueOf();
 
-    const success = player.move(item, newPosition);
+    const success = await player.move(item, newPosition);
 
-    if (success) {
+    if (success === true) {
       const answer = embedFactory();
       answer.setTitle('Moved item!');
 

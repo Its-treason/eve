@@ -1,9 +1,7 @@
 import {CommandInteraction} from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
-import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import validateInput from '../../Validation/validateInput';
-import isNotDmChannel from '../../Validation/Validators/isNotDmChannel';
+import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
 
 export default class ShuffleCommand extends AbstractSlashCommand {
   constructor() {
@@ -15,24 +13,10 @@ export default class ShuffleCommand extends AbstractSlashCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const inputValidationResult = await validateInput(
-      interaction.guild,
-      interaction,
-      isNotDmChannel('This command cannot be used in a DMs!'),
-    );
-    if (inputValidationResult === false) {
+    const player = await validateCanGetPlayer(interaction);
+    if (player === false) {
       return;
     }
-
-    if (MusicPlayerRepository.has(interaction.guild.id) === false) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
-      answer.setDescription('Iam currently not playing any music');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
-      return;
-    }
-
-    const player = MusicPlayerRepository.get(interaction.guild.id);
 
     const member = await interaction.guild.members.fetch(interaction.user);
 

@@ -1,7 +1,7 @@
 import {CommandInteraction} from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
-import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
+import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
 
 export default class NowPlayingCommand extends AbstractSlashCommand {
   constructor() {
@@ -13,23 +13,10 @@ export default class NowPlayingCommand extends AbstractSlashCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    if (interaction.guild === null) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
-      answer.setDescription('Command can not be executed inside DMs!');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
+    const player = await validateCanGetPlayer(interaction, false);
+    if (player === false) {
       return;
     }
-
-    if (!MusicPlayerRepository.has(interaction.guild.id)) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
-      answer.setDescription('Iam currently not playing any music');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
-      return;
-    }
-
-    const player = MusicPlayerRepository.get(interaction.guild?.id || '');
 
     const item = await player.getCurrentPlaying();
 

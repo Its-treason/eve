@@ -63,6 +63,10 @@ export class MusicPlayer {
       this.player.play(stream);
     }
 
+    await this.downloadNextAndRemoveOld();
+  }
+
+  private async downloadNextAndRemoveOld(): Promise<void> {
     if (this.queue[this.pointer + 1]?.downloaded === false) {
       await this.download(this.pointer + 1);
     }
@@ -137,9 +141,7 @@ export class MusicPlayer {
       return;
     }
 
-    if (this.queue[this.pointer + 1]?.id === id) {
-      await this.download(this.pointer + 1);
-    }
+    await this.downloadNextAndRemoveOld();
   }
 
   public async skip(): Promise<void> {
@@ -168,10 +170,6 @@ export class MusicPlayer {
     this.connection.disconnect();
   }
 
-  public getVoiceChannelId(): string {
-    return this.connection.joinConfig.channelId;
-  }
-
   public togglePause(): 'Paused'|'Unpaused' {
     if (this.player.state.status === AudioPlayerStatus.Paused) {
       this.player.unpause();
@@ -183,25 +181,13 @@ export class MusicPlayer {
     return 'Paused';
   }
 
-  public getCurrentPlaying(): QueueItem {
-    return this.queue[this.pointer];
-  }
-
-  public getQueue(): QueueItem[] {
-    return this.queue;
-  }
-
-  public getPointer(): number {
-    return this.pointer;
-  }
-
-  public shuffle(): void {
+  public async shuffle(): Promise<void> {
     const newQueueItem = this.queue.splice(this.pointer, 1)[0];
 
     this.queue = [newQueueItem, ...shuffleArray(this.queue)];
     this.pointer = 0;
 
-    this.download(this.pointer + 1);
+    await this.downloadNextAndRemoveOld();
   }
 
   public loopSong(): boolean {
@@ -209,7 +195,7 @@ export class MusicPlayer {
     return this.loop;
   }
 
-  public move(item: number, newPosition: number): boolean {
+  public async move(item: number, newPosition: number): Promise<boolean> {
     item -= 1;
     newPosition -= 1;
 
@@ -233,10 +219,12 @@ export class MusicPlayer {
       this.pointer++;
     }
 
+    await this.downloadNextAndRemoveOld();
+
     return true;
   }
 
-  public delete(item: number): boolean {
+  public async delete(item: number): Promise<boolean> {
     item -= 1;
 
     if (this.queue[item] === undefined) {
@@ -252,6 +240,8 @@ export class MusicPlayer {
       this.pointer--;
     }
 
+    await this.downloadNextAndRemoveOld();
+
     return true;
   }
 
@@ -266,5 +256,21 @@ export class MusicPlayer {
     answer.setTitle('Error during loading');
     answer.setDescription(`${title} uploaded by ${uploader} could not be loaded!`);
     this.textChannel.send({embeds: [answer]});
+  }
+
+  public getCurrentPlaying(): QueueItem {
+    return this.queue[this.pointer];
+  }
+
+  public getVoiceChannelId(): string {
+    return this.connection.joinConfig.channelId;
+  }
+
+  public getQueue(): QueueItem[] {
+    return this.queue;
+  }
+
+  public getPointer(): number {
+    return this.pointer;
   }
 }
