@@ -1,4 +1,4 @@
-import formatSeconds from '../util/formatSeconds';
+import formatSeconds from '../Util/formatSeconds';
 import embedFactory from '../Factory/messageEmbedFactory';
 import {CommandInteraction, MessageEmbed, User} from 'discord.js';
 import AbstractSlashCommand from './AbstractSlashCommand';

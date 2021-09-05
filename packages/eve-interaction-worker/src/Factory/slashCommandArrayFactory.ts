@@ -17,9 +17,11 @@ import ShuffleCommand from '../SlashCommands/Music/ShuffleCommand';
 import LoopCommand from '../SlashCommands/Music/LoopCommand';
 import MoveCommand from '../SlashCommands/Music/MoveCommand';
 import DeleteCommand from '../SlashCommands/Music/DeleteCommand';
+import PlaylistCommand from '../SlashCommands/Music/Playlist/PlaylistCommand';
+import GotoCommand from '../SlashCommands/Music/GotoCommand';
 
 export default function slashCommandArrayFactory(): AbstractSlashCommand[] {
-  const slashCommands = [];
+  const slashCommands: AbstractSlashCommand[] = [];
 
   slashCommands.push(new BanCommand());
   slashCommands.push(new KickCommand());
@@ -39,5 +41,7 @@ export default function slashCommandArrayFactory(): AbstractSlashCommand[] {
   slashCommands.push(new LoopCommand());
   slashCommands.push(new MoveCommand());
   slashCommands.push(new DeleteCommand());
+  slashCommands.push(new PlaylistCommand());
+  slashCommands.push(new GotoCommand());
   return slashCommands;
 }

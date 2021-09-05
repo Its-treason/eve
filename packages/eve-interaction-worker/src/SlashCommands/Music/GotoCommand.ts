@@ -2,16 +2,17 @@ import {CommandInteraction} from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
+import {ApplicationCommandOptionTypes} from 'discord.js/typings/enums';
 
-export default class DeleteCommand extends AbstractSlashCommand {
+export default class GotoCommand extends AbstractSlashCommand {
   constructor() {
     super({
-      name: 'delete',
-      description: 'Delete an item from the queue',
+      name: 'goto',
+      description: 'Goto a position in the queue',
       options: [
         {
-          name: 'item',
-          description: 'the song to be deleted',
+          name: 'position',
+          description: 'The position to goto',
           type: 4,
           required: true,
         },
@@ -25,23 +26,21 @@ export default class DeleteCommand extends AbstractSlashCommand {
       return;
     }
 
-    const item = interaction.options.getInteger('item', true).valueOf();
-
     await interaction.deferReply();
 
-    const success = await player.delete(item);
+    const position = interaction.options.getInteger('position', true);
+
+    const success = await player.goto(position);
 
     if (success === true) {
       const answer = embedFactory();
-      answer.setTitle('Deleted item!');
-
+      answer.setTitle(`Changed position to ${position}!`);
       await interaction.editReply({embeds: [answer]});
       return;
     }
 
     const answer = embedFactory();
     answer.setTitle('That item does not exists!');
-
     await interaction.editReply({embeds: [answer]});
   }
 }

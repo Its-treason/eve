@@ -34,19 +34,21 @@ export default class MoveCommand extends AbstractSlashCommand {
     const item = interaction.options.getInteger('item', true).valueOf();
     const newPosition = interaction.options.getInteger('new_position', true).valueOf();
 
+    await interaction.deferReply();
+
     const success = await player.move(item, newPosition);
 
     if (success === true) {
       const answer = embedFactory();
       answer.setTitle('Moved item!');
 
-      await interaction.reply({embeds: [answer]});
+      await interaction.editReply({embeds: [answer]});
       return;
     }
 
     const answer = embedFactory();
     answer.setTitle('That item does not exists!');
 
-    await interaction.reply({embeds: [answer]});
+    await interaction.editReply({embeds: [answer]});
   }
 }

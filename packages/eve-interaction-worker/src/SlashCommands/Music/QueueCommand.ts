@@ -9,7 +9,13 @@ export default class QueueCommand extends AbstractSlashCommand {
     super({
       name: 'queue',
       description: 'Get current queue',
-      options: [],
+      options: [
+        {
+          name: 'offset',
+          description: 'Position from where to show the queue',
+          type: 4,
+        },
+      ],
     });
   }
 
@@ -21,6 +27,7 @@ export default class QueueCommand extends AbstractSlashCommand {
 
     const items = player.getQueue();
     const pointer = player.getPointer();
+    const startItemPointer = (interaction.options.getInteger('offset') || (pointer - 1)) - 1;
 
     if (items.length === 0) {
       const answer = embedFactory();
@@ -29,15 +36,14 @@ export default class QueueCommand extends AbstractSlashCommand {
       return;
     }
 
-    const queue = this.createQueueMessage(items, pointer);
+    const queue = this.createQueueMessage(items, startItemPointer, pointer);
 
     await interaction.reply({content: queue});
   }
 
-  createQueueMessage(items: QueueItem[], pointer: number): string {
+  createQueueMessage(items: QueueItem[], startItemPointer: number, pointer: number): string {
     let queue = '```nim\n';
 
-    let startItemPointer = pointer - 2;
     if (startItemPointer < 0) {
       startItemPointer = 0;
     }

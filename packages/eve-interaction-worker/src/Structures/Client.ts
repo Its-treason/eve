@@ -1,4 +1,4 @@
-import logger from '../util/Logger';
+import logger from '../Util/Logger';
 import {Intents, Client} from 'discord.js';
 import {EveClient} from '../types';
 import {REST} from '@discordjs/rest';
@@ -16,7 +16,6 @@ const client: EveClient = new Client({intents});
 
 client.on(interactionCreate.name, interactionCreate.execute);
 
-// Register Slash Commands
 const rest = new REST({version: '9'}).setToken(process.env.DISCORD_TOKEN);
 (async () => {
   const slashCommandsData = slashCommandArrayFactory().map((slashCommand) => slashCommand.data);

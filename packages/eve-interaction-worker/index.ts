@@ -1,6 +1,6 @@
-import logger from './src/util/Logger';
+import logger from './src/Util/Logger';
 // Importing the Client here will Start Bot
-import client from './src/structures/Client';
+import client from './src/Structures/Client';
 
 ''.replaceAll('test', '');
 

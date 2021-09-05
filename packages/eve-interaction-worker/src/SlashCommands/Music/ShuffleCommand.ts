@@ -28,11 +28,13 @@ export default class ShuffleCommand extends AbstractSlashCommand {
       return;
     }
 
+    await interaction.deferReply();
+
     await player.shuffle();
 
     const answer = embedFactory();
     answer.setTitle('Shuffled the queue!');
 
-    await interaction.reply({embeds: [answer]});  
+    await interaction.editReply({embeds: [answer]});
   }
 }

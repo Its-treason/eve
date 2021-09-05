@@ -1,11 +1,11 @@
 import {ButtonInteraction, Collection, CommandInteraction, Interaction} from 'discord.js';
 import {EveEvent, EveInteraction} from '../types';
-import Logger from '../util/Logger';
+import Logger from '../Util/Logger';
 
 import slashCommandArrayFactory from '../Factory/slashCommandArrayFactory';
 import AbstractSlashCommand from '../SlashCommands/AbstractSlashCommand';
 import interactionArrayFactory from '../Factory/interactionArrayFactory';
-import AbstractInteraction from '../interactions/AbstractInteraction';
+import AbstractInteraction from '../Interactions/AbstractInteraction';
 
 const interactionsArray = interactionArrayFactory();
 const interactions = interactionsArray.reduce(

@@ -1,6 +1,6 @@
 import {User} from 'discord.js';
 import getUserFromMention from './getUserFromMention';
-import client from '../structures/Client';
+import client from '../Structures/Client';
 
 export default async (userString: string): Promise<(User|null)> => {
   try {

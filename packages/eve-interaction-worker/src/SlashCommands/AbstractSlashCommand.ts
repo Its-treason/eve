@@ -1,4 +1,3 @@
-import {APIApplicationCommandOption} from 'discord-api-types';
 import {ApplicationCommandData, CommandInteraction} from 'discord.js';
 
 export default abstract class AbstractSlashCommand {

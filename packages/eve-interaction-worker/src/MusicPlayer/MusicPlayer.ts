@@ -1,12 +1,12 @@
 import {StageChannel, TextChannel, ThreadChannel, VoiceChannel} from 'discord.js';
 import {AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel, NoSubscriberBehavior, VoiceConnection, VoiceConnectionStatus} from '@discordjs/voice';
-import generateRandomString from '../util/generateRandomString';
+import generateRandomString from '../Util/generateRandomString';
 import {existsSync, unlinkSync} from 'fs';
 import youtubeDlFactory from '../Factory/youtubeDlFactory';
 import {YtResult} from '../types';
-import Logger from '../util/Logger';
+import Logger from '../Util/Logger';
 import {QueueItem} from '../types';
-import shuffleArray from '../util/shuffleArray';
+import shuffleArray from '../Util/shuffleArray';
 import messageEmbedFactory from '../Factory/messageEmbedFactory';
 
 export class MusicPlayer {
@@ -245,6 +245,20 @@ export class MusicPlayer {
     return true;
   }
 
+  public async goto(position: number): Promise<boolean> {
+    position -= 1;
+
+    if (this.queue[position] === undefined) {
+      return false;
+    }
+
+    await this.download(position);
+
+    this.pointer = (position - 1);
+    this.player.stop(true);
+    return true;
+  }
+
   private async sendPlayError(pointer: number): Promise<void> {
     if (this.queue[pointer] === undefined) {
       return;
@@ -254,7 +268,7 @@ export class MusicPlayer {
 
     const answer = messageEmbedFactory();
     answer.setTitle('Error during loading');
-    answer.setDescription(`${title} uploaded by ${uploader} could not be loaded!`);
+    answer.setDescription(`\`${title}\` uploaded by \`${uploader}\` could not be loaded!`);
     this.textChannel.send({embeds: [answer]});
   }
 

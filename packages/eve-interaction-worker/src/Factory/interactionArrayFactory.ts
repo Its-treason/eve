@@ -1,8 +1,8 @@
-import AbstractInteraction from '../interactions/AbstractInteraction';
-import BanInteraction from '../interactions/BanInteraction';
-import KickInteraction from '../interactions/KickInteraction';
-import MenuInteraction from '../interactions/MenuInteraction';
-import PardonInteraction from '../interactions/PardonInteraction';
+import AbstractInteraction from '../Interactions/AbstractInteraction';
+import BanInteraction from '../Interactions/BanInteraction';
+import KickInteraction from '../Interactions/KickInteraction';
+import MenuInteraction from '../Interactions/MenuInteraction';
+import PardonInteraction from '../Interactions/PardonInteraction';
 
 export default function interactionArrayFactory(): AbstractInteraction[] {
   const interactions = [];

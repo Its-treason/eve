@@ -1,6 +1,6 @@
 import {Id} from '../Value/Id';
 import {Aggregate} from './Aggregate';
-import pool from '../structures/Pool';
+import pool from '../Structures/Pool';
 import {Event} from '../Value/Event';
 import {EventTopic} from '../types';
 

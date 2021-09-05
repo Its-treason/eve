@@ -1,4 +1,4 @@
-import generateRandomString from '../util/generateRandomString';
+import generateRandomString from '../Util/generateRandomString';
 
 export class Id {
   private readonly id: string;
