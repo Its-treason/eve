@@ -19,5 +19,6 @@ export default class InviteCommand extends AbstractSlashCommand {
     const answer = embedFactory();
     answer.setTitle('Invite Link');
     answer.setDescription(invite);
+    interaction.reply({embeds: [answer]});
   }
 }
