@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
@@ -39,16 +39,14 @@ export default class MoveCommand extends AbstractSlashCommand {
     const success = await player.move(item, newPosition);
 
     if (success === true) {
-      const answer = embedFactory();
-      answer.setTitle('Moved item!');
+      const answer = embedFactory(interaction.client, 'Moved item!');
 
-      await interaction.editReply({embeds: [answer]});
+      await interaction.editReply({ embeds: [answer] });
       return;
     }
 
-    const answer = embedFactory();
-    answer.setTitle('That item does not exists!');
+    const answer = embedFactory(interaction.client, 'That item does not exists!');
 
-    await interaction.editReply({embeds: [answer]});
+    await interaction.editReply({ embeds: [answer] });
   }
 }

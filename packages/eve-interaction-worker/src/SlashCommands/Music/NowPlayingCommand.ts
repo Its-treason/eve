@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
@@ -21,13 +21,12 @@ export default class NowPlayingCommand extends AbstractSlashCommand {
     const item = await player.getCurrentPlaying();
     const pointer = player.getPointer();
 
-    const answer = embedFactory();
-    answer.setTitle('Currently playing track');
+    const answer = embedFactory(interaction.client, 'Currently playing track');
     answer.setDescription(`\`${item.title}\` uploaded by \`${item.uploader}\``);
     answer.addField('Link', item.url);
     answer.addField('Current position', `\`${pointer + 1}\``);
     answer.setImage(`https://img.youtube.com/vi/${item.ytId}/0.jpg`);
 
-    await interaction.reply({embeds: [answer]});
+    await interaction.reply({ embeds: [answer] });
   }
 }

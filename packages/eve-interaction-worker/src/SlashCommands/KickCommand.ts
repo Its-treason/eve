@@ -1,9 +1,8 @@
 import embedFactory from '../Factory/messageEmbedFactory';
-import {ButtonInteraction, CommandInteraction} from 'discord.js';
-import {MessageActionRow, MessageButton} from 'discord.js';
-import {EveSlashCommand} from '../types';
-import {EventStore} from '../eventStore/EventStore';
-import {Aggregate} from '../eventStore/Aggregate';
+import { CommandInteraction } from 'discord.js';
+import { MessageActionRow, MessageButton } from 'discord.js';
+import { EventStore } from '../eventStore/EventStore';
+import { Aggregate } from '../eventStore/Aggregate';
 import validateInput from '../Validation/validateInput';
 import notEquals from '../Validation/Validators/notEquals';
 import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
@@ -12,7 +11,9 @@ import hasPermissions from '../Validation/Validators/hasPermissions';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
 export default class KickCommand extends AbstractSlashCommand {
-  constructor() {
+  constructor(
+    private eventStore: EventStore,
+  ) {
     super({
       name: 'kick',
       description: 'Kick a user',
@@ -48,15 +49,15 @@ export default class KickCommand extends AbstractSlashCommand {
       return;
     }
 
-    const answer = embedFactory();
-    answer.setTitle('Kick');
+    const answer = embedFactory(interaction.client, 'Kick');
     answer.setDescription(`Are u sure u want to kick ${user}?`);
 
     const aggregate = Aggregate.createNew();
     const event = await aggregate.record(
       'kick-interaction.create',
-      {userId: interaction.user.id, targetUserId: user.id, reason},
+      { userId: interaction.user.id, targetUserId: user.id, reason },
     );
+    this.eventStore.saveAggregate(aggregate);
 
     const row = new MessageActionRow()
       .addComponents(new MessageButton()
@@ -65,17 +66,18 @@ export default class KickCommand extends AbstractSlashCommand {
           .setStyle('DANGER'),
       );
 
-    await interaction.reply({embeds: [answer], components: [row], allowedMentions: {repliedUser: true} });
+    await interaction.reply({ embeds: [answer], components: [row], allowedMentions: { repliedUser: true } });
 
     setTimeout(() => {
       (async () => {
-        const aggregate = await EventStore.loadAggregate(event.getEventId());
+        const aggregate = await this.eventStore.loadAggregate(event.getEventId());
 
         if (await aggregate.getEventByTopic('kick-interaction.executed') !== null) {
           return;
         }
 
         await aggregate.record('kick-interaction.timedOut', {});
+        this.eventStore.saveAggregate(aggregate);
 
         const row = new MessageActionRow()
           .addComponents(new MessageButton()
@@ -85,7 +87,7 @@ export default class KickCommand extends AbstractSlashCommand {
             .setDisabled(true),
           );
 
-        await interaction.editReply({components: [row]});
+        await interaction.editReply({ components: [row] });
       })();
     }, 60000);
   }

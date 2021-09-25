@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
@@ -20,9 +20,8 @@ export default class LoopCommand extends AbstractSlashCommand {
 
     const loopState = player.loopSong();
 
-    const answer = embedFactory();
-    answer.setTitle(loopState ? 'Now Looping!' : 'Stopped Loop!');
+    const answer = embedFactory(interaction.client, loopState ? 'Now Looping!' : 'Stopped Loop!');
 
-    await interaction.reply({embeds: [answer]});  
+    await interaction.reply({ embeds: [answer] });  
   }
 }

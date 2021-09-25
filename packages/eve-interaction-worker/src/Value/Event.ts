@@ -1,5 +1,5 @@
-import {Id} from './Id';
-import {EventTopic} from '../types';
+import { Id } from './Id';
+import { EventTopic } from '../types';
 
 export class Event {
   private readonly eventId: Id;

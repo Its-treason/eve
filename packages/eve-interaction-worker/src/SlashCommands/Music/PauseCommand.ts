@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
@@ -20,9 +20,8 @@ export default class PauseCommand extends AbstractSlashCommand {
 
     const action = player.togglePause();
 
-    const answer = embedFactory();
-    answer.setTitle(`${action} the player!`);
+    const answer = embedFactory(interaction.client, `${action} the player!`);
 
-    await interaction.reply({embeds: [answer]});
+    await interaction.reply({ embeds: [answer] });
   }
 }

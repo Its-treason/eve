@@ -3,7 +3,6 @@
   "extends": [    
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended"
-    // "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "parserOptions": {
     "ecmaVersion": 2020,
@@ -25,7 +24,7 @@
     "semi": ["error", "always", {"omitLastInOneLineBlock": false}],
     "func-call-spacing": ["error", "never"],
     "eol-last": ["error", "always"],
-    "object-curly-spacing": ["error", "never", {"objectsInObjects": true, "arraysInObjects": false}],
+    "object-curly-spacing": ["error", "always"],
     "space-before-blocks": ["error"],
     "no-multi-spaces": ["error", {"exceptions": {"VariableDeclarator": false, "Property": false}}],
     "block-spacing": "error",

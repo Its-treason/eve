@@ -1,6 +1,6 @@
-import puppeteer, {Browser} from 'puppeteer';
+import puppeteer, { Browser } from 'puppeteer';
 
-export default async (): Promise<Browser> => {
+export default async function browserFactory(): Promise<Browser> {
   const browser = await puppeteer.launch({
     executablePath: '/usr/bin/chromium',
     args: [
@@ -11,4 +11,4 @@ export default async (): Promise<Browser> => {
     ],
   });
   return browser;
-};
+}

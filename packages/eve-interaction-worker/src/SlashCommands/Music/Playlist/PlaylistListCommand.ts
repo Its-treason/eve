@@ -1,11 +1,12 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import AbstractSubSlashCommand from '../../AbstractSubSlashCommand';
-import {ApplicationCommandOptionTypes} from 'discord.js/typings/enums';
 
 export default class PlaylistListCommand extends AbstractSubSlashCommand {
-  constructor() {
+  private readonly playlistProjection: PlaylistProjection;
+
+  constructor(playlistProjection: PlaylistProjection) {
     super({
       type: 1,
       name: 'list',
@@ -19,18 +20,20 @@ export default class PlaylistListCommand extends AbstractSubSlashCommand {
         },
       ],
     });
+
+    this.playlistProjection = playlistProjection;
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
     const user = interaction.options.getUser('user') || interaction.user;
     const userId = user.id;
 
-    const playlists = await PlaylistProjection.loadPlaylistsOfUser(userId);
+    const playlists = await this.playlistProjection.loadPlaylistsOfUser(userId);
 
     if (playlists.length === 0) {
-      const answer = messageEmbedFactory();
-      answer.setTitle(`${user.username} does not has any Playlists saved!`);
-      await interaction.reply({embeds: [answer], allowedMentions: {} });
+      const answer = messageEmbedFactory(interaction.client, 'Error');
+      answer.setDescription(`${user.username} does not has any Playlists saved!`);
+      await interaction.reply({ embeds: [answer], allowedMentions: {} });
       return;
     }
 
@@ -38,10 +41,9 @@ export default class PlaylistListCommand extends AbstractSubSlashCommand {
       return acc + `\`${playlist}\`\n`;
     }, '');
 
-    const answer = messageEmbedFactory();
-    answer.setTitle(`${user.username} playlists:`);
+    const answer = messageEmbedFactory(interaction.client, `${user.username} playlists:`);
     answer.setDescription(playlistsList);
 
-    await interaction.reply({embeds: [answer]});
+    await interaction.reply({ embeds: [answer] });
   }
 }

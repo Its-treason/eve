@@ -1,5 +1,5 @@
-import {Validator} from '../types';
-import {CommandInteraction, Guild, Message} from 'discord.js';
+import { Validator } from '../types';
+import { CommandInteraction, Guild, Message } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
 
 export default async function validateInput(
@@ -11,10 +11,9 @@ export default async function validateInput(
     const result = await validator(guild);
 
     if (result.valid === false) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(original.client, 'Error');
       answer.setDescription(result.msg || 'Unknown Error');
-      await original.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
+      await original.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
       return false;
     }
   }

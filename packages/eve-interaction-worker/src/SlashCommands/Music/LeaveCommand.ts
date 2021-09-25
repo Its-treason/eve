@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
@@ -21,9 +21,8 @@ export default class LeaveCommand extends AbstractSlashCommand {
 
     await MusicPlayerRepository.destroy(interaction.guild.id);
 
-    const answer = embedFactory();
-    answer.setTitle('Left the channel');
+    const answer = embedFactory(interaction.client, 'Left the channel');
 
-    await interaction.reply({embeds: [answer]});
+    await interaction.reply({ embeds: [answer] });
   }
 }

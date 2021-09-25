@@ -1,4 +1,4 @@
-import {ApplicationCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 
 export default abstract class AbstractSlashCommand {
   public data: ApplicationCommandData;

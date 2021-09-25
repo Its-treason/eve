@@ -19,29 +19,31 @@ import MoveCommand from '../SlashCommands/Music/MoveCommand';
 import DeleteCommand from '../SlashCommands/Music/DeleteCommand';
 import PlaylistCommand from '../SlashCommands/Music/Playlist/PlaylistCommand';
 import GotoCommand from '../SlashCommands/Music/GotoCommand';
+import { Container } from 'treason-di';
 
-export default function slashCommandArrayFactory(): AbstractSlashCommand[] {
+export default async function slashCommandArrayFactory(container: Container): Promise<AbstractSlashCommand[]> {
   const slashCommands: AbstractSlashCommand[] = [];
 
-  slashCommands.push(new BanCommand());
-  slashCommands.push(new KickCommand());
-  slashCommands.push(new WhoisCommand());
-  slashCommands.push(new BonkCommand());
-  slashCommands.push(new AvatarCommand());
-  slashCommands.push(new InviteCommand());
-  slashCommands.push(new PardonCommand());
-  slashCommands.push(new PlayCommand());
-  slashCommands.push(new LeaveCommand());
-  slashCommands.push(new ClearCommand());
-  slashCommands.push(new SkipCommand());
-  slashCommands.push(new NowPlayingCommand());
-  slashCommands.push(new QueueCommand());
-  slashCommands.push(new PauseCommand());
-  slashCommands.push(new ShuffleCommand());
-  slashCommands.push(new LoopCommand());
-  slashCommands.push(new MoveCommand());
-  slashCommands.push(new DeleteCommand());
-  slashCommands.push(new PlaylistCommand());
-  slashCommands.push(new GotoCommand());
+  slashCommands.push(await container.get<BanCommand>(BanCommand));
+  slashCommands.push(await container.get<KickCommand>(KickCommand));
+  slashCommands.push(await container.get<WhoisCommand>(WhoisCommand));
+  slashCommands.push(await container.get<BonkCommand>(BonkCommand));
+  slashCommands.push(await container.get<AvatarCommand>(AvatarCommand));
+  slashCommands.push(await container.get<InviteCommand>(InviteCommand));
+  slashCommands.push(await container.get<PardonCommand>(PardonCommand));
+  slashCommands.push(await container.get<PlayCommand>(PlayCommand));
+  slashCommands.push(await container.get<LeaveCommand>(LeaveCommand));
+  slashCommands.push(await container.get<ClearCommand>(ClearCommand));
+  slashCommands.push(await container.get<SkipCommand>(SkipCommand));
+  slashCommands.push(await container.get<NowPlayingCommand>(NowPlayingCommand));
+  slashCommands.push(await container.get<QueueCommand>(QueueCommand));
+  slashCommands.push(await container.get<PauseCommand>(PauseCommand));
+  slashCommands.push(await container.get<ShuffleCommand>(ShuffleCommand));
+  slashCommands.push(await container.get<LoopCommand>(LoopCommand));
+  slashCommands.push(await container.get<MoveCommand>(MoveCommand));
+  slashCommands.push(await container.get<DeleteCommand>(DeleteCommand));
+  slashCommands.push(await container.get<PlaylistCommand>(PlaylistCommand));
+  slashCommands.push(await container.get<GotoCommand>(GotoCommand));
+
   return slashCommands;
 }

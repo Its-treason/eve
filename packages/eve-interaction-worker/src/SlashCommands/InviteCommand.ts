@@ -1,6 +1,6 @@
 import embedFactory from '../Factory/messageEmbedFactory';
 import AbstractSlashCommand from './AbstractSlashCommand';
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 
 export default class InviteCommand extends AbstractSlashCommand {
   constructor() {
@@ -13,12 +13,11 @@ export default class InviteCommand extends AbstractSlashCommand {
 
   async execute(interaction: CommandInteraction): Promise<void> {
     const invite = interaction.client.generateInvite(
-      {scopes: ['applications.commands'], permissions: 'ADMINISTRATOR'},
+      { scopes: ['applications.commands'], permissions: 'ADMINISTRATOR' },
     );
 
-    const answer = embedFactory();
-    answer.setTitle('Invite Link');
+    const answer = embedFactory(interaction.client, 'Invite Link');
     answer.setDescription(invite);
-    interaction.reply({embeds: [answer]});
+    interaction.reply({ embeds: [answer] });
   }
 }

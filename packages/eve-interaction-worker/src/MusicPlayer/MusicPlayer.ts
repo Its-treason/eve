@@ -1,15 +1,20 @@
-import {StageChannel, TextChannel, ThreadChannel, VoiceChannel} from 'discord.js';
-import {AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel, NoSubscriberBehavior, VoiceConnection, VoiceConnectionStatus} from '@discordjs/voice';
+import { StageChannel, TextChannel, ThreadChannel, VoiceChannel } from 'discord.js';
+import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel, NoSubscriberBehavior, VoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
 import generateRandomString from '../Util/generateRandomString';
-import {existsSync, unlinkSync} from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 import youtubeDlFactory from '../Factory/youtubeDlFactory';
-import {YtResult} from '../types';
-import Logger from '../Util/Logger';
-import {QueueItem} from '../types';
+import { YtResult } from '../types';
+import { QueueItem } from '../types';
 import shuffleArray from '../Util/shuffleArray';
 import messageEmbedFactory from '../Factory/messageEmbedFactory';
 
+/**
+ * @TODO Most lines MusicPlayerClass are for managing the queue. Having the queue in a separate class with helper
+ *       methods would probably make the code more readable and this class smaller
+ */
 export class MusicPlayer {
+  public destroyed = false;
+
   private readonly player: AudioPlayer;
   private readonly connection: VoiceConnection
 
@@ -19,6 +24,8 @@ export class MusicPlayer {
   private loop = false;
 
   private textChannel: TextChannel|ThreadChannel;
+
+  private leaveTimeout: NodeJS.Timeout = null;
 
   constructor(channel: VoiceChannel|StageChannel, textChannel: TextChannel|ThreadChannel) {
     this.playNext = this.playNext.bind(this);
@@ -47,8 +54,13 @@ export class MusicPlayer {
 
   private async playNext(): Promise<void> {
     if (this.queue[this.pointer + 1] === undefined) {
+      this.leaveTimeout = setTimeout(() => {
+        this.destroy();
+      }, 1.8e+6); // 1.8e+6 => 30 Minuten
       return;
     }
+
+    clearTimeout(this.leaveTimeout);
 
     if (this.loop === false) {
       this.pointer++;
@@ -84,7 +96,7 @@ export class MusicPlayer {
       return;
     }
 
-    const {url, id} = this.queue[pointer];
+    const { url, id } = this.queue[pointer];
 
     const youtubeDl = youtubeDlFactory();
     try {
@@ -106,7 +118,6 @@ export class MusicPlayer {
       await promise;
     } catch (e) {
       await this.sendPlayError(pointer);
-      Logger.error('Error during song downloading!', {error: e, url});
       return;
     } finally {
       this.queue[pointer].downloading = null;
@@ -123,7 +134,7 @@ export class MusicPlayer {
       await this.queue[pointer].downloading;
     }
 
-    const {id} = this.queue[pointer];
+    const { id } = this.queue[pointer];
 
     if (existsSync(`/tmp/${id}.mp3`) === true) {
       unlinkSync(`/tmp/${id}.mp3`);
@@ -134,7 +145,7 @@ export class MusicPlayer {
 
   public async addToQueue(ytResult: YtResult): Promise<void> {
     const id = generateRandomString();
-    this.queue.push({...ytResult, downloaded: false, id, downloading: null});
+    this.queue.push({ ...ytResult, downloaded: false, id, downloading: null });
 
     if (this.player.state.status === AudioPlayerStatus.Idle) {
       await this.playNext();
@@ -168,6 +179,7 @@ export class MusicPlayer {
   public async destroy(): Promise<void> {
     await this.clear();
     this.connection.disconnect();
+    this.destroyed = true;
   }
 
   public togglePause(): 'Paused'|'Unpaused' {
@@ -196,8 +208,8 @@ export class MusicPlayer {
   }
 
   public async move(item: number, newPosition: number): Promise<boolean> {
-    item -= 1;
-    newPosition -= 1;
+    item--;
+    newPosition--;
 
     if (this.queue[item] === undefined) {
       return false;
@@ -225,7 +237,7 @@ export class MusicPlayer {
   }
 
   public async delete(item: number): Promise<boolean> {
-    item -= 1;
+    item--;
 
     if (this.queue[item] === undefined) {
       return false;
@@ -246,7 +258,7 @@ export class MusicPlayer {
   }
 
   public async goto(position: number): Promise<boolean> {
-    position -= 1;
+    position--;
 
     if (this.queue[position] === undefined) {
       return false;
@@ -264,12 +276,11 @@ export class MusicPlayer {
       return;
     }
 
-    const {title, uploader} = this.queue[pointer];
+    const { title, uploader } = this.queue[pointer];
 
-    const answer = messageEmbedFactory();
-    answer.setTitle('Error during loading');
+    const answer = messageEmbedFactory(this.textChannel.client, 'Error during loading');
     answer.setDescription(`\`${title}\` uploaded by \`${uploader}\` could not be loaded!`);
-    this.textChannel.send({embeds: [answer]});
+    this.textChannel.send({ embeds: [answer] });
   }
 
   public getCurrentPlaying(): QueueItem {

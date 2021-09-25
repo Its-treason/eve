@@ -1,15 +1,15 @@
-import {CommandInteraction} from 'discord.js';
-import AbstractSlashCommand from '../../AbstractSlashCommand';
+import { CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import embedFactory from '../../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../../Validation/validateCanGetPlayer';
-import {YtResult} from '../../../types';
+import { YtResult } from '../../../types';
 import AbstractSubSlashCommand from '../../AbstractSubSlashCommand';
-import {ApplicationCommandOptionTypes} from 'discord.js/typings/enums';
 
 export default class PlaylistSaveCommand extends AbstractSubSlashCommand {
-  constructor() {
+  constructor(
+    private playlistProjection: PlaylistProjection,
+  ) {
     super({
       type: 1,
       name: 'save',
@@ -30,10 +30,9 @@ export default class PlaylistSaveCommand extends AbstractSubSlashCommand {
     const userId = interaction.user.id;
 
     if (name.length > 32) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('Name must not be longer than 32 characters!');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
+      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
       return;
     }
 
@@ -45,10 +44,9 @@ export default class PlaylistSaveCommand extends AbstractSubSlashCommand {
     const queue = player.getQueue();
 
     if (queue.length === 0) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('The queue is currently empty!');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
+      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
       return;
     }
 
@@ -62,11 +60,10 @@ export default class PlaylistSaveCommand extends AbstractSubSlashCommand {
       };
     });
 
-    await PlaylistProjection.savePlaylist(name, userId, ytResultQueue);
+    await this.playlistProjection.savePlaylist(name, userId, ytResultQueue);
 
-    const answer = messageEmbedFactory();
-    answer.setTitle('Saved Playlist!');
+    const answer = messageEmbedFactory(interaction.client, 'Saved Playlist!');
 
-    await interaction.reply({embeds: [answer]});
+    await interaction.reply({ embeds: [answer] });
   }
 }

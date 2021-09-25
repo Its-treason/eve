@@ -1,11 +1,11 @@
-import {CommandInteraction, User} from 'discord.js';
+import { CommandInteraction, User } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import Url from 'url-parse';
-import {YtResult} from '../../types';
-import ytpl, {Item as plItem} from 'ytpl';
-import ytsr, {Item} from 'ytsr';
+import { YtResult } from '../../types';
+import ytpl, { Item as plItem } from 'ytpl';
+import ytsr, { Item } from 'ytsr';
 
 export default class PlayCommand extends AbstractSlashCommand {
   private requester: User;
@@ -30,20 +30,18 @@ export default class PlayCommand extends AbstractSlashCommand {
       interaction.guild === null ||
       (interaction.channel.type !== 'GUILD_TEXT' && interaction.channel.type !== 'GUILD_PUBLIC_THREAD')
     ) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('Command can not be executed inside DMs!');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
+      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
       return;
     }
 
     const member = await interaction.guild.members.fetch(interaction.user);
 
     if (member.voice.channel === null) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('You must be in a voice channel');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
+      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
       return;
     }
 
@@ -58,10 +56,9 @@ export default class PlayCommand extends AbstractSlashCommand {
     const player = MusicPlayerRepository.get(interaction.guild.id);
 
     if (member.voice.channelId !== player.getVoiceChannelId()) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('You must be in the same voice channel as iam in');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
+      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
       return;
     }
 
@@ -73,10 +70,9 @@ export default class PlayCommand extends AbstractSlashCommand {
       await player.addToQueue(parsedUrl);
     }
 
-    const answer = embedFactory();
-    answer.setTitle('Added to Queue!');
+    const answer = embedFactory(interaction.client, 'Added to Queue!');
 
-    await interaction.editReply({embeds: [answer]});
+    await interaction.editReply({ embeds: [answer] });
   }
 
   private async parseQuery(query: string): Promise<YtResult[]> {
@@ -99,7 +95,7 @@ export default class PlayCommand extends AbstractSlashCommand {
   }
 
   private async getAllUrlsFromPlaylist(listId: string): Promise<YtResult[]> {
-    const result = await ytpl(listId, {limit: 999});
+    const result = await ytpl(listId, { limit: 999 });
 
     return result.items.map((item: plItem) => {
       return {
@@ -113,7 +109,7 @@ export default class PlayCommand extends AbstractSlashCommand {
   }
 
   private async searchForVideoByQuery(query: string): Promise<YtResult> {
-    const result = await ytsr(query, {limit: 1});
+    const result = await ytsr(query, { limit: 1 });
     const item = result.items[0];
 
     if (item.type !== 'video') {
@@ -130,7 +126,7 @@ export default class PlayCommand extends AbstractSlashCommand {
   }
 
   private async searchForVideoById(id: string): Promise<YtResult> {
-    const result = await ytsr(id, {limit: 10});
+    const result = await ytsr(id, { limit: 10 });
 
     const item = result.items.filter((item: Item) => {
       if (item.type !== 'video') {

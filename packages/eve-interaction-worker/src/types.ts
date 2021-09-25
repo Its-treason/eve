@@ -1,9 +1,5 @@
-import {Channel, Client, Collection, CommandInteraction, Guild, GuildMember, Interaction, Message, Role, User} from 'discord.js';
-import {APIApplicationCommandOption} from 'discord-api-types/v9';
-
-export interface EveClient extends Client {
-  commands?: Collection<string, EveCommand>;
-}
+import { Channel, CommandInteraction, Guild, GuildMember, Interaction, Message, Role, User } from 'discord.js';
+import { APIApplicationCommandOption } from 'discord-api-types/v9';
 
 export interface EveInteraction {
   name: string,

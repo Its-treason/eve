@@ -1,4 +1,4 @@
-import {CommandInteraction, User} from 'discord.js';
+import { CommandInteraction, User } from 'discord.js';
 import BrowserFactory from '../Factory/browserFactory';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
@@ -74,16 +74,15 @@ export default class BonkCommand extends AbstractSlashCommand {
     try {
       const browser = await BrowserFactory();
       const page = await browser.newPage();
-      await page.setViewport({width: 720, height: 492});
+      await page.setViewport({ width: 720, height: 492 });
       await page.setContent(bonkHtml);
       const attachment = await page.screenshot();
-      await browser.close();
 
       if (!(attachment instanceof Buffer)) {
         throw new Error('Invalid Buffer');
       }
 
-      await interaction.editReply({files: [attachment]});
+      await interaction.editReply({ files: [attachment] });
     } catch (error) {
       await interaction.editReply(`${interaction.user} there was an error while creating the image`);
 

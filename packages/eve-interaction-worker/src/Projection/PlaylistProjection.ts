@@ -1,24 +1,32 @@
-import pool from '../Structures/Pool';
-import {YtResult} from '../types';
+import { YtResult } from '../types';
+import { Pool } from 'mariadb';
 
 export default class PlaylistProjection {
-  public static async savePlaylist(name: string, userId: string, queue: YtResult[]): Promise<void> {
+  private connection: Pool;
+
+  constructor(
+    connection: Pool,
+  ) {
+    this.connection = connection;
+  }
+
+  public async savePlaylist(name: string, userId: string, queue: YtResult[]): Promise<void> {
     const sql = 'INSERT INTO `playlist` (`name`, `user_id`, `queue`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `queue` = ?';
 
     const jsonQueue = JSON.stringify(queue);
-    await pool.query(sql, [name, userId, jsonQueue, jsonQueue]);
+    await this.connection.query(sql, [name, userId, jsonQueue, jsonQueue]);
   }
 
-  public static async deletePlaylist(name: string, userId: string): Promise<void> {
+  public async deletePlaylist(name: string, userId: string): Promise<void> {
     const sql = 'DELETE FROM `playlist` WHERE `name` = ? AND `user_id` = ?';
 
-    await pool.query(sql, [name, userId]);
+    await this.connection.query(sql, [name, userId]);
   }
 
-  public static async loadPlaylistByNameAndUserId(name: string, userId: string): Promise<YtResult[]|false> {
+  public async loadPlaylistByNameAndUserId(name: string, userId: string): Promise<YtResult[]|false> {
     const sql = 'SELECT queue FROM `playlist` WHERE `name` = ? AND `user_id` = ?';
 
-    const result = await pool.query(sql, [name, userId]);
+    const result = await this.connection.query(sql, [name, userId]);
 
     if (result[0] === undefined) {
       return false;
@@ -47,10 +55,10 @@ export default class PlaylistProjection {
     });
   }
 
-  public static async loadPlaylistsOfUser(userId: string): Promise<string[]> {
+  public async loadPlaylistsOfUser(userId: string): Promise<string[]> {
     const sql = 'SELECT `name` FROM `playlist` WHERE `user_id` = ?';
 
-    const result = await pool.query(sql, [userId]);
+    const result = await this.connection.query(sql, [userId]);
 
     return result.map((item: {name: string}) => {
       return item.name;

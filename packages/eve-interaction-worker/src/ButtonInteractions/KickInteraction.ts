@@ -1,20 +1,18 @@
-import {ButtonInteraction, MessageActionRow, MessageButton} from 'discord.js';
-import {EventStore} from '../eventStore/EventStore';
-import {Id} from '../Value/Id';
+import { ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { EventStore } from '../eventStore/EventStore';
+import { Id } from '../Value/Id';
 import embedFactory from '../Factory/messageEmbedFactory';
-import AbstractInteraction from './AbstractInteraction';
+import AbstractButtonInteraction from './AbstractInteraction';
 
-export default class KickInteraction extends AbstractInteraction {
-  name;
-
-  constructor() {
-    super();
-
-    this.name = 'kick';
+export default class KickInteraction extends AbstractButtonInteraction {
+  constructor(
+    private eventStore: EventStore,
+  ) {
+    super('kick');
   }
 
   async execute(args: string[], buttonInteraction: ButtonInteraction): Promise<void> {
-    const aggregate = await EventStore.loadAggregate(Id.fromString(args[0]));
+    const aggregate = await this.eventStore.loadAggregate(Id.fromString(args[0]));
     const event = aggregate.getEventByTopic('kick-interaction.create');
 
     const user = await buttonInteraction.client.users.fetch(`${BigInt(event.getPayload().userId)}`);
@@ -22,10 +20,9 @@ export default class KickInteraction extends AbstractInteraction {
     const reason = event.getPayload().reason;
 
     if (buttonInteraction.user.id !== user.id) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(buttonInteraction.client, 'Error');
       answer.setDescription('You did start this command!');
-      await buttonInteraction.reply({ephemeral: true, embeds: [answer]});
+      await buttonInteraction.reply({ ephemeral: true, embeds: [answer] });
       return;
     }
 
@@ -42,8 +39,9 @@ export default class KickInteraction extends AbstractInteraction {
         .setDisabled(true),
       );
 
-    await buttonInteraction.update({components: [row]});
+    await buttonInteraction.update({ components: [row] });
 
     await aggregate.record('kick-interaction.executed', {});
+    this.eventStore.saveAggregate(aggregate);
   }
 }

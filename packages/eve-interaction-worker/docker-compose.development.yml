@@ -9,7 +9,7 @@ services:
     command:
       - "node"
       - "./node_modules/ts-node/dist/bin.js"
-      - "index.ts"
+      - "src/index.ts"
     environment:
       NODE_ENV: "development"
     env_file:

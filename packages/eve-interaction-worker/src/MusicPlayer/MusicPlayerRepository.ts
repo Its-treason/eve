@@ -1,15 +1,34 @@
-import {MusicPlayer} from './MusicPlayer';
-import {StageChannel, TextChannel, ThreadChannel, VoiceChannel} from 'discord.js';
+import { MusicPlayer } from './MusicPlayer';
+import { StageChannel, TextChannel, ThreadChannel, VoiceChannel } from 'discord.js';
 
 export default class MusicPlayerRepository {
   private static musicPlayers = new Map<string, MusicPlayer>();
 
   public static has(serverId: string): boolean {
-    return this.musicPlayers.has(serverId);
+    const hasPlayer = this.musicPlayers.has(serverId);
+
+    if (hasPlayer === false) {
+      return false;
+    }
+
+    const player = this.musicPlayers.get(serverId);
+
+    if (player.destroyed === true) {
+      MusicPlayerRepository.destroy(serverId);
+      return false;
+    }
+    return true;
   }
 
   public static get(serverId: string): MusicPlayer {
-    return this.musicPlayers.get(serverId);
+    const player = this.musicPlayers.get(serverId);
+
+    if (player.destroyed === true) {
+      MusicPlayerRepository.destroy(serverId);
+      return null;
+    }
+
+    return player;
   }
 
   public static create(channel: VoiceChannel|StageChannel, textChannel: TextChannel|ThreadChannel): MusicPlayer {

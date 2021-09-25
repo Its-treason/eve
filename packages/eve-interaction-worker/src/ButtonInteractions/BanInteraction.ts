@@ -1,21 +1,18 @@
-import {EveInteraction} from '../types';
-import {ButtonInteraction, MessageActionRow, MessageButton} from 'discord.js';
+import { ButtonInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
-import {EventStore} from '../eventStore/EventStore';
-import {Id} from '../Value/Id';
-import AbstractInteraction from './AbstractInteraction';
+import { EventStore } from '../eventStore/EventStore';
+import { Id } from '../Value/Id';
+import AbstractButtonInteraction from './AbstractInteraction';
 
-export default class BanInteraction extends AbstractInteraction {
-  name;
-
-  constructor() {
-    super();
-
-    this.name = 'ban';
+export default class BanInteraction extends AbstractButtonInteraction {
+  constructor(
+    private eventStore: EventStore,
+  ) {
+    super('ban');
   }
 
   async execute(args: string[], buttonInteraction: ButtonInteraction): Promise<void> {
-    const aggregate = await EventStore.loadAggregate(Id.fromString(args[0]));
+    const aggregate = await this.eventStore.loadAggregate(Id.fromString(args[0]));
     const event = aggregate.getEventByTopic('ban-interaction.create');
 
     const user = await buttonInteraction.client.users.fetch(`${BigInt(event.getPayload().userId)}`);
@@ -23,16 +20,16 @@ export default class BanInteraction extends AbstractInteraction {
     const reason = event.getPayload().reason;
 
     if (buttonInteraction.user.id !== user.id) {
-      const answer = embedFactory();
+      const answer = embedFactory(buttonInteraction.client, 'Error');
       answer.setTitle('Error');
       answer.setDescription('You did not start this command!');
-      await buttonInteraction.reply({ephemeral: true, embeds: [answer]});
+      await buttonInteraction.reply({ ephemeral: true, embeds: [answer] });
       return;
     }
 
     await buttonInteraction.guild.members.ban(
       targetUser.id,
-      {reason: `"${reason}" by "${user.username}#${user.discriminator}" using EVE`},
+      { reason: `"${reason}" by "${user.username}#${user.discriminator}" using EVE` },
     );
 
     const row = new MessageActionRow()
@@ -43,8 +40,9 @@ export default class BanInteraction extends AbstractInteraction {
         .setDisabled(true),
       );
 
-    await buttonInteraction.update({components: [row]});
+    await buttonInteraction.update({ components: [row] });
 
-    await aggregate.record('ban-interaction.executed', {});
+    aggregate.record('ban-interaction.executed', {});
+    this.eventStore.saveAggregate(aggregate);
   }
 }

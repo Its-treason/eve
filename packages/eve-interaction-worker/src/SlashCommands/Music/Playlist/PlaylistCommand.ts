@@ -1,35 +1,28 @@
-import {CommandInteraction} from 'discord.js';
+import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../../AbstractSlashCommand';
-import PlaylistListCommand from './PlaylistListCommand';
-import PlaylistSaveCommand from './PlaylistSaveCommand';
-import PlaylistLoadCommand from './PlaylistLoadCommand';
 import AbstractSubSlashCommand from '../../AbstractSubSlashCommand';
 import SubCommandNotFoundError from '../../../Error/SubCommandNotFoundError';
-import PlaylistDeleteCommand from './PlaylistDeleteCommand';
 
 export default class PlaylistCommand extends AbstractSlashCommand {
   private subCommands: Map<string, AbstractSubSlashCommand>;
 
-  constructor() {
+  constructor(
+    subCommandsArray: AbstractSubSlashCommand[],
+  ) {
     const subCommands = new Map<string, AbstractSubSlashCommand>();
-    const listCommand = new PlaylistListCommand();
-    subCommands.set(listCommand.data.name, listCommand);
-    const loadCommand = new PlaylistLoadCommand();
-    subCommands.set(loadCommand.data.name, loadCommand);
-    const saveCommand = new PlaylistSaveCommand();
-    subCommands.set(saveCommand.data.name, saveCommand);
-    const deleteCommand = new PlaylistDeleteCommand();
-    subCommands.set(deleteCommand.data.name, deleteCommand);
+
+    const options = subCommandsArray.map((subCommand): ApplicationCommandSubCommandData => {
+      subCommands.set(subCommand.data.name, subCommand);
+
+      return subCommand.data;
+    });
+
+    subCommands.values();
 
     super({
       name: 'playlist',
       description: 'Manage Playlists',
-      options: [
-        listCommand.data,
-        loadCommand.data,
-        saveCommand.data,
-        deleteCommand.data,
-      ],
+      options,
     });
 
     this.subCommands = subCommands;

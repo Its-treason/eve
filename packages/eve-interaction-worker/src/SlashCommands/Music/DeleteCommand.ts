@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
@@ -32,16 +32,14 @@ export default class DeleteCommand extends AbstractSlashCommand {
     const success = await player.delete(item);
 
     if (success === true) {
-      const answer = embedFactory();
-      answer.setTitle('Deleted item!');
+      const answer = embedFactory(interaction.client, 'Deleted item!');
 
-      await interaction.editReply({embeds: [answer]});
+      await interaction.editReply({ embeds: [answer] });
       return;
     }
 
-    const answer = embedFactory();
-    answer.setTitle('That item does not exists!');
+    const answer = embedFactory(interaction.client, 'That item does not exists!');
 
-    await interaction.editReply({embeds: [answer]});
+    await interaction.editReply({ embeds: [answer] });
   }
 }

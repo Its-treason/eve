@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
@@ -21,10 +21,9 @@ export default class ShuffleCommand extends AbstractSlashCommand {
     const member = await interaction.guild.members.fetch(interaction.user);
 
     if (member.voice?.channelId !== player.getVoiceChannelId()) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(interaction.client, 'Error!');
       answer.setDescription('You must be in the same voice channel as iam in');
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true}, ephemeral: true});
+      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
       return;
     }
 
@@ -32,9 +31,8 @@ export default class ShuffleCommand extends AbstractSlashCommand {
 
     await player.shuffle();
 
-    const answer = embedFactory();
-    answer.setTitle('Shuffled the queue!');
+    const answer = embedFactory(interaction.client, 'Shuffled the queue!');
 
-    await interaction.editReply({embeds: [answer]});
+    await interaction.editReply({ embeds: [answer] });
   }
 }

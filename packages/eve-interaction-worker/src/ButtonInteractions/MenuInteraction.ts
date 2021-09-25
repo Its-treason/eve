@@ -1,19 +1,17 @@
-import {EveInteraction} from '../types';
-import {ButtonInteraction, Interaction} from 'discord.js';
+import { ButtonInteraction } from 'discord.js';
+import { EventStore } from '../eventStore/EventStore';
 import embedFactory from '../Factory/messageEmbedFactory';
-import AbstractInteraction from './AbstractInteraction';
+import AbstractButtonInteraction from './AbstractInteraction';
 
-export default class MenuInteraction extends AbstractInteraction {
-  name;
-
-  constructor() {
-    super();
-
-    this.name = 'menu';
+export default class MenuInteraction extends AbstractButtonInteraction {
+  constructor(
+    private eventStore: EventStore,
+  ) {
+    super('menu');
   }
 
  async execute(args: string[], interaction: ButtonInteraction): Promise<void> {
-    const answer = embedFactory();
+    const answer = embedFactory(interaction.client, 'Role-Menu');
     const guild = interaction.guild;
 
     const roleId = args[1];

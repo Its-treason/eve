@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
@@ -49,19 +49,17 @@ export default class AvatarCommand extends AbstractSlashCommand {
     const size = interaction.options.getInteger('size', false) || 128;
 
     if (size !== 64 && size !== 128 && size !== 512 && size !== 2048 && size !== 4096) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription(`\`${size}\` is not a valid size!`);
-      await interaction.reply({embeds: [answer]});
+      await interaction.reply({ embeds: [answer] });
       return;
     }
 
-    const link = user.displayAvatarURL({format: 'png', size: size});
+    const link = user.displayAvatarURL({ format: 'png', size: size });
 
-    const answer = embedFactory();
-    answer.setTitle(`Avatar of ${user.username}`);
+    const answer = embedFactory(interaction.client, `Avatar of ${user.username}`);
     answer.addField('Link', link);
     answer.setImage(link);
-    await interaction.reply({embeds: [answer]});
+    await interaction.reply({ embeds: [answer] });
   }
 }

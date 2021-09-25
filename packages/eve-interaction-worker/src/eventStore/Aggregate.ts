@@ -1,7 +1,6 @@
-import {Event} from '../Value/Event';
-import {Id} from '../Value/Id';
-import {EventTopic} from '../types';
-import {EventStore} from './EventStore';
+import { Event } from '../Value/Event';
+import { Id } from '../Value/Id';
+import { EventTopic } from '../types';
 
 export class Aggregate {
   private events: Event[] = [];
@@ -21,7 +20,7 @@ export class Aggregate {
     return new Aggregate([]);
   }
 
-  public async record(topic: EventTopic, payload: { [key: string]: string }): Promise<Event> {
+  public record(topic: EventTopic, payload: { [key: string]: string }): Event {
     const newEventId = Id.generate();
 
     const event = Event.fromValues(
@@ -34,8 +33,6 @@ export class Aggregate {
     );
 
     this.apply(event);
-
-    await EventStore.saveAggregate(this);
 
     return event;
   }
@@ -57,5 +54,9 @@ export class Aggregate {
 
   public popEvents(): Event[] {
     return this.events;
+  }
+
+  public getVersion(): number {
+    return this.version;
   }
 }

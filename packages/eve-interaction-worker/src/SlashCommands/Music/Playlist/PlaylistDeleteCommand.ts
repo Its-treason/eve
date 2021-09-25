@@ -1,11 +1,12 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import AbstractSubSlashCommand from '../../AbstractSubSlashCommand';
-import {ApplicationCommandOptionTypes} from 'discord.js/typings/enums';
 
 export default class PlaylistDeleteCommand extends AbstractSubSlashCommand {
-  constructor() {
+  private readonly playlistProjection: PlaylistProjection;
+
+  constructor(playlistProjection: PlaylistProjection) {
     super({
       type: 1,
       name: 'delete',
@@ -19,26 +20,27 @@ export default class PlaylistDeleteCommand extends AbstractSubSlashCommand {
         },
       ],
     });
+
+    this.playlistProjection = playlistProjection;
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
     const name = interaction.options.getString('name', true);
     const userId = interaction.user.id;
 
-    const playlists = await PlaylistProjection.loadPlaylistByNameAndUserId(name, userId);
+    const playlists = await this.playlistProjection.loadPlaylistByNameAndUserId(name, userId);
 
     if (playlists === false) {
-      const answer = messageEmbedFactory();
+      const answer = messageEmbedFactory(interaction.client, 'Error');
       answer.setTitle('This playlist does not exist!');
-      await interaction.reply({embeds: [answer]});
+      await interaction.reply({ embeds: [answer] });
       return;
     }
 
-    await PlaylistProjection.deletePlaylist(name, userId);
+    await this.playlistProjection.deletePlaylist(name, userId);
 
-    const answer = messageEmbedFactory();
-    answer.setTitle('Playlist deleted!');
+    const answer = messageEmbedFactory(interaction.client, '');
 
-    await interaction.reply({embeds: [answer]});
+    await interaction.reply({ embeds: [answer] });
   }
 }

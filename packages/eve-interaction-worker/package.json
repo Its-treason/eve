@@ -1,11 +1,11 @@
 {
-  "name": "eve-util",
+  "name": "eve-interaction-worker",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "ts-node index.ts",
-    "lint": "eslint ./src/**/*.ts index.ts",
+    "lint": "eslint ./src/**/*.ts",
     "build": "webpack"
   },
   "author": "",
@@ -22,6 +22,7 @@
     "mariadb": "^2.5.4",
     "opusscript": "^0.0.8",
     "puppeteer": "^10.2.0",
+    "treason-di": "^0.1.0",
     "url-parse": "^1.5.3",
     "youtube-dl-wrap": "^2.1.0",
     "ytdl-core": "^4.9.1",

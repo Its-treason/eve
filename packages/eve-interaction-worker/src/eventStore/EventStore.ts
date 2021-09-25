@@ -1,8 +1,8 @@
-import {Id} from '../Value/Id';
-import {Aggregate} from './Aggregate';
-import pool from '../Structures/Pool';
-import {Event} from '../Value/Event';
-import {EventTopic} from '../types';
+import { Id } from '../Value/Id';
+import { Aggregate } from './Aggregate';
+import { Event } from '../Value/Event';
+import { EventTopic } from '../types';
+import { Connection } from 'mariadb';
 
 interface EventsRow {
   [string: string]: string,
@@ -10,9 +10,17 @@ interface EventsRow {
 }
 
 export class EventStore {
-  public static async loadAggregate(id: Id): Promise<Aggregate> {
+  private mariadb: Connection
+
+  constructor(
+    mariadb: Connection,
+  ) {
+    this.mariadb = mariadb;
+  }
+
+  public async loadAggregate(id: Id): Promise<Aggregate> {
     const sql = 'SELECT correlation_id FROM events WHERE event_id = ?';
-    const idResult = await pool.query(sql, id.toString());
+    const idResult = await this.mariadb.query(sql, id.toString());
 
     if (idResult[0] === undefined) {
       return null;
@@ -20,7 +28,7 @@ export class EventStore {
 
     const correlationId = idResult[0]['correlation_id'];
 
-    const result = await pool.query('SELECT * FROM events WHERE correlation_id = ?', correlationId);
+    const result = await this.mariadb.query('SELECT * FROM events WHERE correlation_id = ?', correlationId);
 
     const events = result.map((row: EventsRow) => {
       return Event.fromRow(row);
@@ -29,7 +37,7 @@ export class EventStore {
     return Aggregate.reconstitute(events);
   }
 
-  public static async saveAggregate(aggregate: Aggregate): Promise<void> {
+  public async saveAggregate(aggregate: Aggregate): Promise<void> {
     const events = aggregate.popEvents();
 
     for (const event of events) {
@@ -37,7 +45,7 @@ export class EventStore {
         continue;
       }
 
-      await pool.query(
+      await this.mariadb.query(
         'INSERT INTO `events` (`event_id`, `causation_id`, `correlation_id`, `topic`, `payload`) VALUES (?, ?, ?, ?, ?);',
         [
           event.getEventId().toString(),

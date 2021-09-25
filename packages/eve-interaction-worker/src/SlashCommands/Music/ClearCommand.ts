@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
@@ -19,10 +19,8 @@ export default class ClearCommand extends AbstractSlashCommand {
 
     await player.clear();
 
-    const answer = embedFactory();
-    answer.setTitle('Cleared');
-    answer.setDescription('Cleared the queue!');
+    const answer = embedFactory(interaction.client, 'Cleared the queue!');
 
-    await interaction.reply({embeds: [answer]});
+    await interaction.reply({ embeds: [answer] });
   }
 }

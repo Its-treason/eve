@@ -1,4 +1,4 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
@@ -20,9 +20,8 @@ export default class SkipCommand extends AbstractSlashCommand {
 
     await player.skip();
 
-    const answer = embedFactory();
-    answer.setTitle('Skipped the tracked!');
+    const answer = embedFactory(interaction.client, 'Skipped the tracked!');
 
-    await interaction.reply({embeds: [answer]});  
+    await interaction.reply({ embeds: [answer] });
   }
 }

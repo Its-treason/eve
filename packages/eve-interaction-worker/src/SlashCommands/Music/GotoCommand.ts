@@ -1,8 +1,7 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
-import {ApplicationCommandOptionTypes} from 'discord.js/typings/enums';
 
 export default class GotoCommand extends AbstractSlashCommand {
   constructor() {
@@ -33,14 +32,12 @@ export default class GotoCommand extends AbstractSlashCommand {
     const success = await player.goto(position);
 
     if (success === true) {
-      const answer = embedFactory();
-      answer.setTitle(`Changed position to ${position}!`);
-      await interaction.editReply({embeds: [answer]});
+      const answer = embedFactory(interaction.client, `Changed position to ${position}!`);
+      await interaction.editReply({ embeds: [answer] });
       return;
     }
 
-    const answer = embedFactory();
-    answer.setTitle('That item does not exists!');
-    await interaction.editReply({embeds: [answer]});
+    const answer = embedFactory(interaction.client, 'That item does not exists!');
+    await interaction.editReply({ embeds: [answer] });
   }
 }

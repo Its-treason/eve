@@ -1,7 +1,7 @@
-import {ApplicationCommandData, CommandInteraction, MessageActionRow, MessageButton} from 'discord.js';
+import { CommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
-import {Aggregate} from '../eventStore/Aggregate';
-import {EventStore} from '../eventStore/EventStore';
+import { Aggregate } from '../eventStore/Aggregate';
+import { EventStore } from '../eventStore/EventStore';
 import validateInput from '../Validation/validateInput';
 import notEquals from '../Validation/Validators/notEquals';
 import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
@@ -10,7 +10,9 @@ import hasPermissions from '../Validation/Validators/hasPermissions';
 import AbstractSlashCommand from './AbstractSlashCommand';
 
 export default class BanCommand extends AbstractSlashCommand {
-  constructor() {
+  constructor(
+    private eventStore: EventStore,
+  ) {
     super({
       name: 'ban',
       description: 'Ban a user',
@@ -48,7 +50,7 @@ export default class BanCommand extends AbstractSlashCommand {
 
     let banInfo;
     try {
-      banInfo = await interaction.guild.bans.fetch({user, force: true});
+      banInfo = await interaction.guild.bans.fetch({ user, force: true });
     } catch (e) {
       if (e.message !== 'Unknown Ban') {
         throw e;
@@ -56,22 +58,21 @@ export default class BanCommand extends AbstractSlashCommand {
     }
 
     if (banInfo !== undefined) {
-      const answer = embedFactory();
-      answer.setTitle('Error');
+      const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription(`${user} is already banned in this guild!`);
       answer.addField('Ban reason', banInfo.reason);
-      await interaction.reply({embeds: [answer], allowedMentions: {repliedUser: true} });
+      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
       return;
     }
 
     const aggregate = Aggregate.createNew();
     const event = await aggregate.record(
       'ban-interaction.create',
-      {userId: interaction.user.id, targetUserId: user.id, reason: reason},
+      { userId: interaction.user.id, targetUserId: user.id, reason: reason },
     );
+    this.eventStore.saveAggregate(aggregate);
 
-    const answer = embedFactory();
-    answer.setTitle('Ban');
+    const answer = embedFactory(interaction.client, 'Ban');
     answer.setDescription(`Are u sure u want to ban ${user}?`);
 
     const row = new MessageActionRow()
@@ -81,17 +82,18 @@ export default class BanCommand extends AbstractSlashCommand {
           .setStyle('DANGER'),
       );
 
-    await interaction.reply({embeds: [answer], components: [row], allowedMentions: {repliedUser: true} });
+    await interaction.reply({ embeds: [answer], components: [row], allowedMentions: { repliedUser: true } });
 
     setTimeout(() => {
       (async () => {
-        const aggregate = await EventStore.loadAggregate(event.getEventId());
+        const aggregate = await this.eventStore.loadAggregate(event.getEventId());
 
         if (await aggregate.getEventByTopic('ban-interaction.executed') !== null) {
           return;
         }
 
         await aggregate.record('ban-interaction.timedOut', {});
+        this.eventStore.saveAggregate(aggregate);
 
         const row = new MessageActionRow()
           .addComponents(new MessageButton()
@@ -101,7 +103,7 @@ export default class BanCommand extends AbstractSlashCommand {
             .setDisabled(true),
           );
 
-        await interaction.editReply({components: [row]});
+        await interaction.editReply({ components: [row] });
       })();
     }, 60000);
   }

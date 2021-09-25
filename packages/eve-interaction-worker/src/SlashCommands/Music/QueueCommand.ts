@@ -1,7 +1,7 @@
-import {CommandInteraction} from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import {QueueItem} from '../../types';
+import { QueueItem } from '../../types';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
 
 export default class QueueCommand extends AbstractSlashCommand {
@@ -30,15 +30,14 @@ export default class QueueCommand extends AbstractSlashCommand {
     const startItemPointer = (interaction.options.getInteger('offset') || (pointer - 1)) - 1;
 
     if (items.length === 0) {
-      const answer = embedFactory();
-      answer.setTitle('Queue is empty');
-      await interaction.reply({embeds: [answer]});
+      const answer = embedFactory(interaction.client, 'Queue is empty');
+      await interaction.reply({ embeds: [answer] });
       return;
     }
 
     const queue = this.createQueueMessage(items, startItemPointer, pointer);
 
-    await interaction.reply({content: queue});
+    await interaction.reply({ content: queue });
   }
 
   createQueueMessage(items: QueueItem[], startItemPointer: number, pointer: number): string {
