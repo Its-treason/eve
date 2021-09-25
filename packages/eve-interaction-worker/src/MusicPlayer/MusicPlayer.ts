@@ -53,14 +53,14 @@ export class MusicPlayer {
   }
 
   private async playNext(): Promise<void> {
+    clearTimeout(this.leaveTimeout);
+
     if (this.queue[this.pointer + 1] === undefined) {
       this.leaveTimeout = setTimeout(() => {
         this.destroy();
-      }, 1.8e+6); // 1.8e+6 => 30 Minuten
+      }, 600000); // 1.8e+6 => 30 minutes
       return;
     }
-
-    clearTimeout(this.leaveTimeout);
 
     if (this.loop === false) {
       this.pointer++;
