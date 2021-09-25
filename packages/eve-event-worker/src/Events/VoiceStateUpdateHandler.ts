@@ -17,11 +17,11 @@ export default class VoiceStateUpdateHandler extends AbstractEventHandler {
   }
 
   private async recordChannelActivity(oldState: VoiceState, newState: VoiceState): Promise<void> {
-    if (oldState.channel?.id !== null) {
+    if (typeof oldState.channel?.id === 'string') {
       await this.channelActivityProjection.recordChannelLeft(oldState.member.id, oldState.channel.id, oldState.guild.id);
     }
 
-    if (newState.channel?.id !== null) {
+    if (typeof newState.channel?.id === 'string') {
       await this.channelActivityProjection.recordChannelJoin(newState.member.id, newState.channel.id, newState.guild.id);
     }
   }

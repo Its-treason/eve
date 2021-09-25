@@ -1,4 +1,4 @@
-import { Pool } from "mariadb";
+import { Pool } from 'mariadb';
 
 export default class ChannelActivityProjection {
   constructor(
