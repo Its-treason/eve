@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "noImplicitAny": true,
+    "allowUnreachableCode": true,
+    "noEmit": true
+  },
+  "include": [
+    "**/*.ts",
+    "src/index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".idea",
+    "build",
+    "dist"
+  ]
+}

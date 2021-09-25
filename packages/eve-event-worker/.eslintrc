@@ -1,0 +1,42 @@
+{
+  "root": true,
+  "extends": [    
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "project": [
+      "./packages/*/tsconfig.json"
+    ]
+  },
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "no-undef": "off",
+    "eqeqeq": "error",
+    "quotes": ["error", "single"],
+    "camelcase": ["error", {"properties": "always", "ignoreGlobals": true}],
+    "max-len": ["error", {"code": 200, "tabWidth": 4}],
+    "no-useless-constructor": "error",
+    "indent": "off",
+    "comma-dangle": ["error", "always-multiline"],
+    "semi": ["error", "always", {"omitLastInOneLineBlock": false}],
+    "func-call-spacing": ["error", "never"],
+    "eol-last": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
+    "space-before-blocks": ["error"],
+    "no-multi-spaces": ["error", {"exceptions": {"VariableDeclarator": false, "Property": false}}],
+    "block-spacing": "error",
+    "keyword-spacing": ["error", {"after": true, "before": true}]
+  },
+  "ignorePatterns": ["webpack.config.js"],
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ts"]
+    }
+  ]
+}
