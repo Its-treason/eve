@@ -1,5 +1,5 @@
 import { StageChannel, TextChannel, ThreadChannel, VoiceChannel } from 'discord.js';
-import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel, NoSubscriberBehavior, VoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
+import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, entersState, joinVoiceChannel, NoSubscriberBehavior, VoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
 import generateRandomString from '../Util/generateRandomString';
 import { existsSync, unlinkSync } from 'fs';
 import youtubeDlFactory from '../Factory/youtubeDlFactory';
@@ -46,9 +46,18 @@ export class MusicPlayer {
 
     this.connection.once(VoiceConnectionStatus.Ready, () => {
       this.connection.subscribe(this.player);
-
       this.player.on(AudioPlayerStatus.Idle, this.playNext);
       this.player.stop(true);
+    });
+    this.connection.on(VoiceConnectionStatus.Disconnected, async () => {
+      try {
+        await Promise.race([
+          entersState(this.connection, VoiceConnectionStatus.Signalling, 2_000),
+          entersState(this.connection, VoiceConnectionStatus.Connecting, 2_000),
+        ]);
+      } catch (error) {
+        this.destroy();
+      }
     });
   }
 
@@ -98,9 +107,11 @@ export class MusicPlayer {
 
     const { url, id } = this.queue[pointer];
 
+    console.log('Queued download for:', url, pointer);
+
     const youtubeDl = youtubeDlFactory();
     try {
-      const promise = await youtubeDl.execPromise([
+      const promise = youtubeDl.execPromise([
         url,
         '--audio-format',
         'flac',
@@ -117,6 +128,8 @@ export class MusicPlayer {
       this.queue[pointer].downloading = promise;
       await promise;
     } catch (e) {
+      console.error(e);
+      
       await this.sendPlayError(pointer);
       return;
     } finally {
@@ -127,10 +140,10 @@ export class MusicPlayer {
   }
 
   private async removeDownload(pointer: number) {
-    if (this.queue[pointer]?.downloaded !== true) {
+    if (this.queue[pointer]?.downloaded === false) {
       return;
     }
-    if (this.queue[pointer].downloading !== null) {
+    if (this.queue[pointer]?.downloading instanceof Promise) {
       await this.queue[pointer].downloading;
     }
 
@@ -147,12 +160,16 @@ export class MusicPlayer {
     const id = generateRandomString();
     this.queue.push({ ...ytResult, downloaded: false, id, downloading: null });
 
-    if (this.player.state.status === AudioPlayerStatus.Idle) {
-      await this.playNext();
+    if (
+      this.player.state.status === AudioPlayerStatus.Idle
+      && !(this.queue[this.pointer]?.downloading instanceof Promise)
+    ) {
+      console.log('Play next');
+      this.playNext().catch(console.error);
       return;
     }
-
-    await this.downloadNextAndRemoveOld();
+    
+    this.downloadNextAndRemoveOld().catch(console.error);
   }
 
   public async skip(): Promise<void> {
@@ -199,7 +216,7 @@ export class MusicPlayer {
     this.queue = [newQueueItem, ...shuffleArray(this.queue)];
     this.pointer = 0;
 
-    await this.downloadNextAndRemoveOld();
+    this.downloadNextAndRemoveOld().catch(console.error);
   }
 
   public loopSong(): boolean {
@@ -231,7 +248,7 @@ export class MusicPlayer {
       this.pointer++;
     }
 
-    await this.downloadNextAndRemoveOld();
+    this.downloadNextAndRemoveOld().catch(console.error);
 
     return true;
   }
@@ -252,7 +269,7 @@ export class MusicPlayer {
       this.pointer--;
     }
 
-    await this.downloadNextAndRemoveOld();
+    this.downloadNextAndRemoveOld().catch(console.error);
 
     return true;
   }
@@ -263,8 +280,6 @@ export class MusicPlayer {
     if (this.queue[position] === undefined) {
       return false;
     }
-
-    await this.download(position);
 
     this.pointer = (position - 1);
     this.player.stop(true);

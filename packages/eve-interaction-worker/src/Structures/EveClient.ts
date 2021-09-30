@@ -4,6 +4,7 @@ import { Routes } from 'discord-api-types/v9';
 import AbstractSlashCommand from '../SlashCommands/AbstractSlashCommand';
 import AbstractButtonInteraction from '../ButtonInteractions/AbstractInteraction';
 import Logger from '../Util/Logger';
+import messageEmbedFactory from '../Factory/messageEmbedFactory';
 
 export default class EveClient extends Client {
   private readonly slashCommands: AbstractSlashCommand[];
@@ -111,6 +112,15 @@ export default class EveClient extends Client {
           'Error while executing SlashCommand',
           { interactionHandlerName: slashCommand.data.name, error },
         );
+
+        const answer = messageEmbedFactory(interaction.client, 'Error');
+        answer.setDescription('Uhm, there was an error executing this command');
+
+        if (interaction.deferred === true) {
+          interaction.editReply({ embeds: [answer] });
+          return;
+        }
+        interaction.reply({ embeds: [answer], ephemeral: true });
       }
     }
   }

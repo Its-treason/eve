@@ -7,6 +7,8 @@ import { YtResult } from '../../types';
 import ytpl, { Item as plItem } from 'ytpl';
 import ytsr, { Item } from 'ytsr';
 
+const ytRegex = /(.*\.|^)youtube.com/g;
+
 export default class PlayCommand extends AbstractSlashCommand {
   private requester: User;
 
@@ -64,7 +66,18 @@ export default class PlayCommand extends AbstractSlashCommand {
 
     this.requester = interaction.user;
 
-    const parsedUrls = await this.parseQuery(query);
+    const parsedUrls: YtResult[] = [];
+    try {
+      const result = await this.parseQuery(query);
+      parsedUrls.push(...result);
+    } catch (error) {
+      console.error(error);
+      
+      const answer = embedFactory(interaction.client, 'Error!');
+      answer.setDescription('There was an error getting the YouTube result. Is the link correct?');
+      await interaction.editReply({ embeds: [answer] });
+      return;
+    }
 
     for (const parsedUrl of parsedUrls) {
       await player.addToQueue(parsedUrl);
@@ -85,7 +98,7 @@ export default class PlayCommand extends AbstractSlashCommand {
     }
 
     switch (true) {
-      case ((url.pathname === '/watch' || url.pathname === '/playlist') && url.host === 'www.youtube.com' && url.query.list !== undefined):
+      case ((url.pathname === '/watch' || url.pathname === '/playlist') && ytRegex.test(url.host) && url.query.list !== undefined):
         return await this.getAllUrlsFromPlaylist(url.query.list);
       case (url.pathname === '/watch' && url.host === 'www.youtube.com' && url.query.v !== undefined):
         return [await this.searchForVideoById(url.query.v)];
@@ -95,7 +108,7 @@ export default class PlayCommand extends AbstractSlashCommand {
   }
 
   private async getAllUrlsFromPlaylist(listId: string): Promise<YtResult[]> {
-    const result = await ytpl(listId, { limit: 999 });
+    const result = await ytpl(listId);
 
     return result.items.map((item: plItem) => {
       return {
@@ -112,7 +125,7 @@ export default class PlayCommand extends AbstractSlashCommand {
     const result = await ytsr(query, { limit: 1 });
     const item = result.items[0];
 
-    if (item.type !== 'video') {
+    if (item?.type !== 'video') {
       return;
     }
 
