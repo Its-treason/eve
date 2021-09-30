@@ -107,8 +107,6 @@ export class MusicPlayer {
 
     const { url, id } = this.queue[pointer];
 
-    console.log('Queued download for:', url, pointer);
-
     const youtubeDl = youtubeDlFactory();
     try {
       const promise = youtubeDl.execPromise([
@@ -140,7 +138,7 @@ export class MusicPlayer {
   }
 
   private async removeDownload(pointer: number) {
-    if (this.queue[pointer]?.downloaded === false) {
+    if (this.queue[pointer]?.downloaded !== true) {
       return;
     }
     if (this.queue[pointer]?.downloading instanceof Promise) {
@@ -164,7 +162,6 @@ export class MusicPlayer {
       this.player.state.status === AudioPlayerStatus.Idle
       && !(this.queue[this.pointer]?.downloading instanceof Promise)
     ) {
-      console.log('Play next');
       this.playNext().catch(console.error);
       return;
     }
