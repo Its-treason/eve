@@ -22,7 +22,5 @@ import Logger from './Util/Logger';
   });
 
   await client.run();
-  logger.info('Startet client');
-
-  throw new Error('some error lol');
+  logger.info('Started eve-interaction-worker');
 })();

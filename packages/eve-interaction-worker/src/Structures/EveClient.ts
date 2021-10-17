@@ -77,6 +77,8 @@ export default class EveClient extends Client {
 
   private async handleInteraction(interaction: CommandInteraction): Promise<void> {
     if (interaction instanceof ButtonInteraction) {
+      this.logger.info('Handling ButtonInteraction', { customId: interaction.customId });
+
       const args = interaction.customId.split('-');
       const interactionString = args.shift();
 
@@ -97,6 +99,8 @@ export default class EveClient extends Client {
     }
 
     if (interaction instanceof CommandInteraction) {
+      this.logger.info('Handling SlashCommand', { commandName: interaction.commandName });
+
       if (!this.slashCommandMap.has(interaction.commandName)) {
         this.logger.warning('Got unknown SlashCommand interaction', { name: interaction.commandName });
         await interaction.reply({ content: 'Unknown Command', ephemeral: true });
