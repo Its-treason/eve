@@ -1,56 +1,83 @@
-type LogLevel = (100|200|250|300|400|500);
-type Context = {[key: string]: (string|number|Error)};
+import { Client } from '@elastic/elasticsearch';
+import winston from 'winston';
+import { ElasticsearchTransport } from 'winston-elasticsearch';
+
+type Context = {[key: string]: (string|number|Error|boolean)};
 
 export default class Logger {
-  private getLocation(): (string|null) {
-    return (new Error()).stack?.split('\n')[4].trim() || null;
+  private logger: winston.Logger;
+
+  constructor() {
+    const client = new Client({ node: process.env.ELASTIC_HOST });
+
+    this.logger = winston.createLogger({
+      level: 'info',
+      format: winston.format.json(),
+      defaultMeta: { channel: 'eve-interaction-worker' },
+      transports: [
+        new winston.transports.Console(),
+        new ElasticsearchTransport({
+          index: `eve-logs-${process.env.NODE_ENV}`,
+          ensureIndexTemplate: true,
+          client: client,
+        }),
+      ],
+    });
   }
 
-  private formatError(error: Error): {message: string, name: string, location: string} {
+  private static formatError(error: Error): {message: string, name: string, location: string} {
     return {
       message: error.message,
       name: error.name,
-      location: error.stack?.split('\n')[2]?.trim() || 'Unknown',
+      location: error.stack || 'Unknown',
     };
   }
 
-  private log(message: string, context: Context, logLevel: LogLevel): void {
+  debug(message: string, context: Context = {}): void {
     if (context.error instanceof Error) {
-      context.error = this.formatError(context.error);
+      context.error = Logger.formatError(context.error);
     }
 
-    console.log(JSON.stringify({
-      message,
-      context,
-      logLevel,
-      location: this.getLocation(),
-      timestamp: (new Date).toUTCString(),
-    }));
+    this.logger.debug(message, context);
   }
 
-  debug(message: string, context = {}): void {
-    if (process.env.NODE_ENV === 'testing') {
-      this.log(message, context, 100);
+  info(message: string, context: Context = {}): void {
+    if (context.error instanceof Error) {
+      context.error = Logger.formatError(context.error);
     }
+
+    this.logger.info(message, context);
   }
 
-  info(message: string, context = {}): void {
-    this.log(message, context, 200);
+  notice(message: string, context: Context = {}): void {
+    if (context.error instanceof Error) {
+      context.error = Logger.formatError(context.error);
+    }
+
+    this.logger.notice(message, context);
   }
 
-  notice(message: string, context = {}): void {
-    this.log(message, context, 250);
+  warning(message: string, context: Context = {}): void {
+    if (context.error instanceof Error) {
+      context.error = Logger.formatError(context.error);
+    }
+
+    this.logger.warning(message, context);
   }
 
-  warning(message: string, context = {}): void {
-    this.log(message, context, 300);
+  error(message: string, context: Context = {}): void {
+    if (context.error instanceof Error) {
+      context.error = Logger.formatError(context.error);
+    }
+
+    this.logger.error(message, context);
   }
 
-  error(message: string, context = {}): void {
-    this.log(message, context, 400);
-  }
+  critical(message: string, context: Context = {}): void {
+    if (context.error instanceof Error) {
+      context.error = Logger.formatError(context.error);
+    }
 
-  critical(message: string, context = {}): void {
-    this.log(message, context, 500);
+    this.logger.crit(message, context);
   }
 }

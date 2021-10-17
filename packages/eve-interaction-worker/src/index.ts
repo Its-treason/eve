@@ -17,7 +17,12 @@ import Logger from './Util/Logger';
 
   process.on('SIGINT', shutDown);
   process.on('SIGTERM', shutDown);
+  process.on('uncaughtException', error => {
+    logger.error('An error occurred', { error });
+  });
 
   await client.run();
   logger.info('Startet client');
+
+  throw new Error('some error lol');
 })();

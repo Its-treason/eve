@@ -5,15 +5,13 @@ export default class MusicPlayerRepository {
   private static musicPlayers = new Map<string, MusicPlayer>();
 
   public static has(serverId: string): boolean {
-    const hasPlayer = this.musicPlayers.has(serverId);
-
-    if (hasPlayer === false) {
+    if (this.musicPlayers.has(serverId) === false) {
       return false;
     }
 
     const player = this.musicPlayers.get(serverId);
 
-    if (player.destroyed === true) {
+    if (player?.destroyed !== false) {
       MusicPlayerRepository.destroy(serverId);
       return false;
     }
@@ -23,7 +21,7 @@ export default class MusicPlayerRepository {
   public static get(serverId: string): MusicPlayer {
     const player = this.musicPlayers.get(serverId);
 
-    if (player.destroyed === true) {
+    if (player?.destroyed !== false) {
       MusicPlayerRepository.destroy(serverId);
       return null;
     }

@@ -1,5 +1,16 @@
 import { StageChannel, TextChannel, ThreadChannel, VoiceChannel } from 'discord.js';
-import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, entersState, joinVoiceChannel, NoSubscriberBehavior, VoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
+import {
+  AudioPlayer,
+  AudioPlayerStatus,
+  createAudioPlayer,
+  createAudioResource,
+  DiscordGatewayAdapterCreator,
+  entersState,
+  joinVoiceChannel,
+  NoSubscriberBehavior,
+  VoiceConnection,
+  VoiceConnectionStatus,
+} from '@discordjs/voice';
 import generateRandomString from '../Util/generateRandomString';
 import { existsSync, unlinkSync } from 'fs';
 import youtubeDlFactory from '../Factory/youtubeDlFactory';
@@ -41,7 +52,7 @@ export class MusicPlayer {
     this.connection = joinVoiceChannel({
       channelId: channel.id,
       guildId: channel.guild.id,
-      adapterCreator: channel.guild.voiceAdapterCreator,
+      adapterCreator: channel.guild.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
     });
 
     this.connection.once(VoiceConnectionStatus.Ready, () => {

@@ -117,10 +117,13 @@ export default class EveClient extends Client {
         answer.setDescription('Uhm, there was an error executing this command');
 
         if (interaction.deferred === true) {
-          interaction.editReply({ embeds: [answer] });
+          await interaction.editReply({ embeds: [answer] });
           return;
         }
-        interaction.reply({ embeds: [answer], ephemeral: true });
+        await interaction.reply({
+          embeds: [answer],
+          ephemeral: true,
+        });
       }
     }
   }
