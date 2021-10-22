@@ -4,7 +4,7 @@ import { StageChannel, TextChannel, ThreadChannel, VoiceChannel } from 'discord.
 export default class MusicPlayerRepository {
   private static musicPlayers = new Map<string, MusicPlayer>();
 
-  public static has(serverId: string): boolean {
+  public static async has(serverId: string): Promise<boolean> {
     if (this.musicPlayers.has(serverId) === false) {
       return false;
     }
@@ -12,17 +12,17 @@ export default class MusicPlayerRepository {
     const player = this.musicPlayers.get(serverId);
 
     if (player?.destroyed !== false) {
-      MusicPlayerRepository.destroy(serverId);
+      await MusicPlayerRepository.destroy(serverId);
       return false;
     }
     return true;
   }
 
-  public static get(serverId: string): MusicPlayer {
+  public static async get(serverId: string): Promise<MusicPlayer> {
     const player = this.musicPlayers.get(serverId);
 
     if (player?.destroyed !== false) {
-      MusicPlayerRepository.destroy(serverId);
+      await MusicPlayerRepository.destroy(serverId);
       return null;
     }
 

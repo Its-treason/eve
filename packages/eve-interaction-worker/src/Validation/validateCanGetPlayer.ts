@@ -11,14 +11,14 @@ export default async function validateCanGetPlayer(interaction: CommandInteracti
     return false;
   }
 
-  if (MusicPlayerRepository.has(interaction.guild.id) === false) {
+  if (await MusicPlayerRepository.has(interaction.guild.id) === false) {
     const answer = embedFactory(interaction.client, 'Error');
     answer.setDescription('Iam currently not playing any music');
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
     return false;
   }
 
-  const player = MusicPlayerRepository.get(interaction.guild.id);
+  const player = await MusicPlayerRepository.get(interaction.guild.id);
 
   const member = await interaction.guild.members.fetch(interaction.user);
 

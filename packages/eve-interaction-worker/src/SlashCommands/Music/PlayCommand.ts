@@ -49,13 +49,13 @@ export default class PlayCommand extends AbstractSlashCommand {
 
     const query = interaction.options.getString('query', true);
 
-    if (!MusicPlayerRepository.has(interaction.guild.id)) {
+    if (!await MusicPlayerRepository.has(interaction.guild.id)) {
       MusicPlayerRepository.create(member.voice.channel, interaction.channel);
     }
 
     await interaction.deferReply();
 
-    const player = MusicPlayerRepository.get(interaction.guild.id);
+    const player = await MusicPlayerRepository.get(interaction.guild.id);
 
     if (member.voice.channelId !== player.getVoiceChannelId()) {
       const answer = embedFactory(interaction.client, 'Error');

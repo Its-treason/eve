@@ -78,7 +78,7 @@ export class MusicPlayer {
     if (this.queue[this.pointer + 1] === undefined) {
       this.leaveTimeout = setTimeout(() => {
         this.destroy();
-      }, 600000); // 1.8e+6 => 30 minutes
+      }, 1.8e+6); // 1.8e+6 => 30 minutes
       return;
     }
 
