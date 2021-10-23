@@ -4,6 +4,7 @@ import ytpl, { Item as plItem } from 'ytpl';
 import ytsr, { Item } from 'ytsr';
 import SpotifyApi from 'spotify-web-api-node';
 import Logger from '../Util/Logger';
+import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
 
 const ytRegex = /(.*\.|^)youtube.com/g;
 
@@ -95,32 +96,37 @@ export default class YtResultService {
   }
 
   private async getVideosFromSpotifyPlaylist(playlistId: string, requesterId: string): Promise<YtResult[]> {
-    const result = await this.spotifyApi.getPlaylistTracks(playlistId);
-
-    if (result.body.total > 100) {
-      this.logger.warning('Please Update code');
-    }
-
+    let i = 0;
     const ytResults: YtResult[] = [];
 
-    for (const track of result.body.items) {
-      const artists = track.track.artists.map((x) => x.name).join(' ');
-      const query = `${track.track.name} ${artists}`;
-      const result = await ytsr(query, { limit: 1 });
-      const item = result.items[0];
+    let tracks: PlaylistTrackObject[];
+    do {
+      const result = await this.spotifyApi.getPlaylistTracks(playlistId, { limit: 100, offset: i * 100 });
+      tracks = result.body.items;
 
-      if (item?.type !== 'video') {
-        return;
+      for (const track of tracks) {
+        const artists = track.track.artists.map((x) => x.name).join(' ');
+        const query = `${track.track.name} ${artists}`;
+        const result = await ytsr(query, { limit: 1 });
+        const item = result.items[0];
+
+        if (item?.type !== 'video') {
+          return;
+        }
+
+        console.log(item.title, item.author.name, i);
+
+        ytResults.push({
+          url: item.url,
+          title: item.title,
+          uploader: item.author.name,
+          ytId: item.id,
+          requestedBy: requesterId,
+        });
       }
 
-      ytResults.push({
-        url: item.url,
-        title: item.title,
-        uploader: item.author.name,
-        ytId: item.id,
-        requestedBy: requesterId,
-      });
-    }
+      i++;
+    } while (tracks.length > 0);
 
     return ytResults;
   }
