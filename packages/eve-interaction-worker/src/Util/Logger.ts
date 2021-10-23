@@ -12,6 +12,7 @@ export default class Logger {
 
     this.logger = winston.createLogger({
       level: 'info',
+      levels: winston.config.syslog.levels,
       format: winston.format.json(),
       defaultMeta: { channel: 'eve-interaction-worker' },
       transports: [

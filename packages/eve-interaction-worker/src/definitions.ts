@@ -35,12 +35,19 @@ import kickCommandFactory from './SlashCommands/Factory/kickCommandFactory';
 import pardonCommandFactory from './SlashCommands/Factory/pardonCommandFactory';
 import PlaylistProjection from './Projection/PlaylistProjection';
 import playlistProjectionFactory from './Projection/Factory/playlistProjectionFactory';
+import PlayCommand from './SlashCommands/Music/PlayCommand';
+import playCommandFactory from './SlashCommands/Music/Factory/PlayCommandFactory';
+import spotifyApiFactory from './Factory/spotifyApiFactory';
+import YtResultService from './MusicPlayer/YtResultService';
+import YtResultServiceFactory from './MusicPlayer/Factory/ytResultServiceFactory';
 
 const definitions = new Map();
 definitions.set(Browser, factory(browserFactory));
 definitions.set(EveClient, factory(eveClientFactory));
 definitions.set(EventStore, factory(eventStoreFactory));
 definitions.set(PlaylistProjection, factory(playlistProjectionFactory));
+definitions.set(YtResultService, factory(YtResultServiceFactory));
+definitions.set('SpotifyApi', factory(spotifyApiFactory));
 definitions.set('ButtonInteraction', factory(buttonInteractionArrayFactory));
 definitions.set('SlashCommands', factory(slashCommandArrayFactory));
 definitions.set('PlaylistCommands', factory(playlistCommandArrayFactory));
@@ -51,6 +58,7 @@ definitions.set(PlaylistDeleteCommand, factory(playlistDeleteCommandFactory));
 definitions.set(PlaylistListCommand, factory(playlistListCommandFactory));
 definitions.set(PlaylistLoadCommand, factory(playlistLoadCommandFactory));
 definitions.set(PlaylistSaveCommand, factory(playlistSaveCommandFactory));
+definitions.set(PlayCommand, factory(playCommandFactory));
 
 definitions.set(BanInteraction, factory(banInteractionFactory));
 definitions.set(KickInteraction, factory(kickInteractionFactory));

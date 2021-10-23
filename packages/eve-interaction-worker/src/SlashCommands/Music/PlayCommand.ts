@@ -1,18 +1,14 @@
-import { CommandInteraction, User } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import Url from 'url-parse';
 import { YtResult } from '../../types';
-import ytpl, { Item as plItem } from 'ytpl';
-import ytsr, { Item } from 'ytsr';
-
-const ytRegex = /(.*\.|^)youtube.com/g;
+import YtResultService from '../../MusicPlayer/YtResultService';
 
 export default class PlayCommand extends AbstractSlashCommand {
-  private requester: User;
+  private ytResultService: YtResultService;
 
-  constructor() {
+  constructor(ytResultService: YtResultService) {
     super({
       name: 'play',
       description: 'Play some YT video',
@@ -25,6 +21,8 @@ export default class PlayCommand extends AbstractSlashCommand {
         },
       ],
     });
+
+    this.ytResultService = ytResultService;
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
@@ -64,11 +62,9 @@ export default class PlayCommand extends AbstractSlashCommand {
       return;
     }
 
-    this.requester = interaction.user;
-
     const parsedUrls: YtResult[] = [];
     try {
-      const result = await this.parseQuery(query);
+      const result = await this.ytResultService.parseQuery(query, interaction.user.id);
       parsedUrls.push(...result);
     } catch (error) {
       console.error(error);
@@ -88,76 +84,5 @@ export default class PlayCommand extends AbstractSlashCommand {
     await interaction.editReply({ embeds: [answer] });
   }
 
-  private async parseQuery(query: string): Promise<YtResult[]> {
-    let url;
 
-    try {
-      url = Url(query, true);
-    } catch (e) {
-      return [];
-    }
-
-    switch (true) {
-      case ((url.pathname === '/watch' || url.pathname === '/playlist') && ytRegex.test(url.host) && url.query.list !== undefined):
-        return await this.getAllUrlsFromPlaylist(url.query.list);
-      case (url.pathname === '/watch' && url.host === 'www.youtube.com' && url.query.v !== undefined):
-        return [await this.searchForVideoById(url.query.v)];
-      default:
-        return [await this.searchForVideoByQuery(query)];
-    }
-  }
-
-  private async getAllUrlsFromPlaylist(listId: string): Promise<YtResult[]> {
-    const result = await ytpl(listId);
-
-    return result.items.map((item: plItem) => {
-      return {
-        url: item.shortUrl,
-        title: item.title,
-        uploader: item.author.name,
-        ytId: item.id,
-        requestedBy: this.requester.id,
-      };
-    });
-  }
-
-  private async searchForVideoByQuery(query: string): Promise<YtResult> {
-    const result = await ytsr(query, { limit: 1 });
-    const item = result.items[0];
-
-    if (item?.type !== 'video') {
-      return;
-    }
-
-    return {
-      url: item.url,
-      title: item.title,
-      uploader: item.author.name,
-      ytId: item.id,
-      requestedBy: this.requester.id,
-    };
-  }
-
-  private async searchForVideoById(id: string): Promise<YtResult> {
-    const result = await ytsr(id, { limit: 10 });
-
-    const item = result.items.filter((item: Item) => {
-      if (item.type !== 'video') {
-        return false;
-      }
-
-      return item.id === id;
-    })[0];
-    if (item.type !== 'video') {
-      return;
-    }
-
-    return {
-      url: item.url,
-      title: item.title,
-      uploader: item.author.name,
-      ytId: item.id,
-      requestedBy: this.requester.id,
-    };
-  }
 }
