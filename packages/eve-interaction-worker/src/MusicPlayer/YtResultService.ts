@@ -1,133 +1,20 @@
-import { YtResult } from '../types';
-import Url from 'url-parse';
-import ytpl, { Item as plItem } from 'ytpl';
-import ytsr, { Item } from 'ytsr';
-import SpotifyApi from 'spotify-web-api-node';
-import Logger from '../Util/Logger';
-import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
-
-const ytRegex = /(.*\.|^)youtube.com/g;
+import { QueryResult } from '../types';
+import AbstractQueryHandler from './QueryHandler/AbstractQueryHandler';
+import PlayQuery from '../Value/PlayQuery';
 
 export default class YtResultService {
-  private logger: Logger;
-  private spotifyApi: SpotifyApi;
+  private handler: Map<string, AbstractQueryHandler>;
 
   constructor(
-    spotifyApi: SpotifyApi,
-    logger: Logger,
+    handler: Map<string, AbstractQueryHandler>,
   ) {
-    this.logger = logger;
-    this.spotifyApi = spotifyApi;
+    this.handler = handler;
   }
 
-  public async parseQuery(query: string, requesterId: string): Promise<YtResult[]> {
-    let url;
+  public async parseQuery(query: string, requesterId: string): Promise<QueryResult> {
+    const playQuery = PlayQuery.fromQuery(query);
 
-    try {
-      url = Url(query, true);
-    } catch (e) {
-      return [];
-    }
-
-    switch (true) {
-      case ((url.pathname === '/watch' || url.pathname === '/playlist') && ytRegex.test(url.host) && url.query.list !== undefined):
-        return await this.getAllUrlsFromPlaylist(url.query.list, requesterId);
-      case (url.pathname === '/watch' && ytRegex.test(url.host) && url.query.v !== undefined):
-        return [await this.searchForVideoById(url.query.v, requesterId)];
-      case (url.host === 'open.spotify.com' && url.pathname.split('/')[1] === 'playlist' && url.pathname.split('/')[2] !== undefined):
-        return await this.getVideosFromSpotifyPlaylist(url.pathname.split('/')[2], requesterId);
-      default:
-        return [await this.searchForVideoByQuery(query, requesterId)];
-    }
-  }
-
-  private async getAllUrlsFromPlaylist(listId: string, requesterId: string): Promise<YtResult[]> {
-    const result = await ytpl(listId);
-
-    return result.items.map((item: plItem) => {
-      return {
-        url: item.shortUrl,
-        title: item.title,
-        uploader: item.author.name,
-        ytId: item.id,
-        requestedBy: requesterId,
-      };
-    });
-  }
-
-  private async searchForVideoByQuery(query: string, requesterId: string): Promise<YtResult> {
-    const result = await ytsr(query, { limit: 1 });
-    const item = result.items[0];
-
-    if (item?.type !== 'video') {
-      return;
-    }
-
-    return {
-      url: item.url,
-      title: item.title,
-      uploader: item.author.name,
-      ytId: item.id,
-      requestedBy: requesterId,
-    };
-  }
-
-  private async searchForVideoById(id: string, requesterId: string): Promise<YtResult> {
-    const result = await ytsr(id, { limit: 10 });
-
-    const item = result.items.filter((item: Item) => {
-      if (item.type !== 'video') {
-        return false;
-      }
-
-      return item.id === id;
-    })[0];
-    if (item.type !== 'video') {
-      return;
-    }
-
-    return {
-      url: item.url,
-      title: item.title,
-      uploader: item.author.name,
-      ytId: item.id,
-      requestedBy: requesterId,
-    };
-  }
-
-  private async getVideosFromSpotifyPlaylist(playlistId: string, requesterId: string): Promise<YtResult[]> {
-    let i = 0;
-    const ytResults: YtResult[] = [];
-
-    let tracks: PlaylistTrackObject[];
-    do {
-      const result = await this.spotifyApi.getPlaylistTracks(playlistId, { limit: 100, offset: i * 100 });
-      tracks = result.body.items;
-
-      for (const track of tracks) {
-        const artists = track.track.artists.map((x) => x.name).join(' ');
-        const query = `${track.track.name} ${artists}`;
-        const result = await ytsr(query, { limit: 1 });
-        const item = result.items[0];
-
-        if (item?.type !== 'video') {
-          return;
-        }
-
-        console.log(item.title, item.author.name, i);
-
-        ytResults.push({
-          url: item.url,
-          title: item.title,
-          uploader: item.author.name,
-          ytId: item.id,
-          requestedBy: requesterId,
-        });
-      }
-
-      i++;
-    } while (tracks.length > 0);
-
-    return ytResults;
+    const handler = this.handler.get(playQuery.getType());
+    return await handler.handle(playQuery.getQuery(), requesterId);
   }
 }

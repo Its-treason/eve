@@ -40,6 +40,9 @@ import playCommandFactory from './SlashCommands/Music/Factory/PlayCommandFactory
 import spotifyApiFactory from './Factory/spotifyApiFactory';
 import YtResultService from './MusicPlayer/YtResultService';
 import YtResultServiceFactory from './MusicPlayer/Factory/ytResultServiceFactory';
+import spotifyPlaylistSearchHandlerFactory from './MusicPlayer/Factory/spotifyPlaylistSearchHandlerFactory';
+import SpotifyPlaylistSearchHandler from './MusicPlayer/QueryHandler/SpotifyPlaylistSearchHandler';
+import queryHandlerMapFactory from './Factory/queryHandlerMapFactory';
 
 const definitions = new Map();
 definitions.set(Browser, factory(browserFactory));
@@ -47,6 +50,8 @@ definitions.set(EveClient, factory(eveClientFactory));
 definitions.set(EventStore, factory(eventStoreFactory));
 definitions.set(PlaylistProjection, factory(playlistProjectionFactory));
 definitions.set(YtResultService, factory(YtResultServiceFactory));
+definitions.set(SpotifyPlaylistSearchHandler, factory(spotifyPlaylistSearchHandlerFactory));
+definitions.set('QueryHandler', factory(queryHandlerMapFactory));
 definitions.set('SpotifyApi', factory(spotifyApiFactory));
 definitions.set('ButtonInteraction', factory(buttonInteractionArrayFactory));
 definitions.set('SlashCommands', factory(slashCommandArrayFactory));

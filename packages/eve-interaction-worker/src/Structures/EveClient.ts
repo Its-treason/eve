@@ -56,6 +56,11 @@ export default class EveClient extends Client {
 
     const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
 
+    await rest.put(
+      Routes.applicationCommands(process.env.CLIENT_ID),
+      { body: [] },
+    );
+
     try {
       if (process.env.NODE_ENV === 'development') {
         await rest.put(
@@ -77,7 +82,13 @@ export default class EveClient extends Client {
 
   private async handleInteraction(interaction: CommandInteraction): Promise<void> {
     if (interaction instanceof ButtonInteraction) {
-      this.logger.info('Handling ButtonInteraction', { customId: interaction.customId });
+      this.logger.info('Handling ButtonInteraction', {
+        customId: interaction.customId,
+        serverId: interaction.guild.id,
+        serverName: interaction.guild.name,
+        userId: interaction.user.id,
+        userName: interaction.user.username,
+      });
 
       const args = interaction.customId.split('-');
       const interactionString = args.shift();
@@ -99,7 +110,13 @@ export default class EveClient extends Client {
     }
 
     if (interaction instanceof CommandInteraction) {
-      this.logger.info('Handling SlashCommand', { commandName: interaction.commandName });
+      this.logger.info('Handling SlashCommand', {
+        commandName: interaction.commandName,
+        serverId: interaction.guild.id,
+        serverName: interaction.guild.name,
+        userId: interaction.user.id,
+        userName: interaction.user.username,
+      });
 
       if (!this.slashCommandMap.has(interaction.commandName)) {
         this.logger.warning('Got unknown SlashCommand interaction', { name: interaction.commandName });

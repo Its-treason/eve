@@ -45,6 +45,10 @@ export interface YtResult {
   ytId: string,
   requestedBy: string,
 }
+export interface QueryResult {
+  firstResult: YtResult,
+  getAll: () => Promise<YtResult[]>
+}
 
 export interface QueueItem {
   url: string,

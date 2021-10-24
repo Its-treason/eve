@@ -2,13 +2,18 @@ import { CommandInteraction } from 'discord.js';
 import AbstractSlashCommand from '../AbstractSlashCommand';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import { YtResult } from '../../types';
+import { QueryResult } from '../../types';
 import YtResultService from '../../MusicPlayer/YtResultService';
+import Logger from '../../Util/Logger';
 
 export default class PlayCommand extends AbstractSlashCommand {
   private ytResultService: YtResultService;
+  private logger: Logger;
 
-  constructor(ytResultService: YtResultService) {
+  constructor(
+    ytResultService: YtResultService,
+    logger: Logger,
+  ) {
     super({
       name: 'play',
       description: 'Play some YT video',
@@ -23,6 +28,7 @@ export default class PlayCommand extends AbstractSlashCommand {
     });
 
     this.ytResultService = ytResultService;
+    this.logger = logger;
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
@@ -62,12 +68,11 @@ export default class PlayCommand extends AbstractSlashCommand {
       return;
     }
 
-    const parsedUrls: YtResult[] = [];
+    let result: QueryResult;
     try {
-      const result = await this.ytResultService.parseQuery(query, interaction.user.id);
-      parsedUrls.push(...result);
+      result = await this.ytResultService.parseQuery(query, interaction.user.id);
     } catch (error) {
-      console.error(error);
+      this.logger.warning('Error while getting YT-Result', { error });
       
       const answer = embedFactory(interaction.client, 'Error!');
       answer.setDescription('There was an error getting the YouTube result. Is the link correct?');
@@ -75,14 +80,14 @@ export default class PlayCommand extends AbstractSlashCommand {
       return;
     }
 
-    for (const parsedUrl of parsedUrls) {
-      await player.addToQueue(parsedUrl);
-    }
+    await player.addToQueue(result.firstResult);
 
     const answer = embedFactory(interaction.client, 'Added to Queue!');
-
     await interaction.editReply({ embeds: [answer] });
+
+    const fullResult = await result.getAll();
+    for (const parsedUrl of fullResult) {
+      await player.addToQueue(parsedUrl);
+    }
   }
-
-
 }
