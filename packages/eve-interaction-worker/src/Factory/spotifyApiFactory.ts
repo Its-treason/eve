@@ -6,7 +6,13 @@ export default async function spotifyApiFactory(): Promise<SpotifyApi> {
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
   });
 
-  const data = await spotifyApi.clientCredentialsGrant();
-  spotifyApi.setAccessToken(data.body['access_token']);
+  const updateAccessToken = async () => {
+    const data = await spotifyApi.clientCredentialsGrant();
+    spotifyApi.setAccessToken(data.body['access_token']);
+  };
+  await updateAccessToken();
+
+  setInterval(updateAccessToken, 6e+6);
+
   return spotifyApi;
 }
