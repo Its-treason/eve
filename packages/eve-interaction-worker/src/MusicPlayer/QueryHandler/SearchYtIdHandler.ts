@@ -4,7 +4,7 @@ import ytsr, { Item } from 'ytsr';
 
 export default class SearchYtIdHandler implements AbstractQueryHandler {
   async handle(query: string, requesterId: string): Promise<QueryResult> {
-    const result = await ytsr(query, { limit: 10 });
+    const result = await ytsr(`"${query}"`, { limit: 10 });
 
     // YT will sometimes return some other video instead of the video with the id we searched
     const item = result.items.filter((item: Item) => {
