@@ -9,6 +9,10 @@ import VoiceStateUpdateHandler from './Events/VoiceStateUpdateHandler';
 import voiceStateUpdateHandlerFactory from './Events/Factory/voiceStateUpdateHandlerFactory';
 import ChannelActivityProjection from './Projection/ChannelActivityProjection';
 import channelActivityProjectionFactory from './Projection/Factory/channelActivityProjectionFactory';
+import RateLimitEventHandler from './Events/RateLimitEventHandler';
+import rateLimitEventHandlerFactory from './Events/Factory/rateLimitEventHandlerFactory';
+import WarnEventHandler from './Events/WarnEventHandler';
+import warnEventHandlerFactory from './Events/Factory/warnEventHandlerFactory';
 
 const definitions = new Map();
 definitions.set(EveClient, factory(eveClientFactory));
@@ -17,6 +21,7 @@ definitions.set('Connection', factory(connectionFactory));
 definitions.set('EventHandler', factory(eventHandlerArrayFactory));
 definitions.set(VoiceStateUpdateHandler, factory(voiceStateUpdateHandlerFactory));
 definitions.set(ChannelActivityProjection, factory(channelActivityProjectionFactory));
-
+definitions.set(RateLimitEventHandler, factory(rateLimitEventHandlerFactory));
+definitions.set(WarnEventHandler, factory(warnEventHandlerFactory));
 
 export default definitions;

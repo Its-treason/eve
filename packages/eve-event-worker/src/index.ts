@@ -19,5 +19,5 @@ import Logger from './Util/Logger';
   process.on('SIGTERM', shutDown);
 
   await client.run();
-  logger.info('Startet client');
+  logger.info('Started eve-event-worker');
 })();
