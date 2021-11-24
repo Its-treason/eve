@@ -13,11 +13,11 @@ export default class InviteCommand extends AbstractSlashCommand {
 
   async execute(interaction: CommandInteraction): Promise<void> {
     const invite = interaction.client.generateInvite(
-      { scopes: ['applications.commands'], permissions: 'ADMINISTRATOR' },
+      { scopes: ['applications.commands', 'bot'], permissions: 'ADMINISTRATOR' },
     );
 
     const answer = embedFactory(interaction.client, 'Invite Link');
     answer.setDescription(invite);
-    interaction.reply({ embeds: [answer] });
+    await interaction.reply({ embeds: [answer] });
   }
 }

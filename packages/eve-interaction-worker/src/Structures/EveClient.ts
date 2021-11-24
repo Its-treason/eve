@@ -19,7 +19,6 @@ export default class EveClient extends Client {
   ) {
     const intents = new Intents();
     intents.add('GUILDS');
-    intents.add('GUILD_MESSAGES');
     intents.add('GUILD_VOICE_STATES');
     intents.add('GUILD_BANS');
 
