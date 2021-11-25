@@ -3,13 +3,12 @@ import AbstractEventHandler from './AbstractEventHandler';
 import Logger from '../Util/Logger';
 
 export default class RateLimitEventHandler extends AbstractEventHandler {
-  private logger: Logger;
-
-  constructor(logger: Logger) {
+  constructor(
+    private logger: Logger,
+  ) {
     super('rateLimit');
 
     this.execute = this.execute.bind(this);
-    this.logger = logger;
   }
 
   public async execute(rateLimitData: RateLimitData): Promise<void> {

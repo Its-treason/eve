@@ -13,6 +13,10 @@ import RateLimitEventHandler from './Events/RateLimitEventHandler';
 import rateLimitEventHandlerFactory from './Events/Factory/rateLimitEventHandlerFactory';
 import WarnEventHandler from './Events/WarnEventHandler';
 import warnEventHandlerFactory from './Events/Factory/warnEventHandlerFactory';
+import GuildCreateEventHandler from './Events/GuildCreateEventHandler';
+import guildCreateEventHandlerFactory from './Events/Factory/guildCreateEventHandlerFactory';
+import GuildDeleteEventHandler from './Events/GuildDeleteEventHandler';
+import guildDeleteEventHandlerFactory from './Events/Factory/guildDeleteEventHandlerFactory';
 
 const definitions = new Map();
 definitions.set(EveClient, factory(eveClientFactory));
@@ -23,5 +27,7 @@ definitions.set(VoiceStateUpdateHandler, factory(voiceStateUpdateHandlerFactory)
 definitions.set(ChannelActivityProjection, factory(channelActivityProjectionFactory));
 definitions.set(RateLimitEventHandler, factory(rateLimitEventHandlerFactory));
 definitions.set(WarnEventHandler, factory(warnEventHandlerFactory));
+definitions.set(GuildCreateEventHandler, factory(guildCreateEventHandlerFactory));
+definitions.set(GuildDeleteEventHandler, factory(guildDeleteEventHandlerFactory));
 
 export default definitions;

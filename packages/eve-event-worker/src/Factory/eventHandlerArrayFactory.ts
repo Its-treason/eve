@@ -4,7 +4,6 @@ import VoiceStateUpdateHandler from '../Events/VoiceStateUpdateHandler';
 import RateLimitEventHandler from '../Events/RateLimitEventHandler';
 import WarnEventHandler from '../Events/WarnEventHandler';
 import GuildCreateEventHandler from '../Events/GuildCreateEventHandler';
-import guildCreateEventHandlerFactory from '../Events/Factory/guildCreateEventHandlerFactory';
 import GuildDeleteEventHandler from '../Events/GuildDeleteEventHandler';
 
 export default async function eventHandlerArrayFactory(container: Container): Promise<AbstractEventHandler[]> {
