@@ -28,7 +28,7 @@ export class Aggregate {
       this.events[this.events.length - 1]?.getEventId() || newEventId,
       this.events[0]?.getEventId() || newEventId,
       topic,
-      null,
+      new Date(),
       payload,
     );
 
@@ -37,7 +37,7 @@ export class Aggregate {
     return event;
   }
 
-  getEventByTopic(topic: EventTopic): Event {
+  getEventByTopic(topic: EventTopic): Event|null {
     for (const event of this.events) {
       if (event.getTopic() === topic) {
         return event;

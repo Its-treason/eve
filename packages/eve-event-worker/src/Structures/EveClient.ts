@@ -28,7 +28,7 @@ export default class EveClient extends Client {
     try {
       await this.login(process.env.DISCORD_TOKEN);
     } catch (error) {
-      this.logger.critical('Discord Login Failed', { error, isTokenSet: process.env.DISCORD_TOKEN !== undefined });
+      this.logger.critical('Discord Login Failed', { error: (error as Error), isTokenSet: process.env.DISCORD_TOKEN !== undefined });
       process.exit(1);
     }
   }

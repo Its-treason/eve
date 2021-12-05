@@ -1,6 +1,7 @@
 import { Pool } from 'mariadb';
 
 export default class ChannelActivityProjection {
+  // eslint-disable-next-line no-useless-constructor
   constructor(
     private connection: Pool,
   ) {}

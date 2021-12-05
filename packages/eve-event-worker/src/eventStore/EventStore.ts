@@ -18,7 +18,7 @@ export class EventStore {
     this.mariadb = mariadb;
   }
 
-  public async loadAggregate(id: Id): Promise<Aggregate> {
+  public async loadAggregate(id: Id): Promise<Aggregate|null> {
     const sql = 'SELECT correlation_id FROM events WHERE event_id = ?';
     const idResult = await this.mariadb.query(sql, id.toString());
 
