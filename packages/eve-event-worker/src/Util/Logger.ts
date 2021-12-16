@@ -1,6 +1,7 @@
 import { Client } from '@elastic/elasticsearch';
-import winston from 'winston';
+import winston, { format } from 'winston';
 import { ElasticsearchTransport } from 'winston-elasticsearch';
+import cli = format.cli;
 
 type Context = {[key: string]: (string|number|Error|boolean)};
 
@@ -8,13 +9,19 @@ export default class Logger {
   private logger: winston.Logger;
 
   constructor() {
-    const client = new Client({ node: process.env.ELASTIC_HOST });
+    const client = new Client({
+      node: process.env.ELASTIC_HOST,
+      auth: {
+        username: process.env.ELASTIC_USERNAME || '',
+        password: process.env.ELASTIC_PASSWORD || '',
+      },
+    });
 
     this.logger = winston.createLogger({
       level: 'info',
       levels: winston.config.syslog.levels,
       format: winston.format.json(),
-      defaultMeta: { channel: 'eve-interaction-worker' },
+      defaultMeta: { channel: 'eve-event-worker' },
       transports: [
         new winston.transports.Console(),
         new ElasticsearchTransport({
