@@ -16,3 +16,10 @@ services:
       - ".env"
     volumes:
       - ./:/app:rw
+    networks:
+      - eve-storage
+
+networks:
+  eve-storage:
+    external: true
+    name: eve-storage
