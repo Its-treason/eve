@@ -8,7 +8,11 @@ export default async function spotifyApiFactory(): Promise<SpotifyApi> {
 
   const updateAccessToken = async () => {
     const data = await spotifyApi.clientCredentialsGrant();
+    spotifyApi.resetAccessToken();
     spotifyApi.setAccessToken(data.body['access_token']);
+
+    // TODO: Remove this
+    console.log(data.body);
 
     setTimeout(updateAccessToken, data.body['expires_in'] * 999);
   };

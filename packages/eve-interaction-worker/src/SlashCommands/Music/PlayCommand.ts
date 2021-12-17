@@ -75,7 +75,7 @@ export default class PlayCommand extends AbstractSlashCommand {
       this.logger.warning('Error while getting YT-Result', { error });
       
       const answer = embedFactory(interaction.client, 'Error!');
-      answer.setDescription('There was an error getting the YouTube result. Is the link correct?');
+      answer.setDescription('There was an error getting a result. Is the link correct?');
       await interaction.editReply({ embeds: [answer] });
       return;
     }
