@@ -11,9 +11,6 @@ export default async function spotifyApiFactory(): Promise<SpotifyApi> {
     spotifyApi.resetAccessToken();
     spotifyApi.setAccessToken(data.body['access_token']);
 
-    // TODO: Remove this
-    console.log(data.body);
-
     setTimeout(updateAccessToken, data.body['expires_in'] * 999);
   };
   await updateAccessToken();
