@@ -6,7 +6,7 @@ RUN apt update \
     && apt install chromium ffmpeg --no-install-recommends -y \
     && apt clean
 
-RUN wget -q -O "/usr/bin/youtube-dl" "https://github.com/ytdl-org/youtube-dl/releases/download/2021.06.06/youtube-dl" \
+RUN wget -q -O "/usr/bin/youtube-dl" "https://github.com/ytdl-org/youtube-dl/releases/download/2021.12.17/youtube-dl" \
     && chmod +x /usr/bin/youtube-dl
 
 FROM base AS development
