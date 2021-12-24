@@ -1,6 +1,8 @@
 import AbstractEventHandler from './AbstractEventHandler';
 import Logger from '../Util/Logger';
+import { Injectable } from 'injection-js';
 
+@Injectable()
 export default class WarnEventHandler extends AbstractEventHandler {
   private logger: Logger;
 

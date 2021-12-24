@@ -1,3 +1,6 @@
+import { Injectable } from 'injection-js';
+
+@Injectable()
 export default abstract class AbstractEventHandler {
   public eventName: string;
 

@@ -13,8 +13,9 @@
   "dependencies": {
     "@elastic/elasticsearch": "^7.15.0",
     "discord.js": "^13.1.0",
+    "injection-js": "^2.4.0",
     "mariadb": "^2.5.4",
-    "treason-di": "^0.1.0",
+    "reflect-metadata": "^0.1.13",
     "winston": "^3.3.3",
     "winston-elasticsearch": "^0.15.9"
   },

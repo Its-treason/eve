@@ -1,7 +1,9 @@
 import { RateLimitData } from 'discord.js';
 import AbstractEventHandler from './AbstractEventHandler';
 import Logger from '../Util/Logger';
+import { Injectable } from 'injection-js';
 
+@Injectable()
 export default class RateLimitEventHandler extends AbstractEventHandler {
   constructor(
     private logger: Logger,

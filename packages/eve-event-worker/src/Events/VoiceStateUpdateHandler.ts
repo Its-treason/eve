@@ -1,7 +1,9 @@
 import { VoiceState } from 'discord.js';
 import ChannelActivityProjection from '../Projection/ChannelActivityProjection';
 import AbstractEventHandler from './AbstractEventHandler';
+import { Injectable } from 'injection-js';
 
+@Injectable()
 export default class VoiceStateUpdateHandler extends AbstractEventHandler {
   private channelActivityProjection: ChannelActivityProjection;
 

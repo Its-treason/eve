@@ -1,13 +1,15 @@
-import { Intents, Client, ButtonInteraction, CommandInteraction } from 'discord.js';
+import { Intents, Client } from 'discord.js';
 import Logger from '../Util/Logger';
-import AbstractEventHandler from '../Events/AbstractEventHandler';
+import { EventHandlerCollection } from './EventHandlerCollection';
+import { Injectable } from 'injection-js';
 
+@Injectable()
 export default class EveClient extends Client {
-  private readonly eventHandler: AbstractEventHandler[];
+  private readonly eventHandler: EventHandlerCollection;
   private readonly logger: Logger;
 
   constructor(
-    eventHandler: AbstractEventHandler[],
+    eventHandler: EventHandlerCollection,
     logger: Logger,
   ) {
     const intents = new Intents();
@@ -34,7 +36,7 @@ export default class EveClient extends Client {
   }
 
   async registerEventHandler(): Promise<void> {
-    this.eventHandler.forEach((eventHandler): void => {
+    this.eventHandler.getAll().forEach((eventHandler): void => {
       this.on(eventHandler.eventName, eventHandler.execute);
     });
   }

@@ -1,7 +1,9 @@
 import AbstractEventHandler from './AbstractEventHandler';
 import Logger from '../Util/Logger';
 import { Guild } from 'discord.js';
+import { Injectable } from 'injection-js';
 
+@Injectable()
 export default class GuildCreateEventHandler extends AbstractEventHandler {
   constructor(
     private logger: Logger,

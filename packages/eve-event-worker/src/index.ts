@@ -1,12 +1,11 @@
-import definitions from './definitions';
-import { Container } from 'treason-di';
+import 'reflect-metadata';
+import injector from './injector';
 import EveClient from './Structures/EveClient';
 import Logger from './Util/Logger';
 
 (async () => {
-  const container = new Container(definitions);
-  const logger = await container.get<Logger>(Logger);
-  const client = await container.get<EveClient>(EveClient);
+  const logger = injector.get(Logger);
+  const client = injector.get(EveClient);
 
   const shutDown = () => {
     logger.notice('Got SIGINT or SIGTERM exiting');
@@ -14,9 +13,14 @@ import Logger from './Util/Logger';
     client?.destroy();
     process.exit(0);
   };
-
   process.on('SIGINT', shutDown);
   process.on('SIGTERM', shutDown);
+
+  const handleError = (error: Error) => {
+    logger.error('An error occurred', { error });
+  };
+  process.on('uncaughtException', handleError);
+  process.on('unhandledRejection', handleError);
 
   await client.run();
   logger.info('Started eve-event-worker');

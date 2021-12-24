@@ -1,9 +1,11 @@
-import { Pool } from 'mariadb';
+import { Injectable } from 'injection-js';
+import MySQLClient from '../Structures/MySQLClient';
 
+@Injectable()
 export default class ChannelActivityProjection {
   // eslint-disable-next-line no-useless-constructor
   constructor(
-    private connection: Pool,
+    private connection: MySQLClient,
   ) {}
 
   public async recordChannelJoin(userId: string, channelId: string, guildId: string): Promise<void> {

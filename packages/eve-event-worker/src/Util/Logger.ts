@@ -1,10 +1,11 @@
 import { Client } from '@elastic/elasticsearch';
-import winston, { format } from 'winston';
+import winston from 'winston';
 import { ElasticsearchTransport } from 'winston-elasticsearch';
-import cli = format.cli;
+import { Injectable } from 'injection-js';
 
 type Context = {[key: string]: (string|number|Error|boolean)};
 
+@Injectable()
 export default class Logger {
   private logger: winston.Logger;
 
