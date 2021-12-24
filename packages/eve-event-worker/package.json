@@ -4,9 +4,11 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "node build/index.js",
+    "prestart": "webpack",
     "lint": "eslint ./src/**/*.ts",
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest"
   },
   "author": "",
   "license": "MIT",
@@ -23,12 +25,17 @@
     "@types/node": "^16.6.1",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "@typescript-eslint/parser": "^4.29.1",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-typescript": "^7.16.0",
     "eslint": "^7.32.0",
     "ts-loader": "^9.2.5",
-    "ts-node": "^10.1.0",
     "typescript": "^4.4.2",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "@types/jest": "^27.0.3",
+    "babel-jest": "^27.4.5",
+    "jest": "^27.4.5"
   }
 }

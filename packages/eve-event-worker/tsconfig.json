@@ -13,7 +13,7 @@
     "jsx": "preserve",
     "noImplicitAny": true,
     "allowUnreachableCode": true,
-    "noEmit": true,
+    "noEmit": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
   },

@@ -4,8 +4,11 @@ import EveClient from './Structures/EveClient';
 import Logger from './Util/Logger';
 
 (async () => {
+  throw new Error('Test');
+
   const logger = injector.get(Logger);
   const client = injector.get(EveClient);
+
 
   const shutDown = () => {
     logger.notice('Got SIGINT or SIGTERM exiting');
