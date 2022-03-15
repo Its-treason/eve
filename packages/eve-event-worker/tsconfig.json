@@ -4,7 +4,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": false,
     "esModuleInterop": true,
     "module": "CommonJS",
     "moduleResolution": "Node",

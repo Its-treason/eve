@@ -1,29 +1,15 @@
 import 'reflect-metadata';
-import injector from './injector';
-import EveClient from './Structures/EveClient';
+import './dependencyDefinition';
+import EveClient from './Structure/EveClient';
 import Logger from './Util/Logger';
+import { container } from 'tsyringe';
+import registerErrorAndShutdownHandler from './Util/registerErrorAndShutdownHandler';
 
 (async () => {
-  throw new Error('Test');
+  const logger = container.resolve(Logger);
+  const client = container.resolve(EveClient);
 
-  const logger = injector.get(Logger);
-  const client = injector.get(EveClient);
-
-
-  const shutDown = () => {
-    logger.notice('Got SIGINT or SIGTERM exiting');
-
-    client?.destroy();
-    process.exit(0);
-  };
-  process.on('SIGINT', shutDown);
-  process.on('SIGTERM', shutDown);
-
-  const handleError = (error: Error) => {
-    logger.error('An error occurred', { error });
-  };
-  process.on('uncaughtException', handleError);
-  process.on('unhandledRejection', handleError);
+  registerErrorAndShutdownHandler(logger, client);
 
   await client.run();
   logger.info('Started eve-event-worker');

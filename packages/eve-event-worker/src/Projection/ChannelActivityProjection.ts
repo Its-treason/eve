@@ -1,7 +1,7 @@
-import { Injectable } from 'injection-js';
-import MySQLClient from '../Structures/MySQLClient';
+import MySQLClient from '../Structure/MySQLClient';
+import { injectable } from 'tsyringe';
 
-@Injectable()
+@injectable()
 export default class ChannelActivityProjection {
   // eslint-disable-next-line no-useless-constructor
   constructor(

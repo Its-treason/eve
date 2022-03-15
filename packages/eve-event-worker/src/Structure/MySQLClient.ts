@@ -1,5 +1,7 @@
 import { createPool, Pool, QueryOptions } from 'mariadb';
+import { singleton } from 'tsyringe';
 
+@singleton()
 export default class MySQLClient {
   private readonly pool: Pool;
 

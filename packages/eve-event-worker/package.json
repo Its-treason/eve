@@ -14,28 +14,27 @@
   "license": "MIT",
   "dependencies": {
     "@elastic/elasticsearch": "^7.15.0",
-    "discord.js": "^13.1.0",
-    "injection-js": "^2.4.0",
-    "mariadb": "^2.5.4",
+    "discord.js": "^13.6.0",
+    "mariadb": "^3.0.0",
     "reflect-metadata": "^0.1.13",
-    "winston": "^3.3.3",
-    "winston-elasticsearch": "^0.15.9"
+    "tsyringe": "^4.6.0"
   },
   "devDependencies": {
-    "@types/node": "^16.6.1",
-    "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "@typescript-eslint/parser": "^4.29.1",
     "@babel/core": "^7.16.0",
+    "@babel/plugin-proposal-decorators": "^7.16.5",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-typescript": "^7.16.0",
-    "eslint": "^7.32.0",
-    "ts-loader": "^9.2.5",
-    "typescript": "^4.4.2",
-    "webpack": "^5.51.1",
-    "webpack-cli": "^4.8.0",
-    "webpack-node-externals": "^3.0.0",
-    "@types/jest": "^27.0.3",
-    "babel-jest": "^27.4.5",
-    "jest": "^27.4.5"
+    "@types/jest": "^27.4.1",
+    "@types/node": "^16.11.26",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^ 5.14.0",
+    "babel-jest": "^27.5.1",
+    "eslint": "^8.10.0",
+    "jest": "^27.5.1",
+    "ts-loader": "^9.2.7",
+    "typescript": "^4.6.2",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-node-externals": "^3.0.0"
   }
 }

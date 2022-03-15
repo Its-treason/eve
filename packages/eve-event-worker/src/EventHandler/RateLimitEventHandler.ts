@@ -1,16 +1,16 @@
 import { RateLimitData } from 'discord.js';
-import AbstractEventHandler from './AbstractEventHandler';
 import Logger from '../Util/Logger';
-import { Injectable } from 'injection-js';
+import { injectable } from 'tsyringe';
+import EventHandler from './EventHandler';
 
-@Injectable()
-export default class RateLimitEventHandler extends AbstractEventHandler {
+@injectable()
+export default class RateLimitEventHandler implements EventHandler {
   constructor(
     private logger: Logger,
-  ) {
-    super('rateLimit');
+  ) {}
 
-    this.execute = this.execute.bind(this);
+  public getNameEventName(): string {
+    return 'rateLimit';
   }
 
   public async execute(rateLimitData: RateLimitData): Promise<void> {

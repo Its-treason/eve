@@ -1,17 +1,17 @@
 import { VoiceState } from 'discord.js';
 import ChannelActivityProjection from '../Projection/ChannelActivityProjection';
-import AbstractEventHandler from './AbstractEventHandler';
-import { Injectable } from 'injection-js';
+import AbstractEventHandler from './EventHandler';
+import EventHandler from './EventHandler';
+import { injectable } from 'tsyringe';
 
-@Injectable()
-export default class VoiceStateUpdateHandler extends AbstractEventHandler {
-  private channelActivityProjection: ChannelActivityProjection;
+@injectable()
+export default class VoiceStateUpdateHandler implements EventHandler {
+  constructor(
+    private channelActivityProjection: ChannelActivityProjection
+  ) {}
 
-  constructor(channelActivityProjection: ChannelActivityProjection) {
-    super('voiceStateUpdate');
-
-    this.execute = this.execute.bind(this);
-    this.channelActivityProjection = channelActivityProjection;
+  getNameEventName(): string {
+    return 'voiceStateUpdate';
   }
 
   public async execute(oldState: VoiceState, newState: VoiceState): Promise<void> {

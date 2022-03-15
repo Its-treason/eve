@@ -7,9 +7,9 @@ services:
       dockerfile: docker/node/Dockerfile
       target: development
     command:
-      - "node"
-      - "./node_modules/ts-node/dist/bin.js"
-      - "src/index.ts"
+      - "npm"
+      - "run"
+      - "start"
     environment:
       NODE_ENV: "development"
     env_file:

@@ -1,16 +1,16 @@
-import AbstractEventHandler from './AbstractEventHandler';
 import Logger from '../Util/Logger';
 import { Guild } from 'discord.js';
-import { Injectable } from 'injection-js';
+import { injectable } from 'tsyringe';
+import EventHandler from './EventHandler';
 
-@Injectable()
-export default class GuildDeleteEventHandler extends AbstractEventHandler {
+@injectable()
+export default class GuildDeleteEventHandler implements EventHandler {
   constructor(
     private logger: Logger,
-  ) {
-    super('guildDelete');
+  ) {}
 
-    this.execute = this.execute.bind(this);
+  public getNameEventName(): string {
+    return 'guildDelete';
   }
 
   public async execute(guild: Guild): Promise<void> {

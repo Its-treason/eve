@@ -1,4 +1,4 @@
-import MySQLClient from '../Structures/MySQLClient';
+import MySQLClient from '../Structure/MySQLClient';
 
 export default function mySqlClientFactory(): MySQLClient {
   if (
