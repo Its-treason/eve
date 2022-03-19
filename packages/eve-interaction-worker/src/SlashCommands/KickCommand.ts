@@ -1,20 +1,45 @@
-import embedFactory from '../Factory/messageEmbedFactory';
-import { CommandInteraction } from 'discord.js';
-import { MessageActionRow, MessageButton } from 'discord.js';
-import { EventStore } from '../eventStore/EventStore';
-import { Aggregate } from '../eventStore/Aggregate';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import validateInput from '../Validation/validateInput';
 import notEquals from '../Validation/Validators/notEquals';
 import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
 import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
 import hasPermissions from '../Validation/Validators/hasPermissions';
-import AbstractSlashCommand from './AbstractSlashCommand';
+import SlashCommandInterface from './SlashCommandInterface';
+import { injectable } from 'tsyringe';
+import embedFactory from '../Factory/messageEmbedFactory';
 
-export default class KickCommand extends AbstractSlashCommand {
-  constructor(
-    private eventStore: EventStore,
-  ) {
-    super({
+@injectable()
+export default class KickCommand implements SlashCommandInterface {
+  async execute(interaction: CommandInteraction): Promise<void> {
+    const actionUser = interaction.user;
+    const targetUser = interaction.options.get('user').user;
+    const reason = String(interaction.options.get('reason')?.value) || 'No reason given';
+
+    const inputValidationResult = await validateInput(
+      interaction.guild,
+      interaction,
+      notEquals(actionUser.id, targetUser.id, 'You cannot kick yourself!'),
+      isNotGuildOwner(targetUser.id, 'The owner of this server cannot be kicked!'),
+      isNotDmChannel('This command cannot be used in a DMs!'),
+      hasPermissions(interaction.user, 'KICK_MEMBERS', 'You dont have the permission to kick member!'),
+    );
+    if (inputValidationResult === false) {
+      return;
+    }
+
+    await interaction.guild.members.kick(
+      targetUser,
+      `"${reason}" by "${actionUser.username}#${actionUser.discriminator}" using EVE`,
+    );
+
+    const answer = embedFactory(interaction.client, 'Kicked');
+    answer.setDescription(`${targetUser} was successfully kicked!`);
+    answer.addField('Reason', reason);
+    await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
+  }
+
+  getData(): ApplicationCommandData {
+    return {
       name: 'kick',
       description: 'Kick a user',
       options: [
@@ -30,65 +55,6 @@ export default class KickCommand extends AbstractSlashCommand {
           type: 3,
         },
       ],
-    });
-  }
-
-  async execute(interaction: CommandInteraction): Promise<void> {
-    const user = interaction.options.get('user').user;
-    const reason = interaction.options.get('reason')?.value as string || 'No reason given';
-
-    const inputValidationResult = await validateInput(
-      interaction.guild,
-      interaction,
-      notEquals(interaction.user.id, user.id, 'You cannot kick yourself!'),
-      isNotGuildOwner(user.id, 'The owner of this server cannot be kicked!'),
-      isNotDmChannel('This command cannot be used in a DMs!'),
-      hasPermissions(interaction.user, 'KICK_MEMBERS', 'You dont have the permission to kick member!'),
-    );
-    if (inputValidationResult === false) {
-      return;
-    }
-
-    const answer = embedFactory(interaction.client, 'Kick');
-    answer.setDescription(`Are u sure u want to kick ${user}?`);
-
-    const aggregate = Aggregate.createNew();
-    const event = await aggregate.record(
-      'kick-interaction.create',
-      { userId: interaction.user.id, targetUserId: user.id, reason },
-    );
-    this.eventStore.saveAggregate(aggregate);
-
-    const row = new MessageActionRow()
-      .addComponents(new MessageButton()
-          .setCustomId(`kick-${event.getEventId().toString()}`)
-          .setLabel('Kick')
-          .setStyle('DANGER'),
-      );
-
-    await interaction.reply({ embeds: [answer], components: [row], allowedMentions: { repliedUser: true } });
-
-    setTimeout(() => {
-      (async () => {
-        const aggregate = await this.eventStore.loadAggregate(event.getEventId());
-
-        if (await aggregate.getEventByTopic('kick-interaction.executed') !== null) {
-          return;
-        }
-
-        await aggregate.record('kick-interaction.timedOut', {});
-        this.eventStore.saveAggregate(aggregate);
-
-        const row = new MessageActionRow()
-          .addComponents(new MessageButton()
-            .setCustomId('timedOut')
-            .setLabel('Timed out')
-            .setStyle('DANGER')
-            .setDisabled(true),
-          );
-
-        await interaction.editReply({ components: [row] });
-      })();
-    }, 60000);
+    };
   }
 }

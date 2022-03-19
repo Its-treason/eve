@@ -1,16 +1,11 @@
-import { CommandInteraction } from 'discord.js';
-import AbstractSlashCommand from '../AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
+import { injectable } from 'tsyringe';
 
-export default class ClearCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'clear',
-      description: 'Clear the music queue',
-    });
-  }
-
+@injectable()
+export default class ClearCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const player = await validateCanGetPlayer(interaction);
     if (player === false) {
@@ -22,5 +17,12 @@ export default class ClearCommand extends AbstractSlashCommand {
     const answer = embedFactory(interaction.client, 'Cleared the queue!');
 
     await interaction.reply({ embeds: [answer] });
+  }
+
+  getData(): ApplicationCommandData {
+    return {
+      name: 'clear',
+      description: 'Clear the music queue',
+    };
   }
 }

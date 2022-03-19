@@ -1,16 +1,10 @@
 import embedFactory from '../Factory/messageEmbedFactory';
-import AbstractSlashCommand from './AbstractSlashCommand';
-import { CommandInteraction } from 'discord.js';
+import SlashCommandInterface from './SlashCommandInterface';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { injectable } from 'tsyringe';
 
-export default class InviteCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'invite',
-      description: 'Create an invite to invite the bot to your server',
-      options: [],
-    });
-  }
-
+@injectable()
+export default class InviteCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const invite = interaction.client.generateInvite(
       { scopes: ['applications.commands', 'bot'], permissions: 'ADMINISTRATOR' },
@@ -19,5 +13,13 @@ export default class InviteCommand extends AbstractSlashCommand {
     const answer = embedFactory(interaction.client, 'Invite Link');
     answer.setDescription(invite);
     await interaction.reply({ embeds: [answer] });
+  }
+
+  getData(): ApplicationCommandData {
+    return {
+      name: 'invite',
+      description: 'Create an invite to invite the bot to your server',
+      options: [],
+    };
   }
 }

@@ -1,16 +1,20 @@
-import { CommandInteraction } from 'discord.js';
+import { ApplicationCommandSubCommandData, CommandInteraction} from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import embedFactory from '../../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../../Validation/validateCanGetPlayer';
 import { YtResult } from '../../../types';
-import AbstractSubSlashCommand from '../../AbstractSubSlashCommand';
+import SubSlashCommandInterface from '../../SubSlashCommandInterface';
+import {injectable} from 'tsyringe';
 
-export default class PlaylistSaveCommand extends AbstractSubSlashCommand {
+@injectable()
+export default class PlaylistSaveCommand implements SubSlashCommandInterface {
   constructor(
     private playlistProjection: PlaylistProjection,
-  ) {
-    super({
+  ) {}
+
+  getData(): ApplicationCommandSubCommandData {
+    return {
       type: 1,
       name: 'save',
       description: 'Save the current queue as a Playlist',
@@ -22,7 +26,7 @@ export default class PlaylistSaveCommand extends AbstractSubSlashCommand {
           type: 3,
         },
       ],
-    });
+    };
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {

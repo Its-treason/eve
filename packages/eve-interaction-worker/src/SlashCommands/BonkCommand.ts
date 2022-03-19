@@ -1,33 +1,39 @@
-import { CommandInteraction, User } from 'discord.js';
-import BrowserFactory from '../Factory/browserFactory';
-import AbstractSlashCommand from './AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction, User } from 'discord.js';
+import SlashCommandInterface from './SlashCommandInterface';
+import { injectable } from 'tsyringe';
+import BrowserWrapper from '../Structures/BrowserWrapper';
 
-export default class BonkCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'bonk',
-      description: 'Send a image of the "Go to Horny Jail" meme with users Avatars',
-      options: [
-        {
-          name: 'bonkee',
-          description: 'User to Bonk',
-          type: 6,
-          required: true,
-        },
-        {
-          name: 'bonker',
-          description: 'User thats Bonks',
-          type: 6,
-          required: false,
-        },
-        {
-          name: 'title',
-          description: 'A title for the image',
-          type: 3,
-          required: false,
-        },
-      ],
-    });
+@injectable()
+export default class BonkCommand implements SlashCommandInterface {
+  constructor(
+    private browser: BrowserWrapper,
+  ) {}
+
+  getData(): ApplicationCommandData {
+      return {
+        name: 'bonk',
+        description: 'Send a image of the "Go to Horny Jail" meme with users Avatars',
+        options: [
+          {
+            name: 'bonkee',
+            description: 'User to Bonk',
+            type: 6,
+            required: true,
+          },
+          {
+            name: 'bonker',
+            description: 'User thats Bonks',
+            type: 6,
+            required: false,
+          },
+          {
+            name: 'title',
+            description: 'A title for the image',
+            type: 3,
+            required: false,
+          },
+        ],
+      };
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
@@ -72,11 +78,11 @@ export default class BonkCommand extends AbstractSlashCommand {
     `;
 
     try {
-      const browser = await BrowserFactory();
-      const page = await browser.newPage();
+      const page = await this.browser.newPage();
       await page.setViewport({ width: 720, height: 492 });
       await page.setContent(bonkHtml);
       const attachment = await page.screenshot();
+      await page.close();
 
       if (!(attachment instanceof Buffer)) {
         throw new Error('Invalid Buffer');

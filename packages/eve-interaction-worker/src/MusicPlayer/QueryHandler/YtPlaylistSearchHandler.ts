@@ -1,8 +1,10 @@
-import AbstractQueryHandler from './AbstractQueryHandler';
+import QueryHandlerInterface from './QueryHandlerInterface';
 import { QueryResult, YtResult } from '../../types';
 import ytpl, { Item as plItem } from 'ytpl';
+import { injectable } from 'tsyringe';
 
-export default class YtPlaylistSearchHandler implements AbstractQueryHandler {
+@injectable()
+export default class YtPlaylistSearchHandler implements QueryHandlerInterface {
   async handle(query: string, requesterId: string): Promise<QueryResult> {
     const result = await ytpl(query, { limit: 1 });
 
@@ -32,5 +34,9 @@ export default class YtPlaylistSearchHandler implements AbstractQueryHandler {
         return ytResult;
       },
     };
+  }
+
+  getType(): string {
+    return 'yt-playlist';
   }
 }

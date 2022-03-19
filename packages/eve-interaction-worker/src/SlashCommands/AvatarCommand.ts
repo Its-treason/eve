@@ -1,10 +1,31 @@
-import { CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
-import AbstractSlashCommand from './AbstractSlashCommand';
+import SlashCommandInterface from './SlashCommandInterface';
+import { injectable } from 'tsyringe';
 
-export default class AvatarCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
+@injectable()
+export default class AvatarCommand implements SlashCommandInterface {
+  async execute(interaction: CommandInteraction): Promise<void> {
+    const user = interaction.options.getUser('user', false) || interaction.user;
+    const size = interaction.options.getInteger('size', false) || 128;
+
+    if (size !== 64 && size !== 128 && size !== 512 && size !== 2048 && size !== 4096) {
+      const answer = embedFactory(interaction.client, 'Error');
+      answer.setDescription(`\`${size}\` is not a valid size!`);
+      await interaction.reply({ embeds: [answer] });
+      return;
+    }
+
+    const link = user.displayAvatarURL({ format: 'png', size: size });
+
+    const answer = embedFactory(interaction.client, `Avatar of ${user.username}`);
+    answer.addField('Link', link);
+    answer.setImage(link);
+    await interaction.reply({ embeds: [answer] });
+  }
+
+  getData(): ApplicationCommandData {
+    return {
       name: 'avatar',
       description: 'Get a users Avatar',
       options: [
@@ -41,25 +62,6 @@ export default class AvatarCommand extends AbstractSlashCommand {
           ],
         },
       ],
-    });
-  }
-
-  async execute(interaction: CommandInteraction): Promise<void> {
-    const user = interaction.options.getUser('user', false) || interaction.user;
-    const size = interaction.options.getInteger('size', false) || 128;
-
-    if (size !== 64 && size !== 128 && size !== 512 && size !== 2048 && size !== 4096) {
-      const answer = embedFactory(interaction.client, 'Error');
-      answer.setDescription(`\`${size}\` is not a valid size!`);
-      await interaction.reply({ embeds: [answer] });
-      return;
-    }
-
-    const link = user.displayAvatarURL({ format: 'png', size: size });
-
-    const answer = embedFactory(interaction.client, `Avatar of ${user.username}`);
-    answer.addField('Link', link);
-    answer.setImage(link);
-    await interaction.reply({ embeds: [answer] });
+    };
   }
 }

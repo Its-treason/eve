@@ -1,8 +1,10 @@
-import AbstractQueryHandler from './AbstractQueryHandler';
+import QueryHandlerInterface from './QueryHandlerInterface';
 import { QueryResult, YtResult } from '../../types';
 import ytsr, { Item } from 'ytsr';
+import { injectable } from 'tsyringe';
 
-export default class SearchYtIdHandler implements AbstractQueryHandler {
+@injectable()
+export default class SearchYtIdHandler implements QueryHandlerInterface {
   async handle(query: string, requesterId: string): Promise<QueryResult> {
     const result = await ytsr(`"${query}"`, { limit: 10 });
 
@@ -32,5 +34,9 @@ export default class SearchYtIdHandler implements AbstractQueryHandler {
       firstResult,
       getAll: async (): Promise<YtResult[]> => [], // No other results will be returned here
     };
+  }
+
+  getType(): string {
+    return 'search-id';
   }
 }

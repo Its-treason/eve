@@ -27,7 +27,7 @@ export class MusicPlayer {
   public destroyed = false;
 
   private readonly player: AudioPlayer;
-  private readonly connection: VoiceConnection
+  private readonly connection: VoiceConnection;
 
   private queue: QueueItem[];
   private pointer = -1;

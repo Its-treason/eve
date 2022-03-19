@@ -1,42 +1,16 @@
-import { CommandInteraction } from 'discord.js';
+import {ApplicationCommandSubCommandData, CommandInteraction} from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
-import AbstractSubSlashCommand from '../../AbstractSubSlashCommand';
+import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import embedFactory from '../../../Factory/messageEmbedFactory';
 import MusicPlayerRepository from '../../../MusicPlayer/MusicPlayerRepository';
+import {injectable} from 'tsyringe';
 
-export default class PlaylistLoadCommand extends AbstractSubSlashCommand {
+@injectable()
+export default class PlaylistLoadCommand implements SubSlashCommandInterface {
   constructor(
     private playlistProjection: PlaylistProjection,
-  ) {
-    super({
-      type: 1,
-      name: 'load',
-      description: 'Load Playlists of a user',
-      options: [
-        {
-          name: 'name',
-          description: 'Name of the Playlist',
-          required: true,
-          type: 3,
-        },
-        {
-          name: 'user',
-          description: 'User to get the playlists from',
-          required: false,
-          type: 6,
-        },
-        {
-          name: 'clear',
-          description: 'clear the current queue. Default is: false',
-          required: false,
-          type: 5,
-        },
-      ],
-    });
-
-    this.playlistProjection = playlistProjection;
-  }
+  ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
     const name = interaction.options.getString('name');
@@ -96,7 +70,36 @@ export default class PlaylistLoadCommand extends AbstractSubSlashCommand {
     }
 
     const answer = embedFactory(interaction.client, 'Loaded the playlist!');
+    answer.addField('Added to queue', `${queue.length} items where added to the queue`);
 
     await interaction.editReply({ embeds: [answer] });
+  }
+
+  getData(): ApplicationCommandSubCommandData {
+    return {
+      type: 1,
+      name: 'load',
+      description: 'Load Playlists of a user',
+      options: [
+        {
+          name: 'name',
+          description: 'Name of the Playlist',
+          required: true,
+          type: 3,
+        },
+        {
+          name: 'user',
+          description: 'User to get the playlists from',
+          required: false,
+          type: 6,
+        },
+        {
+          name: 'clear',
+          description: 'clear the current queue. Default is: false',
+          required: false,
+          type: 5,
+        },
+      ],
+    };
   }
 }

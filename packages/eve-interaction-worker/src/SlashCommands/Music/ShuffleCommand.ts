@@ -1,17 +1,11 @@
-import { CommandInteraction } from 'discord.js';
-import AbstractSlashCommand from '../AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
+import { injectable } from 'tsyringe';
 
-export default class ShuffleCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'shuffle',
-      description: 'shuffle the queue',
-      options: [],
-    });
-  }
-
+@injectable()
+export default class ShuffleCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const player = await validateCanGetPlayer(interaction);
     if (player === false) {
@@ -34,5 +28,13 @@ export default class ShuffleCommand extends AbstractSlashCommand {
     const answer = embedFactory(interaction.client, 'Shuffled the queue!');
 
     await interaction.editReply({ embeds: [answer] });
+  }
+
+  getData(): ApplicationCommandData {
+    return {
+      name: 'shuffle',
+        description: 'shuffle the queue',
+      options: [],
+    };
   }
 }

@@ -1,4 +1,4 @@
-FROM node:16.7.0-buster AS base
+FROM node:16.14.0-buster AS base
 
 RUN mkdir /app
 

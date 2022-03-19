@@ -1,24 +1,12 @@
-import { CommandInteraction } from 'discord.js';
-import AbstractSlashCommand from '../AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { QueueItem } from '../../types';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
+import { injectable } from 'tsyringe';
 
-export default class QueueCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'queue',
-      description: 'Get current queue',
-      options: [
-        {
-          name: 'offset',
-          description: 'Position from where to show the queue',
-          type: 4,
-        },
-      ],
-    });
-  }
-
+@injectable()
+export default class QueueCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const player = await validateCanGetPlayer(interaction, false);
     if (player === false) {
@@ -63,5 +51,19 @@ export default class QueueCommand extends AbstractSlashCommand {
     }
 
     return queue + '\n```';
+  }
+
+  getData(): ApplicationCommandData {
+    return {
+      name: 'queue',
+      description: 'Get current queue',
+      options: [
+        {
+          name: 'offset',
+          description: 'Position from where to show the queue',
+          type: 4,
+        },
+      ],
+    };
   }
 }

@@ -1,14 +1,12 @@
 import { YtResult } from '../types';
-import { Pool } from 'mariadb';
+import MySQLClient from '../Structures/MySQLClient';
+import { injectable } from 'tsyringe';
 
+@injectable()
 export default class PlaylistProjection {
-  private connection: Pool;
-
   constructor(
-    connection: Pool,
-  ) {
-    this.connection = connection;
-  }
+    private connection: MySQLClient,
+  ) {}
 
   public async savePlaylist(name: string, userId: string, queue: YtResult[]): Promise<void> {
     const sql = 'INSERT INTO `playlist` (`name`, `user_id`, `queue`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `queue` = ?';

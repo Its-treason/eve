@@ -1,17 +1,11 @@
-import { CommandInteraction } from 'discord.js';
-import AbstractSlashCommand from '../AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
+import { injectable } from 'tsyringe';
 
-export default class NowPlayingCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'np',
-      description: 'Get the currently playing',
-      options: [],
-    });
-  }
-
+@injectable()
+export default class NowPlayingCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const player = await validateCanGetPlayer(interaction, false);
     if (player === false) {
@@ -28,5 +22,13 @@ export default class NowPlayingCommand extends AbstractSlashCommand {
     answer.setImage(`https://img.youtube.com/vi/${item.ytId}/0.jpg`);
 
     await interaction.reply({ embeds: [answer] });
+  }
+
+  getData(): ApplicationCommandData {
+    return {
+      name: 'np',
+      description: 'Get the currently playing',
+      options: [],
+    };
   }
 }

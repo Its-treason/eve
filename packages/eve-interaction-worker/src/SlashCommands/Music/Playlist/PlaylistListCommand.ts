@@ -1,13 +1,17 @@
-import { CommandInteraction } from 'discord.js';
+import { ApplicationCommandSubCommandData, CommandInteraction} from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
-import AbstractSubSlashCommand from '../../AbstractSubSlashCommand';
+import SubSlashCommandInterface from '../../SubSlashCommandInterface';
+import {injectable} from 'tsyringe';
 
-export default class PlaylistListCommand extends AbstractSubSlashCommand {
-  private readonly playlistProjection: PlaylistProjection;
+@injectable()
+export default class PlaylistListCommand implements SubSlashCommandInterface {
+  constructor(
+    private playlistProjection: PlaylistProjection,
+  ) {}
 
-  constructor(playlistProjection: PlaylistProjection) {
-    super({
+  getData(): ApplicationCommandSubCommandData {
+    return {
       type: 1,
       name: 'list',
       description: 'List Playlists of a user',
@@ -19,9 +23,7 @@ export default class PlaylistListCommand extends AbstractSubSlashCommand {
           type: 6,
         },
       ],
-    });
-
-    this.playlistProjection = playlistProjection;
+    };
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {

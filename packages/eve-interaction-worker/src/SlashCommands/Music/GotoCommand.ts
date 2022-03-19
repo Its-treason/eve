@@ -1,24 +1,11 @@
-import { CommandInteraction } from 'discord.js';
-import AbstractSlashCommand from '../AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
+import { injectable } from 'tsyringe';
 
-export default class GotoCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'goto',
-      description: 'Goto a position in the queue',
-      options: [
-        {
-          name: 'position',
-          description: 'The position to goto',
-          type: 4,
-          required: true,
-        },
-      ],
-    });
-  }
-
+@injectable()
+export default class GotoCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const player = await validateCanGetPlayer(interaction);
     if (player === false) {
@@ -39,5 +26,20 @@ export default class GotoCommand extends AbstractSlashCommand {
 
     const answer = embedFactory(interaction.client, 'That item does not exists!');
     await interaction.editReply({ embeds: [answer] });
+  }
+
+  public getData(): ApplicationCommandData {
+    return {
+      name: 'goto',
+      description: 'Goto a position in the queue',
+      options: [
+        {
+          name: 'position',
+          description: 'The position to goto',
+          type: 4,
+          required: true,
+        },
+      ],
+    };
   }
 }

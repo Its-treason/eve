@@ -1,28 +1,14 @@
-import { CommandInteraction } from 'discord.js';
+import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
-import AbstractSubSlashCommand from '../../AbstractSubSlashCommand';
+import SubSlashCommandInterface from '../../SubSlashCommandInterface';
+import {injectable} from 'tsyringe';
 
-export default class PlaylistDeleteCommand extends AbstractSubSlashCommand {
-  private readonly playlistProjection: PlaylistProjection;
-
-  constructor(playlistProjection: PlaylistProjection) {
-    super({
-      type: 1,
-      name: 'delete',
-      description: 'Delete a playlist',
-      options: [
-        {
-          name: 'name',
-          description: 'Name of the Playlist to be deleted',
-          type: 3,
-          required: true,
-        },
-      ],
-    });
-
-    this.playlistProjection = playlistProjection;
-  }
+@injectable()
+export default class PlaylistDeleteCommand implements SubSlashCommandInterface {
+  constructor(
+    private playlistProjection: PlaylistProjection,
+  ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
     const name = interaction.options.getString('name', true);
@@ -42,5 +28,21 @@ export default class PlaylistDeleteCommand extends AbstractSubSlashCommand {
     const answer = messageEmbedFactory(interaction.client, '');
 
     await interaction.reply({ embeds: [answer] });
+  }
+
+  public getData(): ApplicationCommandSubCommandData {
+    return {
+      type: 1,
+      name: 'delete',
+      description: 'Delete a playlist',
+      options: [
+        {
+          name: 'name',
+          description: 'Name of the Playlist to be deleted',
+          type: 3,
+          required: true,
+        },
+      ],
+    };
   }
 }

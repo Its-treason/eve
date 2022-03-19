@@ -18,7 +18,6 @@
     "quotes": ["error", "single"],
     "camelcase": ["error", {"properties": "always", "ignoreGlobals": true}],
     "max-len": ["error", {"code": 200, "tabWidth": 4}],
-    "no-useless-constructor": "error",
     "indent": "off",
     "comma-dangle": ["error", "always-multiline"],
     "semi": ["error", "always", {"omitLastInOneLineBlock": false}],

@@ -1,19 +1,62 @@
-import { CommandInteraction, MessageActionRow, MessageButton } from 'discord.js';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
-import { Aggregate } from '../eventStore/Aggregate';
-import { EventStore } from '../eventStore/EventStore';
 import validateInput from '../Validation/validateInput';
 import notEquals from '../Validation/Validators/notEquals';
 import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
 import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
 import hasPermissions from '../Validation/Validators/hasPermissions';
-import AbstractSlashCommand from './AbstractSlashCommand';
+import SlashCommandInterface from './SlashCommandInterface';
+import { injectable } from 'tsyringe';
 
-export default class BanCommand extends AbstractSlashCommand {
-  constructor(
-    private eventStore: EventStore,
-  ) {
-    super({
+@injectable()
+export default class BanCommand implements SlashCommandInterface {
+  async execute(interaction: CommandInteraction): Promise<void> {
+    const targetUser = interaction.options.get('user').user;
+    const actionUser = interaction.user;
+    const reason = interaction.options.get('reason')?.value as string || 'No reason given';
+
+    const inputValidationResult = await validateInput(
+      interaction.guild,
+      interaction,
+      notEquals(actionUser.id, targetUser.id, 'You cannot ban yourself!'),
+      isNotGuildOwner(targetUser.id, 'The owner of this server cannot be banned!'),
+      isNotDmChannel('This command cannot be used in a DMs!'),
+      hasPermissions(interaction.user, 'BAN_MEMBERS', 'You dont have the permission to ban member!'),
+    );
+    if (inputValidationResult === false) {
+      return;
+    }
+
+    let banInfo;
+    try {
+      banInfo = await interaction.guild.bans.fetch({ user: targetUser, force: true });
+    } catch (e) {
+      if (e.message !== 'Unknown Ban') {
+        throw e;
+      }
+    }
+
+    if (banInfo !== undefined) {
+      const answer = embedFactory(interaction.client, 'Error');
+      answer.setDescription(`${targetUser} is already banned in this guild!`);
+      answer.addField('Ban reason', banInfo.reason);
+      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
+      return;
+    }
+
+    await interaction.guild.members.ban(
+      targetUser.id,
+      { reason: `"${reason}" by "${actionUser.username}#${actionUser.discriminator}" using EVE` },
+    );
+
+    const answer = embedFactory(interaction.client, 'Banned');
+    answer.setDescription(`${targetUser} was successfully banned!`);
+    answer.addField('Reason', reason);
+    await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
+  }
+
+  getData(): ApplicationCommandData {
+    return {
       name: 'ban',
       description: 'Ban a user',
       options: [
@@ -29,82 +72,6 @@ export default class BanCommand extends AbstractSlashCommand {
           type: 3,
         },
       ],
-    });
-  }
-
-  async execute(interaction: CommandInteraction): Promise<void> {
-    const user = interaction.options.get('user').user;
-    const reason = interaction.options.get('reason')?.value as string || 'No reason given';
-
-    const inputValidationResult = await validateInput(
-      interaction.guild,
-      interaction,
-      notEquals(interaction.user.id, user.id, 'You cannot ban yourself!'),
-      isNotGuildOwner(user.id, 'The owner of this server cannot be banned!'),
-      isNotDmChannel('This command cannot be used in a DMs!'),
-      hasPermissions(interaction.user, 'BAN_MEMBERS', 'You dont have the permission to ban member!'),
-    );
-    if (inputValidationResult === false) {
-      return;
-    }
-
-    let banInfo;
-    try {
-      banInfo = await interaction.guild.bans.fetch({ user, force: true });
-    } catch (e) {
-      if (e.message !== 'Unknown Ban') {
-        throw e;
-      }
-    }
-
-    if (banInfo !== undefined) {
-      const answer = embedFactory(interaction.client, 'Error');
-      answer.setDescription(`${user} is already banned in this guild!`);
-      answer.addField('Ban reason', banInfo.reason);
-      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
-      return;
-    }
-
-    const aggregate = Aggregate.createNew();
-    const event = await aggregate.record(
-      'ban-interaction.create',
-      { userId: interaction.user.id, targetUserId: user.id, reason: reason },
-    );
-    this.eventStore.saveAggregate(aggregate);
-
-    const answer = embedFactory(interaction.client, 'Ban');
-    answer.setDescription(`Are u sure u want to ban ${user}?`);
-
-    const row = new MessageActionRow()
-      .addComponents(new MessageButton()
-          .setCustomId(`ban-${event.getEventId()}`)
-          .setLabel('Ban')
-          .setStyle('DANGER'),
-      );
-
-    await interaction.reply({ embeds: [answer], components: [row], allowedMentions: { repliedUser: true } });
-
-    setTimeout(() => {
-      (async () => {
-        const aggregate = await this.eventStore.loadAggregate(event.getEventId());
-
-        if (await aggregate.getEventByTopic('ban-interaction.executed') !== null) {
-          return;
-        }
-
-        await aggregate.record('ban-interaction.timedOut', {});
-        this.eventStore.saveAggregate(aggregate);
-
-        const row = new MessageActionRow()
-          .addComponents(new MessageButton()
-            .setCustomId('timedOut')
-            .setLabel('Timed out')
-            .setStyle('DANGER')
-            .setDisabled(true),
-          );
-
-        await interaction.editReply({ components: [row] });
-      })();
-    }, 60000);
+    };
   }
 }

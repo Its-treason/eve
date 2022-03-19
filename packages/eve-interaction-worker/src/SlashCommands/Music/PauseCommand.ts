@@ -1,17 +1,11 @@
-import { CommandInteraction } from 'discord.js';
-import AbstractSlashCommand from '../AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
+import { injectable } from 'tsyringe';
 
-export default class PauseCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'pause',
-      description: 'pause or unpause the music player',
-      options: [],
-    });
-  }
-
+@injectable()
+export default class PauseCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const player = await validateCanGetPlayer(interaction);
     if (player === false) {
@@ -23,5 +17,13 @@ export default class PauseCommand extends AbstractSlashCommand {
     const answer = embedFactory(interaction.client, `${action} the player!`);
 
     await interaction.reply({ embeds: [answer] });
+  }
+
+  getData(): ApplicationCommandData {
+    return {
+      name: 'pause',
+      description: 'pause or unpause the music player',
+      options: [],
+    };
   }
 }

@@ -1,20 +1,21 @@
 import { Intents, Client, ButtonInteraction, CommandInteraction } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import AbstractSlashCommand from '../SlashCommands/AbstractSlashCommand';
-import AbstractButtonInteraction from '../ButtonInteractions/AbstractInteraction';
-import Logger from '../Util/Logger';
+import SlashCommandInterface from '../SlashCommands/SlashCommandInterface';
+import ButtonInteractionInterface from '../ButtonInteractions/ButtonInteractionInterface';
+import Logger from '../Structures/Logger';
 import messageEmbedFactory from '../Factory/messageEmbedFactory';
+import { injectable, injectAll } from 'tsyringe';
 
+@injectable()
 export default class EveClient extends Client {
-  private readonly slashCommands: AbstractSlashCommand[];
-  private readonly slashCommandMap: Map<string, AbstractSlashCommand>;
-  private readonly buttonInteractionMap: Map<string, AbstractButtonInteraction>;
+  private readonly slashCommands: SlashCommandInterface[];
+  private readonly buttonInteractions: ButtonInteractionInterface[];
   private readonly logger: Logger;
 
   constructor(
-    slashCommands: AbstractSlashCommand[],
-    buttonInteraction: AbstractButtonInteraction[],
+    @injectAll('SlashCommands') slashCommands: SlashCommandInterface[],
+    @injectAll('ButtonInteractions') buttonInteractions: ButtonInteractionInterface[],
     logger: Logger,
   ) {
     const intents = new Intents();
@@ -24,17 +25,8 @@ export default class EveClient extends Client {
 
     super({ intents });
 
-    this.slashCommandMap = slashCommands.reduce<Map<string, AbstractSlashCommand>>((map, slashCommand) =>{
-       map.set(slashCommand.data.name, slashCommand);
-       return map;
-    }, new Map<string, AbstractSlashCommand>());
     this.slashCommands = slashCommands;
-
-    this.buttonInteractionMap = buttonInteraction.reduce<Map<string, AbstractButtonInteraction>>((map, slashCommand) =>{
-      map.set(slashCommand.name, slashCommand);
-      return map;
-   }, new Map<string, AbstractButtonInteraction>());
-
+    this.buttonInteractions = buttonInteractions;
     this.logger = logger;
   }
 
@@ -45,13 +37,13 @@ export default class EveClient extends Client {
     try {
       await this.login(process.env.DISCORD_TOKEN);
     } catch (error) {
-      this.logger.critical('Discord Login Failed', { error, isTokenSet: process.env.DISCORD_TOKEN !== undefined });
-      process.exit(1);
+      this.logger.emergency('Discord Login Failed', { error, isTokenSet: process.env.DISCORD_TOKEN !== undefined });
+      throw error;
     }
   }
 
   private async registerSlashCommands(): Promise<void> {
-    const slashCommandsData = this.slashCommands.map((slashCommand) => slashCommand.data);
+    const slashCommandsData = this.slashCommands.map((slashCommand) => slashCommand.getData());
 
     const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
 
@@ -81,70 +73,81 @@ export default class EveClient extends Client {
 
   private async handleInteraction(interaction: CommandInteraction): Promise<void> {
     if (interaction instanceof ButtonInteraction) {
-      this.logger.info('Handling ButtonInteraction', {
-        customId: interaction.customId,
-        serverId: interaction.guild.id,
-        serverName: interaction.guild.name,
-        userId: interaction.user.id,
-        userName: interaction.user.username,
-      });
-
-      const args = interaction.customId.split('-');
-      const interactionString = args.shift();
-
-      if (!this.buttonInteractionMap.has(interactionString)) {
-        this.logger.warning('Got unknown interaction', { name: interactionString, customId: interaction.customId });
-        return;
-      }
-
-      const interactionHandler = this.buttonInteractionMap.get(interactionString);
-      try {
-        await interactionHandler.execute(args, interaction);
-      } catch (error) {
-        this.logger.error(
-          'Error while executing interaction',
-          { interactionHandlerName: interactionHandler.name, error },
-        );
-      }
+      await this.handleButtonInteraction(interaction);
     }
 
     if (interaction instanceof CommandInteraction) {
-      this.logger.info('Handling SlashCommand', {
-        commandName: interaction.commandName,
-        serverId: interaction.guild.id,
-        serverName: interaction.guild.name,
-        userId: interaction.user.id,
-        userName: interaction.user.username,
-      });
+      await this.handleCommandInteraction(interaction);
+    }
+  }
 
-      if (!this.slashCommandMap.has(interaction.commandName)) {
-        this.logger.warning('Got unknown SlashCommand interaction', { name: interaction.commandName });
-        await interaction.reply({ content: 'Unknown Command', ephemeral: true });
+  private async handleCommandInteraction(interaction: CommandInteraction): Promise<void> {
+    this.logger.info('Handling SlashCommand', {
+      commandName: interaction.commandName,
+      serverId: interaction.guild.id,
+      serverName: interaction.guild.name,
+      userId: interaction.user.id,
+      userName: interaction.user.username,
+    });
+
+    const slashCommand = this.slashCommands.find(slashCommand => slashCommand.getData().name === interaction.commandName);
+
+    if (!slashCommand) {
+      this.logger.warning('Got unknown SlashCommand interaction', { name: interaction.commandName });
+      await interaction.reply({ content: 'Unknown Command', ephemeral: true });
+      return;
+    }
+
+    try {
+      await slashCommand.execute(interaction);
+    } catch (error) {
+      this.logger.error(
+        'Error while executing SlashCommand',
+        { interactionHandlerName: slashCommand.getData().name, error },
+      );
+
+      const answer = messageEmbedFactory(interaction.client, 'Error');
+      answer.setDescription('Uhm, there was an error executing this command');
+
+      if (interaction.deferred === true) {
+        await interaction.editReply({ embeds: [answer] });
         return;
       }
+      await interaction.reply({
+        embeds: [answer],
+        ephemeral: true,
+      });
+    }
+  }
 
-      const slashCommand = this.slashCommandMap.get(interaction.commandName);
+  private async handleButtonInteraction(interaction: ButtonInteraction): Promise<void> {
+    this.logger.info('Handling ButtonInteraction', {
+      customId: interaction.customId,
+      serverId: interaction.guild.id,
+      serverName: interaction.guild.name,
+      userId: interaction.user.id,
+      userName: interaction.user.username,
+    });
 
-      try {
-        await slashCommand.execute(interaction);
-      } catch (error) {
-        this.logger.error(
-          'Error while executing SlashCommand',
-          { interactionHandlerName: slashCommand.data.name, error },
-        );
+    const args = interaction.customId.split('-');
+    const interactionString = args.shift();
 
-        const answer = messageEmbedFactory(interaction.client, 'Error');
-        answer.setDescription('Uhm, there was an error executing this command');
+    const interactionHandler = this.buttonInteractions.find(
+      (buttonInteraction) => buttonInteraction.getName() === interactionString,
+    );
 
-        if (interaction.deferred === true) {
-          await interaction.editReply({ embeds: [answer] });
-          return;
-        }
-        await interaction.reply({
-          embeds: [answer],
-          ephemeral: true,
-        });
-      }
+    if (!interactionHandler) {
+      this.logger.warning('Got unknown interaction', { name: interactionString, customId: interaction.customId });
+      return;
+    }
+
+    try {
+      await interactionHandler.execute(args, interaction);
+    } catch (error) {
+      this.logger.error(
+        'Error while executing interaction',
+        { interactionHandlerName: interactionHandler.getName(), error },
+      );
     }
   }
 }

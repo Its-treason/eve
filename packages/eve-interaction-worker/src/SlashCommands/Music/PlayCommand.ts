@@ -1,35 +1,18 @@
-import { CommandInteraction } from 'discord.js';
-import AbstractSlashCommand from '../AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import SlashCommandInterface from '../SlashCommandInterface';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { QueryResult } from '../../types';
 import YtResultService from '../../MusicPlayer/YtResultService';
-import Logger from '../../Util/Logger';
+import Logger from '../../Structures/Logger';
+import { injectable } from 'tsyringe';
 
-export default class PlayCommand extends AbstractSlashCommand {
-  private ytResultService: YtResultService;
-  private logger: Logger;
-
+@injectable()
+export default class PlayCommand implements SlashCommandInterface {
   constructor(
-    ytResultService: YtResultService,
-    logger: Logger,
-  ) {
-    super({
-      name: 'play',
-      description: 'Play some YT video',
-      options: [
-        {
-          name: 'query',
-          description: 'Search Query / Youtube URL',
-          type: 3,
-          required: true,
-        },
-      ],
-    });
-
-    this.ytResultService = ytResultService;
-    this.logger = logger;
-  }
+    private ytResultService: YtResultService,
+    private logger: Logger,
+  ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
     if (
@@ -83,11 +66,31 @@ export default class PlayCommand extends AbstractSlashCommand {
     await player.addToQueue(result.firstResult);
 
     const answer = embedFactory(interaction.client, 'Added to Queue!');
+    answer.setDescription(
+      `\`${result.firstResult.title}\` uploaded by \`${result.firstResult.uploader}\` added to queue`,
+    );
+    answer.addField('Link', result.firstResult.url);
+    answer.setImage(`https://img.youtube.com/vi/${result.firstResult.ytId}/0.jpg`);
     await interaction.editReply({ embeds: [answer] });
 
     const fullResult = await result.getAll();
     for (const parsedUrl of fullResult) {
       await player.addToQueue(parsedUrl);
     }
+  }
+
+  getData(): ApplicationCommandData {
+    return {
+      name: 'play',
+      description: 'Play some YT video',
+      options: [
+        {
+          name: 'query',
+          description: 'Search Query / Youtube URL',
+          type: 3,
+          required: true,
+        },
+      ],
+    };
   }
 }

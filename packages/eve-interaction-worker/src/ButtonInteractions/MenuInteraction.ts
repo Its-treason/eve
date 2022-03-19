@@ -1,13 +1,10 @@
 import { ButtonInteraction } from 'discord.js';
-import { EventStore } from '../eventStore/EventStore';
 import embedFactory from '../Factory/messageEmbedFactory';
-import AbstractButtonInteraction from './AbstractInteraction';
+import ButtonInteractionInterface from './ButtonInteractionInterface';
 
-export default class MenuInteraction extends AbstractButtonInteraction {
-  constructor(
-    private eventStore: EventStore,
-  ) {
-    super('menu');
+export default class MenuInteraction implements ButtonInteractionInterface {
+  getName(): string {
+    return 'menu';
   }
 
  async execute(args: string[], interaction: ButtonInteraction): Promise<void> {
@@ -19,10 +16,21 @@ export default class MenuInteraction extends AbstractButtonInteraction {
     const interactionUser = guild.members.cache.get(interaction.user.id);
 
     if (interactionUser.roles.cache.find(r => r.id === role.id)) {
-      // TODO: Check if Bot has Permission to Remove role
-      await interactionUser.roles.remove(role.id);
+      try {
+        await interactionUser.roles.remove(role.id);
+      } catch (e) {
+        answer.addField(
+          'Error',
+          `I couldn't remove the \`${role.name}\` role from you, because i don't have enough permission.`,
+        );
+        await interaction.reply({
+          embeds: [answer],
+          ephemeral: true,
+        });
+        return;
+      }
 
-      answer.addField('Role Menu', `\`${role.name}\` removed`);
+      answer.addField('Role removed', `\`${role.name}\` removed`);
       await interaction.reply({
         embeds: [answer],
         ephemeral: true,
@@ -30,10 +38,21 @@ export default class MenuInteraction extends AbstractButtonInteraction {
       return;
     }
 
-    // TODO: Check if Bot has Permission to Add role
-    await interactionUser.roles.add(role.id);
+    try {
+      await interactionUser.roles.add(role.id);
+    } catch (e) {
+      answer.addField(
+        'Error',
+        `I couldn't add the \`${role.name}\` role to you. Because i don't have enough permission.`,
+      );
+      await interaction.reply({
+        embeds: [answer],
+        ephemeral: true,
+      });
+      return;
+    }
 
-    answer.addField('Role Menu', `\`${role.name}\` added`);
+    answer.addField('Role added', `\`${role.name}\` added`);
     await interaction.reply({
       embeds: [answer],
       ephemeral: true,

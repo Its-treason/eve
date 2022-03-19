@@ -1,10 +1,12 @@
-import AbstractQueryHandler from './AbstractQueryHandler';
+import QueryHandlerInterface from './QueryHandlerInterface';
 import { QueryResult, YtResult } from '../../types';
 import ytsr from 'ytsr';
 import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
 import SpotifyApi from 'spotify-web-api-node';
+import { injectable } from 'tsyringe';
 
-export default class SpotifyPlaylistSearchHandler implements AbstractQueryHandler {
+@injectable()
+export default class SpotifyPlaylistSearchHandler implements QueryHandlerInterface {
   private spotifyApi: SpotifyApi;
 
   constructor(
@@ -73,5 +75,9 @@ export default class SpotifyPlaylistSearchHandler implements AbstractQueryHandle
         return ytResults;
       },
     };
+  }
+
+  getType(): string {
+    return 'spotify-playlist';
   }
 }

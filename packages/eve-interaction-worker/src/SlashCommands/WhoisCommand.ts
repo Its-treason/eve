@@ -1,23 +1,11 @@
 import formatSeconds from '../Util/formatSeconds';
 import embedFactory from '../Factory/messageEmbedFactory';
-import { CommandInteraction, MessageEmbed, User } from 'discord.js';
-import AbstractSlashCommand from './AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction, MessageEmbed, User } from 'discord.js';
+import SlashCommandInterface from './SlashCommandInterface';
+import { injectable } from 'tsyringe';
 
-export default class WhoisCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'whois',
-      description: 'Get info about user',
-      options: [
-        {
-          name: 'user',
-          description: 'User to lookup',
-          type: 6,
-        },
-      ],
-    });
-  }
-
+@injectable()
+export default class WhoisCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const targetUser = interaction.options.getUser('user', false);
 
@@ -58,5 +46,19 @@ export default class WhoisCommand extends AbstractSlashCommand {
     }
 
     answer.addField('Attributes:', '```yml\n' + attributes.join('\n') + '```');
+  }
+
+  getData(): ApplicationCommandData {
+    return {
+      name: 'whois',
+      description: 'Get info about user',
+      options: [
+        {
+          name: 'user',
+          description: 'User to lookup',
+          type: 6,
+        },
+      ],
+    };
   }
 }

@@ -1,30 +1,11 @@
-import { CommandInteraction } from 'discord.js';
-import AbstractSlashCommand from '../AbstractSlashCommand';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
+import { injectable } from 'tsyringe';
 
-export default class MoveCommand extends AbstractSlashCommand {
-  constructor() {
-    super({
-      name: 'move',
-      description: 'move a queue item to another position',
-      options: [
-        {
-          name: 'item',
-          description: 'the song to be moved',
-          type: 4,
-          required: true,
-        },
-        {
-          name: 'new_position',
-          description: 'The new position. 0 or a negative number will put the item at the start.',
-          type: 4,
-          required: true,
-        },
-      ],
-    });
-  }
-
+@injectable()
+export default class MoveCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const player = await validateCanGetPlayer(interaction);
     if (player === false) {
@@ -48,5 +29,26 @@ export default class MoveCommand extends AbstractSlashCommand {
     const answer = embedFactory(interaction.client, 'That item does not exists!');
 
     await interaction.editReply({ embeds: [answer] });
+  }
+
+  getData(): ApplicationCommandData {
+    return {
+      name: 'move',
+      description: 'move a queue item to another position',
+      options: [
+        {
+          name: 'item',
+          description: 'the song to be moved',
+          type: 4,
+          required: true,
+        },
+        {
+          name: 'new_position',
+          description: 'The new position. 0 or a negative number will put the item at the start.',
+          type: 4,
+          required: true,
+        },
+      ],
+    };
   }
 }
