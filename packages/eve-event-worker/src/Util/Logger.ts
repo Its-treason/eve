@@ -50,7 +50,7 @@ export default class Logger {
       message,
       level,
       'level_name': levelName,
-      channel: 'ath-web',
+      channel: 'eve-event-worker',
       timestamp: (new Date()).toISOString(),
       context: normalisedContext,
     };
@@ -59,7 +59,7 @@ export default class Logger {
     console.info(logData);
 
     this.client.index({
-      index: 'ath-logs-development',
+      index: `eve-logs-${process.env.NODE_ENV}`,
       body,
     });
   }
