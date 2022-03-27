@@ -4,7 +4,7 @@ import embedFactory from '../Factory/messageEmbedFactory';
 import MusicPlayerRepository from '../MusicPlayer/MusicPlayerRepository';
 
 export default async function validateCanGetPlayer(interaction: CommandInteraction, sameVc = true): Promise<MusicPlayer|false> {
-  if (interaction.guild === null) {
+  if (interaction.channel.type === 'DM') {
     const answer = embedFactory(interaction.client, 'Error');
     answer.setDescription('Command can not be executed inside DMs!');
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
@@ -21,7 +21,6 @@ export default async function validateCanGetPlayer(interaction: CommandInteracti
   const player = await MusicPlayerRepository.get(interaction.guild.id);
 
   const member = await interaction.guild.members.fetch(interaction.user);
-
   if (member.voice.channelId !== player.getVoiceChannelId() && sameVc === true) {
     const answer = embedFactory(interaction.client, 'Error');
     answer.setDescription('You must be in the same voice channel as iam in');

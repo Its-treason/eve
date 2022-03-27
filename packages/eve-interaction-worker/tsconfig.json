@@ -19,12 +19,16 @@
   },
   "include": [
     "**/*.ts",
-    "src/index.ts"
+    "src/index.ts",
+    "src/yasha.d.ts"
   ],
   "exclude": [
     "node_modules",
     ".idea",
     "build",
     "dist"
-  ]
+  ],
+  "ts-node": {
+    "files": true
+  }
 }

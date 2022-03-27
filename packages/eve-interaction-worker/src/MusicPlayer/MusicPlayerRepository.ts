@@ -1,5 +1,5 @@
 import { MusicPlayer } from './MusicPlayer';
-import { StageChannel, TextChannel, ThreadChannel, VoiceChannel } from 'discord.js';
+import { TextBasedChannel, VoiceBasedChannel } from 'discord.js';
 
 export default class MusicPlayerRepository {
   private static musicPlayers = new Map<string, MusicPlayer>();
@@ -29,7 +29,7 @@ export default class MusicPlayerRepository {
     return player;
   }
 
-  public static create(channel: VoiceChannel|StageChannel, textChannel: TextChannel|ThreadChannel): MusicPlayer {
+  public static create(channel: VoiceBasedChannel, textChannel: TextBasedChannel): MusicPlayer {
     const player = new MusicPlayer(channel, textChannel);
 
     this.musicPlayers.set(channel.guild.id, player);

@@ -1,7 +1,7 @@
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import { QueueItem } from '../../types';
+import { MusicResult } from '../../types';
 import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
 import { injectable } from 'tsyringe';
 
@@ -28,7 +28,7 @@ export default class QueueCommand implements SlashCommandInterface {
     await interaction.reply({ content: queue });
   }
 
-  createQueueMessage(items: QueueItem[], startItemPointer: number, pointer: number): string {
+  createQueueMessage(items: MusicResult[], startItemPointer: number, pointer: number): string {
     let queue = '```nim\n';
 
     if (startItemPointer < 0) {

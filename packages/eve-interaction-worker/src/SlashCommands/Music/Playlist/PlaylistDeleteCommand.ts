@@ -2,7 +2,7 @@ import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
-import {injectable} from 'tsyringe';
+import { injectable } from 'tsyringe';
 
 @injectable()
 export default class PlaylistDeleteCommand implements SubSlashCommandInterface {
@@ -25,7 +25,7 @@ export default class PlaylistDeleteCommand implements SubSlashCommandInterface {
 
     await this.playlistProjection.deletePlaylist(name, userId);
 
-    const answer = messageEmbedFactory(interaction.client, '');
+    const answer = messageEmbedFactory(interaction.client, `Deleted the playlist \`${name}\``);
 
     await interaction.reply({ embeds: [answer] });
   }

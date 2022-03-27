@@ -2,23 +2,19 @@ import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import SlashCommandInterface from '../SlashCommandInterface';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import { QueryResult } from '../../types';
-import YtResultService from '../../MusicPlayer/YtResultService';
+import MusicResultService from '../../MusicPlayer/MusicResultService';
 import Logger from '../../Structures/Logger';
 import { injectable } from 'tsyringe';
 
 @injectable()
 export default class PlayCommand implements SlashCommandInterface {
   constructor(
-    private ytResultService: YtResultService,
+    private ytResultService: MusicResultService,
     private logger: Logger,
   ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    if (
-      interaction.guild === null ||
-      (interaction.channel.type !== 'GUILD_TEXT' && interaction.channel.type !== 'GUILD_PUBLIC_THREAD')
-    ) {
+    if (interaction.channel.type === 'DM') {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('Command can not be executed inside DMs!');
       await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
@@ -51,31 +47,43 @@ export default class PlayCommand implements SlashCommandInterface {
       return;
     }
 
-    let result: QueryResult;
+    let result;
     try {
       result = await this.ytResultService.parseQuery(query, interaction.user.id);
     } catch (error) {
       this.logger.warning('Error while getting YT-Result', { error });
-      
+
       const answer = embedFactory(interaction.client, 'Error!');
-      answer.setDescription('There was an error getting a result. Is the link correct?');
+      answer.setDescription('There was an error getting a result.');
       await interaction.editReply({ embeds: [answer] });
       return;
     }
 
-    await player.addToQueue(result.firstResult);
+    if (result === false) {
+      const answer = embedFactory(interaction.client, 'Error!');
+      answer.setDescription('No results for your query found!');
+      await interaction.editReply({ embeds: [answer] });
+      return;
+    }
+
+    const firstResult = result.shift();
+    await player.addToQueue(firstResult);
+
+    let hasMoreText = '';
+    if (result.length > 0) {
+      hasMoreText = `and **${result.length}** more songs were`;
+    }
 
     const answer = embedFactory(interaction.client, 'Added to Queue!');
     answer.setDescription(
-      `\`${result.firstResult.title}\` uploaded by \`${result.firstResult.uploader}\` added to queue`,
+      `\`${firstResult.title}\` uploaded by \`${firstResult.uploader}\` ${hasMoreText} added to queue.`,
     );
-    answer.addField('Link', result.firstResult.url);
-    answer.setImage(`https://img.youtube.com/vi/${result.firstResult.ytId}/0.jpg`);
+    answer.addField('Link', firstResult.url);
+    answer.setImage(`https://img.youtube.com/vi/${firstResult.ytId}/0.jpg`);
     await interaction.editReply({ embeds: [answer] });
 
-    const fullResult = await result.getAll();
-    for (const parsedUrl of fullResult) {
-      await player.addToQueue(parsedUrl);
+    for (const resultItem of result) {
+      await player.addToQueue(resultItem);
     }
   }
 

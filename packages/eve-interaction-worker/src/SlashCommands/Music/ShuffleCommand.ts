@@ -12,15 +12,6 @@ export default class ShuffleCommand implements SlashCommandInterface {
       return;
     }
 
-    const member = await interaction.guild.members.fetch(interaction.user);
-
-    if (member.voice?.channelId !== player.getVoiceChannelId()) {
-      const answer = embedFactory(interaction.client, 'Error!');
-      answer.setDescription('You must be in the same voice channel as iam in');
-      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
-      return;
-    }
-
     await interaction.deferReply();
 
     await player.shuffle();

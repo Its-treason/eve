@@ -1,4 +1,5 @@
 import { Channel, CommandInteraction, Guild, GuildMember, Interaction, Message, Role, User } from 'discord.js';
+import * as yasha from 'yasha';
 import { APIApplicationCommandOption } from 'discord-api-types/v9';
 
 export interface EveInteraction {
@@ -38,25 +39,18 @@ export type ValidatorWrapper = (...args: unknown[]) => Validator;
 
 export type ParsedArg = (string|User|GuildMember|Channel|Role);
 
-export interface YtResult {
-  url: string,
-  uploader: string,
-  title: string,
+export interface PlaylistItem {
   ytId: string,
-  requestedBy: string,
-}
-export interface QueryResult {
-  firstResult: YtResult,
-  getAll: () => Promise<YtResult[]>
+  url: string,
+  title: string,
+  uploader: string,
 }
 
-export interface QueueItem {
+export interface MusicResult {
   url: string,
-  downloaded: boolean,
-  id: string,
-  title: string,
   uploader: string,
+  title: string,
   ytId: string,
   requestedBy: string,
-  downloading: null|Promise<never>
+  track: yasha.Track.Track,
 }

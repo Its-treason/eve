@@ -1,4 +1,4 @@
-import { YtResult } from '../types';
+import { PlaylistItem } from '../types';
 import MySQLClient from '../Structures/MySQLClient';
 import { injectable } from 'tsyringe';
 
@@ -8,7 +8,7 @@ export default class PlaylistProjection {
     private connection: MySQLClient,
   ) {}
 
-  public async savePlaylist(name: string, userId: string, queue: YtResult[]): Promise<void> {
+  public async savePlaylist(name: string, userId: string, queue: PlaylistItem[]): Promise<void> {
     const sql = 'INSERT INTO `playlist` (`name`, `user_id`, `queue`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `queue` = ?';
 
     const jsonQueue = JSON.stringify(queue);
@@ -21,7 +21,7 @@ export default class PlaylistProjection {
     await this.connection.query(sql, [name, userId]);
   }
 
-  public async loadPlaylistByNameAndUserId(name: string, userId: string): Promise<YtResult[]|false> {
+  public async loadPlaylistByNameAndUserId(name: string, userId: string): Promise<PlaylistItem[]|false> {
     const sql = 'SELECT queue FROM `playlist` WHERE `name` = ? AND `user_id` = ?';
 
     const result = await this.connection.query(sql, [name, userId]);
@@ -32,23 +32,12 @@ export default class PlaylistProjection {
 
     const rawQueue = JSON.parse(result[0]['queue']);
 
-    return rawQueue.map((rawYtResult: {[key: string]: string}): YtResult => {
-      if (
-        typeof rawYtResult.ytId !== 'string' ||
-        typeof rawYtResult.url !== 'string' ||
-        typeof rawYtResult.title !== 'string' ||
-        typeof rawYtResult.uploader !== 'string' ||
-        typeof rawYtResult.requestedBy !== 'string'
-      ) {
-        return;
-      }
-
+    return rawQueue.map((rawYtResult: {[key: string]: string}): PlaylistItem => {
       return {
-        ytId: rawYtResult.ytId,
-        url: rawYtResult.url,
-        title: rawYtResult.title,
-        uploader: rawYtResult.uploader,
-        requestedBy: rawYtResult.requestedBy,
+        ytId: String(rawYtResult.ytId),
+        url: String(rawYtResult.url),
+        title: String(rawYtResult.title),
+        uploader: String(rawYtResult.uploader),
       };
     });
   }

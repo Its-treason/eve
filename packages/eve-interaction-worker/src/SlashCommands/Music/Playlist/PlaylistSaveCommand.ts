@@ -1,11 +1,11 @@
-import { ApplicationCommandSubCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import embedFactory from '../../../Factory/messageEmbedFactory';
 import validateCanGetPlayer from '../../../Validation/validateCanGetPlayer';
-import { YtResult } from '../../../types';
+import {MusicResult, PlaylistItem} from '../../../types';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
-import {injectable} from 'tsyringe';
+import { injectable } from 'tsyringe';
 
 @injectable()
 export default class PlaylistSaveCommand implements SubSlashCommandInterface {
@@ -54,13 +54,12 @@ export default class PlaylistSaveCommand implements SubSlashCommandInterface {
       return;
     }
 
-    const ytResultQueue = queue.map((queueItem): YtResult => {
+    const ytResultQueue = queue.map((queueItem): PlaylistItem => {
       return {
         ytId: queueItem.ytId,
         url: queueItem.url,
         title: queueItem.title,
         uploader: queueItem.uploader,
-        requestedBy: '',
       };
     });
 

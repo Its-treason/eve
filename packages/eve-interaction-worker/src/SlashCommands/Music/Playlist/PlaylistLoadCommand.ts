@@ -1,10 +1,13 @@
-import {ApplicationCommandSubCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import embedFactory from '../../../Factory/messageEmbedFactory';
 import MusicPlayerRepository from '../../../MusicPlayer/MusicPlayerRepository';
-import {injectable} from 'tsyringe';
+import { injectable } from 'tsyringe';
+import { MusicResult, PlaylistItem } from '../../../types';
+import * as yasha from 'yasha';
+import { MultiDownloader } from '../../../Util/MultiDownloader';
 
 @injectable()
 export default class PlaylistLoadCommand implements SubSlashCommandInterface {
@@ -13,24 +16,21 @@ export default class PlaylistLoadCommand implements SubSlashCommandInterface {
   ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const name = interaction.options.getString('name');
+    const playlistName = interaction.options.getString('name');
     const user = interaction.options.getUser('user') || interaction.user;
     const clear = interaction.options.getBoolean('clear') || false;
     const userId = user.id;
 
-    const queue = await this.playlistProjection.loadPlaylistByNameAndUserId(name, userId);
+    const playlistItems = await this.playlistProjection.loadPlaylistByNameAndUserId(playlistName, userId);
 
-    if (queue === false) {
+    if (playlistItems === false) {
       const answer = messageEmbedFactory(interaction.client, 'Error');
       answer.setDescription('This playlist does not exist!');
       await interaction.reply({ embeds: [answer] });
       return; 
     }
 
-    if (
-      interaction.guild === null ||
-      (interaction.channel.type !== 'GUILD_TEXT' && interaction.channel.type !== 'GUILD_PUBLIC_THREAD')
-    ) {
+    if (interaction.channel.type === 'DM') {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('Command can not be executed inside DMs!');
       await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
@@ -56,7 +56,7 @@ export default class PlaylistLoadCommand implements SubSlashCommandInterface {
 
     if (member.voice.channelId !== player.getVoiceChannelId()) {
       const answer = embedFactory(interaction.client, 'Error');
-      answer.setDescription('You must be in the same voice channel as iam in');
+      answer.setDescription('You must be in the same voice channel with me!');
       await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
       return;
     }
@@ -65,14 +65,58 @@ export default class PlaylistLoadCommand implements SubSlashCommandInterface {
       await player.clear();
     }
 
+    const queue = await this.createQueue(playlistItems, userId);
+
     for (const item of queue) {
       await player.addToQueue(item);
     }
 
-    const answer = embedFactory(interaction.client, 'Loaded the playlist!');
-    answer.addField('Added to queue', `${queue.length} items where added to the queue`);
+    const firstResult = queue.shift();
 
+    const answer = embedFactory(interaction.client, `Loaded ${playlistName}!`);
+    answer.setDescription(
+      `\`${firstResult.title}\` uploaded by \`${firstResult.uploader}\` 
+      and **${queue.length}** more songs were added to the queue`,
+    );
+    answer.addField('Link', firstResult.url);
+    answer.setImage(`https://img.youtube.com/vi/${firstResult.ytId}/0.jpg`);
     await interaction.editReply({ embeds: [answer] });
+  }
+
+  private async createQueue(playlistItems: PlaylistItem[], requestedBy: string): Promise<MusicResult[]> {
+    const results: (MusicResult|false)[] = [];
+
+    const multiDownloader = new MultiDownloader<MusicResult|false>(30);
+
+    for (const item of playlistItems) {
+      const resultPromise = this.fetchMusicResult(item, requestedBy);
+
+      results.push(...(await multiDownloader.download(resultPromise)));
+    }
+
+    results.push(...(await multiDownloader.flush()));
+
+    return results.filter((result): result is MusicResult => result !== false);
+  }
+
+  private async fetchMusicResult(playlistItem: PlaylistItem, requestedBy: string): Promise<MusicResult|false> {
+    // Getting the Track will sometimes throw an random error, this try catch mess will retry it once
+    let track: yasha.api.Youtube.Track;
+    try {
+      track = await yasha.api.Youtube.get(playlistItem.ytId);
+    } catch (e) {
+      try {
+        track = await yasha.api.Youtube.get(playlistItem.ytId);
+      } catch (e) {
+        return false;
+      }
+    }
+
+    return {
+      ...playlistItem,
+      track,
+      requestedBy,
+    };
   }
 
   getData(): ApplicationCommandSubCommandData {

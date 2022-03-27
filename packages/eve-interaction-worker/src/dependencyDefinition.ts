@@ -4,12 +4,6 @@ import PlaylistListCommand from './SlashCommands/Music/Playlist/PlaylistListComm
 import PlaylistLoadCommand from './SlashCommands/Music/Playlist/PlaylistLoadCommand';
 import PlaylistSaveCommand from './SlashCommands/Music/Playlist/PlaylistSaveCommand';
 import PlaylistCommand from './SlashCommands/Music/Playlist/PlaylistCommand';
-import SearchQueryHandler from './MusicPlayer/QueryHandler/SearchQueryHandler';
-import SearchYtIdHandler from './MusicPlayer/QueryHandler/SearchYtIdHandler';
-import SpotifyPlaylistSearchHandler from './MusicPlayer/QueryHandler/SpotifyPlaylistSearchHandler';
-import YtPlaylistSearchHandler from './MusicPlayer/QueryHandler/YtPlaylistSearchHandler';
-import spotifyApiFactory from './Factory/spotifyApiFactory';
-import SpotifyApi from 'spotify-web-api-node';
 import MySQLClient from './Structures/MySQLClient';
 import mySqlClientFactory from './Factory/mySqlClientFactory';
 import AvatarCommand from './SlashCommands/AvatarCommand';
@@ -33,7 +27,6 @@ import PardonCommand from './SlashCommands/PardonCommand';
 import WhoisCommand from './SlashCommands/WhoisCommand';
 import MenuInteraction from './ButtonInteractions/MenuInteraction';
 
-container.register(SpotifyApi, { useFactory: instanceCachingFactory(spotifyApiFactory) });
 container.register(MySQLClient, { useFactory: instanceCachingFactory(mySqlClientFactory) });
 
 container.register('SlashCommands', PlaylistCommand);
@@ -63,8 +56,3 @@ container.register('PlaylistSubCommands', PlaylistLoadCommand);
 container.register('PlaylistSubCommands', PlaylistSaveCommand);
 
 container.register('ButtonInteractions', MenuInteraction);
-
-container.register('QueryHandler', SearchQueryHandler);
-container.register('QueryHandler', SearchYtIdHandler);
-container.register('QueryHandler', SpotifyPlaylistSearchHandler);
-container.register('QueryHandler', YtPlaylistSearchHandler);

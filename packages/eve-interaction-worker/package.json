@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "ts-node index.ts --files",
     "lint": "eslint ./src/**/*.ts",
     "build": "webpack"
   },
@@ -17,24 +17,16 @@
     "@elastic/elasticsearch": "^7.15.0",
     "discord-api-types": "^0.29.0",
     "discord.js": "^13.6.0",
-    "ffmpeg": "^0.0.4",
-    "ffmpeg-static": "^4.2.7",
-    "libsodium-wrappers": "^0.7.9",
     "mariadb": "^3.0.0",
     "opusscript": "^0.0.8",
     "puppeteer": "^13.5.1",
     "reflect-metadata": "^0.1.13",
-    "spotify-web-api-node": "^5.0.2",
     "tsyringe": "^4.6.0",
-    "url-parse": "^1.4.8",
-    "youtube-dl-wrap": "^2.1.0",
-    "ytdl-core": "^4.11.0",
-    "ytpl": "^2.3.0",
-    "ytsr": "^3.6.0"
+    "yasha": "github:ilikdoge/yasha"
   },
   "devDependencies": {
-    "@types/spotify-web-api-node": "^5.0.7",
     "@types/node": "^16.6.1",
+    "@types/spotify-web-api-node": "^5.0.7",
     "@types/url-parse": "^1.4.4",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",

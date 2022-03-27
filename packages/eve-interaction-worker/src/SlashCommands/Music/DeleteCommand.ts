@@ -16,16 +16,21 @@ export default class DeleteCommand implements SlashCommandInterface {
 
     await interaction.deferReply();
 
+    const originalItem = player.getQueue()[(item - 1)];
+
     const success = await player.delete(item);
 
     if (success === true) {
       const answer = embedFactory(interaction.client, 'Deleted item!');
+      answer.setDescription(
+        `\`${originalItem.title}\` uploaded by \`${originalItem.uploader}\` is removed from the queue.`,
+      );
 
       await interaction.editReply({ embeds: [answer] });
       return;
     }
 
-    const answer = embedFactory(interaction.client, 'That item does not exists!');
+    const answer = embedFactory(interaction.client, 'That song does not exists in the queue!');
 
     await interaction.editReply({ embeds: [answer] });
   }

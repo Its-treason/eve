@@ -3,7 +3,8 @@ FROM node:16.14.0-buster AS base
 RUN mkdir /app
 
 RUN apt update \
-    && apt install chromium ffmpeg --no-install-recommends -y \
+    && apt install libsodium-dev libtool protobuf-compiler cmake g++ gcc libuv1-dev libopus-dev libavcodec-dev libavcodec58 libavformat-dev libavformat58 libavutil-dev libavutil56 libavfilter7 libavfilter-dev libswresample-dev libswresample3 -y \
+    && apt install chromium --no-install-recommends -y \
     && apt clean
 
 RUN wget -q -O "/usr/bin/youtube-dl" "https://github.com/ytdl-org/youtube-dl/releases/download/2021.12.17/youtube-dl" \
@@ -15,23 +16,11 @@ WORKDIR /app
 
 FROM base AS production
 
-RUN mkdir /build
-COPY . /build
-
-WORKDIR /build
-
-RUN rm -rf /build/node_modules \
-    && npm i \
-    && sed -i 's/"noEmit": true/"noEmit": false/g' tsconfig.json \
-    && npm run build \
-    && mv /build/build /app/ \
-    && rm -rf /build/*
-
-COPY . /build
-
-RUN rm -rf /build/node_modules \
-    && npm i --only=prod \
-    && mv /build/node_modules /app/ \
-    && rm -rf /build
-
 WORKDIR /app
+
+COPY . /app
+
+RUN rm -rf /app/node_modules
+RUN npm i
+RUN sed -i 's/"noEmit": true/"noEmit": false/g' tsconfig.json
+RUN npm run build
