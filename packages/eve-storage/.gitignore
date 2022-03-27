@@ -1,0 +1,5 @@
+elastic_data
+mariadb_data
+node_modules
+.idea
+.env

@@ -1,0 +1,69 @@
+version: "3.8"
+
+services:
+  mariadb:
+    image: mariadb:10.6.4
+    restart: "no"
+    environment:
+      MARIADB_ROOT_PASSWORD: "mht749032qtGr87943gfnhdjG5545gf"
+      MARIADB_DATABASE: "eve-dev"
+    volumes:
+      - "./mariadb_data:/var/lib/mysql"
+    networks:
+      - eve-storage
+
+  phpmyadmin:
+    image: phpmyadmin:5.1.1
+    ports:
+      - "8000:80"
+    restart: "no"
+    environment:
+      PMA_HOST: "mariadb"
+      PMA_PORT: 3306
+    networks:
+      - eve-storage
+
+  elasticsearch:
+    image: elasticsearch:7.14.2
+    restart: "no"
+    environment:
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    volumes:
+      - "./elastic_data:/usr/share/elasticsearch/data"
+    networks:
+      - eve-storage
+
+  kibana:
+    image: kibana:7.14.2
+    ports:
+      - "5601:5601"
+    restart: "no"
+    environment:
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+    networks:
+      - eve-storage
+
+  node-cli:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+      target: development
+    command:
+      - "npm"
+      - "run"
+      - "start"
+    environment:
+      NODE_ENV: "development"
+    restart: "no"
+    env_file:
+      - ".env"
+    volumes:
+      - ./:/app:rw
+    networks:
+      - eve-storage
+
+networks:
+  eve-storage:
+    driver: "bridge"
+    name: eve-storage
