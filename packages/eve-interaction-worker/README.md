@@ -14,7 +14,13 @@ Build the Docker-Container:
 docker-compose -f docker-compose.development build
 ````
 
-And then start it:
+Install dependencies. `sange` will be compiled on the first install, to avoid installing 10 tons of
+dependencies on your local system you should execute this inside the container
+````
+docker-compose -f docker-compose.development run node npm i
+````
+
+And then start it using:
 ````
 docker-compose -f docker-compose.development up
 ````
