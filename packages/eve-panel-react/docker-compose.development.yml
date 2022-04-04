@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+      target: development
+    command:
+      - "npm"
+      - "run"
+      - "dev"
+    environment:
+      NODE_ENV: "development"
+    volumes: 
+      - ".:/app"
+    ports: 
+      - "3000:3000"
