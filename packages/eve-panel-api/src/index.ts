@@ -6,6 +6,7 @@ import corsMiddleware from './web/middleware/corsMiddleware';
 import routerV1 from './web/RouterV1';
 import getLogger from './structures/getLogger';
 import getApiClient from './structures/getApiClient';
+import helmet from 'helmet';
 
 (async () => {
   // Init the client and connection
@@ -16,7 +17,7 @@ import getApiClient from './structures/getApiClient';
   const app = express();
   const server = http.createServer(app);
 
-  app.use(corsMiddleware, json({ limit: '50MB' }), (req: Request, res: Response, next: NextFunction) => {
+  app.use(helmet(), corsMiddleware, json({ limit: '50MB' }), (req: Request, res: Response, next: NextFunction) => {
     next();
     logger.info('Api request', {
       path: req.path,
