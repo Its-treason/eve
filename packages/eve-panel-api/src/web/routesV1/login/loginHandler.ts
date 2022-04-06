@@ -35,7 +35,6 @@ export default async function loginHandler(req: Request, res: Response): Promise
   await ApiKeysProjection.createApiKey(apiKey, accessToken, expiresIn, tokenType);
 
   const user = await getReducedUserFromId(id, apiKey);
-  
   if (user === null) {
     ResponseHelper.userUnauthorizedResponse(res);
     return;

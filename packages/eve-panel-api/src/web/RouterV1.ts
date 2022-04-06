@@ -27,9 +27,9 @@ import updateRoleMenuHandler from './routesV1/server/roleMenu/updateRoleMenuHand
 import deleteRoleMenuHandler from './routesV1/server/roleMenu/deleteRoleMenuHandler/deleteRoleMenuHandler';
 
 const router = Router();
-router.use('/login/login', catchError(loginHandler));
-router.use('/login/logout', authMiddleware(false), catchError(logoutHandler));
-router.use('/login/verify', authMiddleware(false), catchError(verifyHandler));
+router.post('/login/login', catchError(loginHandler));
+router.post('/login/logout', authMiddleware(false), catchError(logoutHandler));
+router.get('/login/verify', authMiddleware(false), catchError(verifyHandler));
 
 router.get('/server/:serverId/channelList', authMiddleware(false), canAccessServerMiddleware, catchError(channelListHandler));
 router.get('/server/:serverId/roleList', authMiddleware(false), canAccessServerMiddleware, catchError(roleListHandler));

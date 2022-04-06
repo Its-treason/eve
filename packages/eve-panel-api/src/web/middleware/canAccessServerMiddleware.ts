@@ -20,7 +20,6 @@ export default async function canAccessServerMiddleware(req: Request, res: Respo
   }
 
   const member = await api.getGuildMember(server.id, res.locals.user.id);
-
   if (!member || server.owner_id !== res.locals.user.id || !res.locals.isAdmin) {
     ResponseHelper.userUnauthorizedResponse(res);
     return;

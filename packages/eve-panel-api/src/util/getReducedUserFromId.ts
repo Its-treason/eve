@@ -21,10 +21,12 @@ export default async function getReducedUserFromId(id: string, apiKey: string): 
     return null;
   }
 
+  const admin = await PermissionProjection.isUserAdmin(id);
+
   const server: ReducedServer[] = [];
   for (const guild of usersGuilds) {
     const fullGuild = await api.getGuild(guild.id);
-    if (!fullGuild) {
+    if (!fullGuild || guild.owner_id !== id || !admin) {
       continue;
     }
 
@@ -34,8 +36,6 @@ export default async function getReducedUserFromId(id: string, apiKey: string): 
       id: fullGuild.id,
     });
   }
-
-  const admin = await PermissionProjection.isUserAdmin(id);
 
   return {
     name: fullUser.username,

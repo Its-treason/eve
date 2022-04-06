@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { DiscordApiGuildsResponse } from '../types';
 import getLogger from '../structures/getLogger';
-import {APIUser} from "discord-api-types/v9";
+import {APIGuild, APIUser} from "discord-api-types/v9";
 
 interface DiscordTokenResponse {
   'access_token': string,
@@ -28,7 +28,7 @@ export default class DiscordApiProjection {
     return jsonResult;
   }
 
-  static async getUsersGuilds(tokenType: string, accessToken: string): Promise<DiscordApiGuildsResponse[]|null> {
+  static async getUsersGuilds(tokenType: string, accessToken: string): Promise<APIGuild[]|null> {
     const guildsResult = await fetch('https://discord.com/api/v9/users/@me/guilds', {
       method: 'GET',
       headers: {
