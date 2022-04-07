@@ -22,4 +22,14 @@ export default class LoginApi {
 
     return response.data.data;
   }
+
+  public static async logout(): Promise<VerifyApiResponseData|false> {
+    const response = await Ajax.get('/v1/login/logout');
+
+    if (response.code !== 200) {
+      return false;
+    }
+
+    return response.data.data;
+  }
 }

@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Table } from '@mantine/core';
-import { Button } from 'react-bootstrap';
+import { Table, Button } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
 interface PlaylistTableProps {

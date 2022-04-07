@@ -24,9 +24,9 @@ function AutoActions() {
   }
 
   const navItems: BreadCrumpItem[] = [
-    { label: 'Home', to: '/home', active: false },
-    { label: `Edit: ${server.name}`, to: `/server/${server.id}/home`, active: false },
-    { label: `Auto Actions`, active: true },
+    { label: 'Home', to: '/home' },
+    { label: `Edit: ${server.name}`, to: `/server/${server.id}/home` },
+    { label: `Auto Actions` },
   ];
 
   function openDocs() {

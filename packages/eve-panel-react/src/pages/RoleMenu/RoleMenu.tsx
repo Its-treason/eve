@@ -40,9 +40,9 @@ function RoleMenu() {
   });
 
   const navItems: BreadCrumpItem[] = [
-    { label: 'Home', to: '/home', active: false },
-    { label: `Edit: ${server.name}`, to: `/server/${server.id}/home`, active: false },
-    { label: `Role menu`, active: true },
+    { label: 'Home', to: '/home' },
+    { label: `Edit: ${server.name}`, to: `/server/${server.id}/home` },
+    { label: `Role menu` },
   ];
 
   return (

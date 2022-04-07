@@ -1,41 +1,45 @@
 import { ReactElement } from 'react';
-import * as Bootstrap from 'react-bootstrap';
-import { Avatar, Center, Space, Text, Container } from '@mantine/core';
-import NavigationBreadcrumbs from './NavigationBreadcrumbs';
+import {AppShell, Avatar, Button, Container, Group, Header, Title} from '@mantine/core';
 import { BreadCrumpItem } from '../types';
-import {MantineNumberSize} from "@mantine/styles";
+import { MantineNumberSize } from "@mantine/styles";
+import NavigationBreadcrumbs from "./NavigationBreadcrumbs";
+import styles from './styles/Layout.module.css';
 
 interface LayoutProps {
   children: ReactElement|ReactElement[],
   navItems?: BreadCrumpItem[],
   containerSize?: MantineNumberSize,
+  rightHeaderChildren?: ReactElement|ReactElement[]
 }
 
-export default function Layout({ children, navItems, containerSize }: LayoutProps): ReactElement {
+export default function Layout({ children, navItems, rightHeaderChildren, containerSize }: LayoutProps): ReactElement {
   if (!navItems) {
     navItems = [];
   }
-  if (!containerSize) {
-    containerSize = 'xl';
-  }
 
   return (
-    <main>
-      <Bootstrap.Navbar bg="primary">
-        <Bootstrap.Container style={{ justifyContent: 'start' }}>
-          <Bootstrap.Navbar.Brand href='/home'>
-            <Center style={{ gap: '10px' }}>
-              <Avatar src='/assets/eve-logo.png' />
-              <Text size={'xl'}>EVE</Text>
-            </Center>
-          </Bootstrap.Navbar.Brand>
-          <NavigationBreadcrumbs items={navItems} />
-        </Bootstrap.Container>
-      </Bootstrap.Navbar>
-      <Space h={'xl'} />
-      <Container size={containerSize} style={{ height: 'calc(100vh - 88px)', overflowY: 'auto', width: '100%' }}>
+    <AppShell
+      fixed={true}
+      header={
+        <Header height={60}>
+          <Container size={'xl'} className={styles.headerContainer}>
+            <Container className={styles.headerLeft}>
+              <Group>
+                <Avatar size={'md'} src={'/assets/eve-logo.png'} />
+                <Title>EVE</Title>
+              </Group>
+              <NavigationBreadcrumbs items={navItems} />
+            </Container>
+            <Container className={styles.headerRight}>
+              {rightHeaderChildren}
+            </Container>
+          </Container>
+        </Header>
+      }
+    >
+      <Container size={containerSize}>
         {children}
       </Container>
-    </main>
+    </AppShell>
   );
 }

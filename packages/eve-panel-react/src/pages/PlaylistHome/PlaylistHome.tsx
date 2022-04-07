@@ -42,9 +42,9 @@ export default function PlaylistHome(): ReactElement {
   }, []);
 
   const navItems: BreadCrumpItem[] = [
-    { label: 'Home', to: '/home', active: false },
-    { label: `Edit: ${user.name}`, to: `/user/${user.id}/home`, active: false },
-    { label: 'Playlist', active: true },
+    { label: 'Home', to: '/home' },
+    { label: `Edit: ${user.name}`, to: `/user/${user.id}/home` },
+    { label: 'Playlist' },
   ];
 
   return (

@@ -32,9 +32,9 @@ export default function UserVoiceActivity(): ReactElement {
   }
 
   const navItems: BreadCrumpItem[] = [
-    { label: 'Home', to: '/home', active: false },
-    { label: `Edit: ${user.name}`, to: `/user/${user.id}/home`, active: false },
-    { label: 'Voice activity', active: true },
+    { label: 'Home', to: '/home' },
+    { label: `Edit: ${user.name}`, to: `/user/${user.id}/home` },
+    { label: 'Voice activity' },
   ];
 
   if (loading) {
@@ -56,7 +56,7 @@ export default function UserVoiceActivity(): ReactElement {
         <caption>
           {rows.length === 0 ?
             'Nothing to show for this time range' :
-            'Values with "Not available" mean that the user/guild/channel was deleted or is not accessible'
+            'Values with "Not available" mean that the user/guild/channel was deleted or is not accessible to the bot'
           }
         </caption>
         <thead>

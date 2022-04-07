@@ -34,6 +34,7 @@ export default function Router(): ReactElement {
               <Route path="/user/:userId/home" element={<EditUserHome />} />
               <Route path="/user/:userId/playlist" element={<PlaylistHome />} />
               <Route path="/user/:userId/playlist/:playlistName/edit" element={<PlaylistEdit />} />
+              <Route path="/user/:userId/activity" element={<UserVoiceActivity />} />
 
               {/* Server Routes */}
               <Route path="/server/:serverId/home" element={<EditServerHome />} />

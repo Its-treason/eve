@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
-import { Breadcrumb } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import {Anchor, Breadcrumbs, Text} from '@mantine/core';
 import styles from './styles/NavigationBreadcrumbs.module.css';
 import { BreadCrumpItem } from '../types';
 
@@ -10,14 +10,18 @@ interface Props {
 
 export default function NavigationBreadcrumbs({ items }: Props): ReactElement {
   return (
-    <Breadcrumb className={styles.wrapper}>
+    <Breadcrumbs className={styles.wrapper}>
       {items.map(item => {
-        if (item.active) {
-          return <Breadcrumb.Item key={item.label} className={styles.linkActive} active>{item.label}</Breadcrumb.Item>;
+        if (!item.to) {
+          return <Text key={item.label} className={styles.linkActive}>{item.label}</Text>;
         }
-        item.to = item.to ?? '';
-        return <Breadcrumb.Item key={item.label} className={styles.link} linkAs={Link} linkProps={{ to: item.to }}>{item.label}</Breadcrumb.Item>;
+        return <Anchor
+          component={Link}
+          key={item.label}
+          className={styles.link}
+          to={item.to}
+        >{item.label}</Anchor>;
       })}
-    </Breadcrumb>
+    </Breadcrumbs>
   );
 }

@@ -1,6 +1,6 @@
 import React, { ReactElement, useContext } from 'react';
 import Layout from '../../components/Layout';
-import { Container, Space, Title, Text } from '@mantine/core';
+import {Container, Space, Title, Text, Group, Avatar} from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import useUserServerFromParams from '../../hooks/useUserServerFromParams';
 import KibanaButton from '../../components/KibanaButton';
@@ -22,30 +22,31 @@ export default function EditServerHome(): ReactElement {
   }
 
   const navItems: BreadCrumpItem[] = [
-    { label: 'Home', to: '/home', active: false },
-    { label: `Edit: ${server.name}`, active: true },
+    { label: 'Home', to: '/home' },
+    { label: `Edit: ${server.name}` },
   ];
 
   return (
-    <Layout navItems={navItems}>
-      <Container size={'xs'}>
+    <Layout navItems={navItems} containerSize={'xs'}>
+      <Group direction="row" align="center">
         <Title>Edit server settings!</Title>
-        <Text color={'dimmed'}>Edit settings for {server.name}</Text>
-        <Space />
-        <KibanaButton
-          icon={autoIcon}
-          text={'Auto actions'}
-          subtext={'Automatic actions'}
-          to={`/server/${server.id}/actions`}
-        />
-        <Space h={'sm'} />
-        <KibanaButton
-          icon={roleMenuIcon}
-          text={'Role menu'}
-          subtext={'Create a role menu where user can give themself roles'}
-          to={`/server/${server.id}/roleMenu`}
-        />
-      </Container>
+        <Avatar src={server.icon} alt={'Profile icon'} />
+      </Group>
+      <Text color={'dimmed'}>Edit settings for {server.name}</Text>
+      <Space />
+      <KibanaButton
+        icon={autoIcon}
+        text={'Auto actions'}
+        subtext={'Automatic actions'}
+        to={`/server/${server.id}/actions`}
+      />
+      <Space h={'sm'} />
+      <KibanaButton
+        icon={roleMenuIcon}
+        text={'Role menu'}
+        subtext={'Create a role menu where user can give themself roles'}
+        to={`/server/${server.id}/roleMenu`}
+      />
     </Layout>
   );
 }
