@@ -6,7 +6,7 @@ import { RESTPatchAPIChannelMessageJSONBody, RESTPostAPIChannelMessageJSONBody }
 
 export class ApiClient {
   private static readonly NULL_VALUE = 'NIL';
-  private static readonly CACHE_TTL = 60;
+  private static readonly CACHE_TTL = 300;
 
   private readonly restClient: REST;
 
@@ -140,6 +140,8 @@ export class ApiClient {
           break;
       }
     } catch (e) {
+      console.log(e);
+
       await this.redisClient.set(redisKey, ApiClient.NULL_VALUE);
       await this.redisClient.expire(redisKey, ApiClient.CACHE_TTL);
       return null;

@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
-import { DiscordApiGuildsResponse } from '../types';
 import getLogger from '../structures/getLogger';
-import {APIGuild, APIUser} from "discord-api-types/v9";
+import { APIGuild, APIUser } from 'discord-api-types/v9';
 
 interface DiscordTokenResponse {
   'access_token': string,

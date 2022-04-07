@@ -3,7 +3,6 @@ import ApiKeysProjection from '../../projections/ApiKeysProjection';
 import DiscordApiProjection from '../../projections/DiscordApiProjection';
 import PermissionProjection from '../../projections/PermissionProjection';
 import { ResponseHelper } from '../ResponseHelper';
-import getApiClient from '../../structures/getApiClient';
 
 export default function authMiddleware(mustBeElevated: boolean) {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {

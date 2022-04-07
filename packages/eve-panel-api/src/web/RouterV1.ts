@@ -28,7 +28,7 @@ import deleteRoleMenuHandler from './routesV1/server/roleMenu/deleteRoleMenuHand
 
 const router = Router();
 router.post('/login/login', catchError(loginHandler));
-router.post('/login/logout', authMiddleware(false), catchError(logoutHandler));
+router.get('/login/logout', authMiddleware(false), catchError(logoutHandler));
 router.get('/login/verify', authMiddleware(false), catchError(verifyHandler));
 
 router.get('/server/:serverId/channelList', authMiddleware(false), canAccessServerMiddleware, catchError(channelListHandler));
