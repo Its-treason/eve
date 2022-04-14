@@ -7,6 +7,7 @@ import routerV1 from './web/RouterV1';
 import getLogger from './structures/getLogger';
 import getApiClient from './structures/getApiClient';
 import helmet from 'helmet';
+import loggerMiddleware from "./web/middleware/loggerMiddleware";
 
 (async () => {
   // Init the client and connection
@@ -17,15 +18,10 @@ import helmet from 'helmet';
   const app = express();
   const server = http.createServer(app);
 
-  app.use(helmet(), corsMiddleware, json({ limit: '50MB' }), (req: Request, res: Response, next: NextFunction) => {
-    next();
-    logger.info('Api request', {
-      path: req.path,
-      method: req.method,
-      ip: req.ip,
-      protocol: req.protocol,
-    });
-  });
+  app.use(helmet());
+  app.use(loggerMiddleware);
+  app.use(corsMiddleware);
+  app.use(json({ limit: '50MB' }));
   app.use('/v1/', routerV1);
 
   server.listen(3030, () => {
