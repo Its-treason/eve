@@ -5,7 +5,7 @@ import actionFactory from '../actions/factory/actionFactory';
 
 export default class AutoActionsProjection {
   public static async getActions(serverId: string, type: string): Promise<AbstractAutoAction> {
-    const sql = 'SELECT payload FROM auto_actions WHERE action = ? AND server_id';
+    const sql = 'SELECT payload FROM auto_actions WHERE action = ? AND server_id = ?';
     const result = await getConnection().query(sql, [type, serverId]);
 
     if (!result[0]) {
