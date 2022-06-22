@@ -1,18 +1,18 @@
-version: "3.8"
+version: "3.9"
 
 services:
-  mariadb:
+  eve-mariadb:
     image: mariadb:10.8.2
     restart: "no"
     environment:
-      MARIADB_ROOT_PASSWORD: "mht749032qtGr87943gfnhdjG5545gf"
+      MARIADB_ROOT_PASSWORD: "1234"
       MARIADB_DATABASE: "eve-dev"
     volumes:
       - "./mariadb_data:/var/lib/mysql"
     networks:
       - eve-storage
 
-  phpmyadmin:
+  eve-phpmyadmin:
     image: phpmyadmin:5.1.1
     ports:
       - "8000:80"
@@ -23,7 +23,7 @@ services:
     networks:
       - eve-storage
 
-  elasticsearch:
+  eve-elasticsearch:
     image: elasticsearch:8.1.2
     restart: "no"
     environment:
@@ -35,7 +35,7 @@ services:
     networks:
       - eve-storage
 
-  kibana:
+  eve-kibana:
     image: kibana:7.17.2
     ports:
       - "5601:5601"
@@ -45,28 +45,29 @@ services:
     networks:
       - eve-storage
 
-  redis:
-    image: redis:7.0-rc2-alpine
+  eve-redis:
+    image: redis:7.0.2-alpine
     restart: "no"
     networks:
       - eve-storage
 
-  node-cli:
+  eve-rabbitmq:
+    image: rabbitmq:3.10.5-management-alpine
+    restart: "no"
+    ports:
+      - "15672:15672"
+    networks:
+      - eve-storage
+
+  eve-cli:
     build:
       context: .
       dockerfile: docker/node/Dockerfile
-      target: development
-    command:
-      - "npm"
-      - "run"
-      - "start"
-    environment:
-      NODE_ENV: "development"
+      target: "development"
     restart: "no"
+    command: "sleep infinity"
     env_file:
       - ".env"
-    volumes:
-      - ./:/app:rw
     networks:
       - eve-storage
 

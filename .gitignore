@@ -1,2 +1,10 @@
 .idea
+.vscode
+
+mariadb_data
+elastic_data
+
+.env
+/packages/*/build
+/packages/*/node_modules
 node_modules
