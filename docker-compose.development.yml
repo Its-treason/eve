@@ -18,7 +18,7 @@ services:
       - "8000:80"
     restart: "no"
     environment:
-      PMA_HOST: "mariadb"
+      PMA_HOST: "eve-mariadb"
       PMA_PORT: 3306
     networks:
       - eve-storage
@@ -41,7 +41,7 @@ services:
       - "5601:5601"
     restart: "no"
     environment:
-      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      ELASTICSEARCH_HOSTS: "http://eve-elasticsearch:9200"
     networks:
       - eve-storage
 
