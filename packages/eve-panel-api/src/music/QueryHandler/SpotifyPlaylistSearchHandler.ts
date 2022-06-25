@@ -1,10 +1,9 @@
 import AbstractQueryHandler from './AbstractQueryHandler';
-import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
-import SpotifyApi from 'spotify-web-api-node';
 import { PlaylistItem } from '../../web/sharedApiTypes';
 import getSpotifyApi from '../../structures/getSpotifyApi';
 import { MultiDownloader } from '../MultiDownloader';
 import downloadOneByQuery from '../util/downloadOneByQuery';
+import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
 
 export default class SpotifyPlaylistSearchHandler implements AbstractQueryHandler {
   async handle(query: string, requesterId: string): Promise<PlaylistItem[]> {
@@ -19,6 +18,10 @@ export default class SpotifyPlaylistSearchHandler implements AbstractQueryHandle
       tracks = result.body.items;
 
       for (const track of tracks) {
+        if (track.track === null) {
+          continue;
+        }
+
         const artists = track.track.artists.map((x) => x.name).join(' ');
         const query = `${track.track.name} ${artists}`;
 
@@ -30,7 +33,7 @@ export default class SpotifyPlaylistSearchHandler implements AbstractQueryHandle
 
     ytResults.push(...(await multiDownload.flush()));
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore ts ist so ein dummer hurensohn
+    // @ts-ignore
     return ytResults.filter<PlaylistItem>((item) => item !== false);
   }
 }

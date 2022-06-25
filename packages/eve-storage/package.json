@@ -9,7 +9,6 @@
     },
     "scripts": {
         "start": "node build/index.js",
-        "dev": "nodemon ./src/index.ts",
         "lint": "eslint ./src/**/*.ts index.ts",
         "build": "webpack"
     },

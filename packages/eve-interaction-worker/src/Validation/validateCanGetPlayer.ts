@@ -4,7 +4,7 @@ import embedFactory from '../Factory/messageEmbedFactory';
 import MusicPlayerRepository from '../MusicPlayer/MusicPlayerRepository';
 
 export default async function validateCanGetPlayer(interaction: CommandInteraction, sameVc = true): Promise<MusicPlayer|false> {
-  if (interaction.channel.type === 'DM') {
+  if (!interaction.inCachedGuild()) {
     const answer = embedFactory(interaction.client, 'Error');
     answer.setDescription('Command can not be executed inside DMs!');
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
@@ -13,7 +13,7 @@ export default async function validateCanGetPlayer(interaction: CommandInteracti
 
   if (await MusicPlayerRepository.has(interaction.guild.id) === false) {
     const answer = embedFactory(interaction.client, 'Error');
-    answer.setDescription('Iam currently not playing any music');
+    answer.setDescription('I\'m currently not playing any music');
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
     return false;
   }

@@ -30,7 +30,7 @@ export default class PlaylistLoadCommand implements SubSlashCommandInterface {
       return; 
     }
 
-    if (interaction.channel.type === 'DM') {
+    if (!interaction.inCachedGuild()) {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('Command can not be executed inside DMs!');
       await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });

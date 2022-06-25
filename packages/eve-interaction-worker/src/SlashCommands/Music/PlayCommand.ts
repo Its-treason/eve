@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import {ApplicationCommandData, CommandInteraction, Guild} from 'discord.js';
 import SlashCommandInterface from '../SlashCommandInterface';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
@@ -14,7 +14,7 @@ export default class PlayCommand implements SlashCommandInterface {
   ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    if (interaction.channel.type === 'DM') {
+    if (!interaction.inCachedGuild()) {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('Command can not be executed inside DMs!');
       await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });

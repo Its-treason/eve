@@ -1,6 +1,0 @@
-node_modules
-.idea
-.env
-.vscode
-build
-/coverage/

@@ -3,10 +3,13 @@
   "version": "0.0.0",
   "description": "Api for EVE's panel",
   "main": "build/index.js",
+  "private": true,
+  "license": "MIT",
   "scripts": {
     "build": "webpack",
     "lint": "eslint ./src/**/*.ts --fix",
-    "start": "ts-node ./src/index.ts",
+    "start": "build/index.js",
+    "dev": "nodemon ./src/index.ts",
     "test": "jest --coverage --collectCoverageFrom=src/**/*.ts --coverageReporters=lcov --restoreMocks",
     "test:watch": "jest --watchAll --coverage --collectCoverageFrom=src/**/*.ts --coverageReporters=lcov --restoreMocks"
   },
@@ -38,7 +41,9 @@
     "babel-jest": "^27.5.1",
     "eslint": "^8.12.0",
     "jest": "^27.5.1",
+    "nodemon": "^2.0.18",
     "ts-loader": "^9.2.8",
+    "ts-node": "^10.8.1",
     "typescript": "^4.6.3",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
@@ -46,6 +51,6 @@
     "webpack-shell-plugin-next": "^2.2.2"
   },
   "engines": {
-    "node": "^16.14.0"
+    "node": "^18"
   }
 }

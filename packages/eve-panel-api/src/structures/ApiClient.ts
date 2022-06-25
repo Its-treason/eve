@@ -1,7 +1,6 @@
-import { REST } from '@discordjs/rest';
+import {RequestData, REST, RouteLike} from '@discordjs/rest';
 import { APIChannel, APIGuild, APIGuildMember, APIMessage, APIRole, APIUser, Routes } from 'discord-api-types/v9';
 import { RedisClientType } from 'redis';
-import { RequestData, RouteLike } from '@discordjs/rest/dist/lib/RequestManager';
 import { RESTPatchAPIChannelMessageJSONBody, RESTPostAPIChannelMessageJSONBody } from 'discord-api-types/rest/v9/channel';
 
 export class ApiClient {

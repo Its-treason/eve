@@ -1,4 +1,4 @@
-import { Intents, Client, ButtonInteraction, CommandInteraction } from 'discord.js';
+import {Intents, Client, ButtonInteraction, CommandInteraction, Interaction} from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import SlashCommandInterface from '../SlashCommands/SlashCommandInterface';
@@ -66,26 +66,31 @@ export default class EveClient extends Client {
         { body: slashCommandsData },
       );
     } catch (error) {
-      this.logger.error('Error during SlashCommand registration', { env: process.env.NODE_ENV });
+      this.logger.error('Error during SlashCommand registration', { env: process.env.NODE_ENV, error });
       throw error;
     }
   }
 
-  private async handleInteraction(interaction: CommandInteraction): Promise<void> {
-    if (interaction instanceof ButtonInteraction) {
-      await this.handleButtonInteraction(interaction);
+  private async handleInteraction(interaction: Interaction): Promise<void> {
+    if (interaction.isButton()) {
+      return this.handleButtonInteraction(interaction);
     }
 
-    if (interaction instanceof CommandInteraction) {
-      await this.handleCommandInteraction(interaction);
+    if (interaction.isCommand()) {
+      return this.handleCommandInteraction(interaction);
     }
+
+    this.logger.notice(
+      'Got interaction with unknown type!',
+      { type: interaction.type, userId: interaction.user.id },
+    )
   }
 
   private async handleCommandInteraction(interaction: CommandInteraction): Promise<void> {
     this.logger.info('Handling SlashCommand', {
       commandName: interaction.commandName,
-      serverId: interaction.guild.id,
-      serverName: interaction.guild.name,
+      serverId: interaction.guild?.id,
+      serverName: interaction.guild?.name,
       userId: interaction.user.id,
       userName: interaction.user.username,
     });
@@ -106,10 +111,10 @@ export default class EveClient extends Client {
         { interactionHandlerName: slashCommand.getData().name, error },
       );
 
-      const answer = messageEmbedFactory(interaction.client, 'Error');
-      answer.setDescription('Uhm, there was an error executing this command');
+      const answer = messageEmbedFactory(interaction.client, 'An error occurred');
+      answer.setDescription('Uhm, this is embarrassing. An error occurred while executing this command.');
 
-      if (interaction.deferred === true) {
+      if (interaction.deferred) {
         await interaction.editReply({ embeds: [answer] });
         return;
       }
@@ -123,8 +128,8 @@ export default class EveClient extends Client {
   private async handleButtonInteraction(interaction: ButtonInteraction): Promise<void> {
     this.logger.info('Handling ButtonInteraction', {
       customId: interaction.customId,
-      serverId: interaction.guild.id,
-      serverName: interaction.guild.name,
+      serverId: interaction.guild?.id,
+      serverName: interaction.guild?.name,
       userId: interaction.user.id,
       userName: interaction.user.username,
     });
