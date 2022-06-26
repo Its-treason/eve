@@ -1,17 +1,14 @@
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
-import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
 import { injectable } from 'tsyringe';
+import AbstractMusicCommand from "./AbstractMusicCommand";
+import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
 
 @injectable()
-export default class NowPlayingCommand implements SlashCommandInterface {
-  async execute(interaction: CommandInteraction): Promise<void> {
-    const player = await validateCanGetPlayer(interaction, false);
-    if (player === false) {
-      return;
-    }
+export default class NowPlayingCommand extends AbstractMusicCommand {
+  protected sameVc = false;
 
+  async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
     const item = await player.getCurrentPlaying();
     const pointer = player.getPointer();
 

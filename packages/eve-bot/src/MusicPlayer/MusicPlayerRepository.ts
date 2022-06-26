@@ -18,7 +18,7 @@ export default class MusicPlayerRepository {
     return true;
   }
 
-  public static async get(serverId: string): Promise<MusicPlayer> {
+  public static async get(serverId: string): Promise<MusicPlayer|null> {
     const player = this.musicPlayers.get(serverId);
 
     if (player?.destroyed !== false) {
@@ -26,7 +26,7 @@ export default class MusicPlayerRepository {
       return null;
     }
 
-    return player;
+    return player || null;
   }
 
   public static create(channel: VoiceBasedChannel, textChannel: TextBasedChannel): MusicPlayer {

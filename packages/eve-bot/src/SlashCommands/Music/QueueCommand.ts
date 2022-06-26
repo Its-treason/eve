@@ -1,18 +1,15 @@
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
-import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { MusicResult } from '../../types';
-import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
 import { injectable } from 'tsyringe';
+import AbstractMusicCommand from "./AbstractMusicCommand";
+import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
 
 @injectable()
-export default class QueueCommand implements SlashCommandInterface {
-  async execute(interaction: CommandInteraction): Promise<void> {
-    const player = await validateCanGetPlayer(interaction, false);
-    if (player === false) {
-      return;
-    }
+export default class QueueCommand extends AbstractMusicCommand {
+  sameVc = false;
 
+  async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
     const items = player.getQueue();
     const pointer = player.getPointer();
     const startItemPointer = (interaction.options.getInteger('offset') || (pointer - 1)) - 1;

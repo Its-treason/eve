@@ -45,7 +45,6 @@ export class MusicPlayer {
 
     if (this.loop === true && this.player.hasPlayer()) {
       this.player.seek(0);
-      console.log('loop return');
       return;
     }
 
@@ -133,13 +132,14 @@ export class MusicPlayer {
       newPosition = this.queue.length;
     }
 
+    const currentPlaying = this.queue[this.pointer];
+
     const itemToMove = this.queue.splice(item, 1)[0];
     this.queue.splice(newPosition, 0, itemToMove);
 
-    if (this.pointer === item) {
-      this.pointer = newPosition;
-    } else if (this.pointer === newPosition || (newPosition < this.pointer && item > this.pointer)) {
-      this.pointer++;
+    const currentPlayingNewIndex = this.queue.findIndex((item) => item === currentPlaying);
+    if (currentPlayingNewIndex !== -1) {
+      this.pointer = currentPlayingNewIndex;
     }
 
     return true;

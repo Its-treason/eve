@@ -6,7 +6,6 @@ export default class MustacheReplace {
     for (const [searchValue, replaceValue] of Object.entries(replacer)) {
       const searchValueRegex = this.wrapWithRegex(searchValue);
       text = text.replace(searchValueRegex, replaceValue);
-      console.log(text, searchValueRegex, searchValue, replaceValue);
     }
     return text;
   }

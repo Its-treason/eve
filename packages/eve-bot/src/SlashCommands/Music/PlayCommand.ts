@@ -1,28 +1,25 @@
-import {ApplicationCommandData, CommandInteraction, Guild} from 'discord.js';
-import SlashCommandInterface from '../SlashCommandInterface';
+import {ApplicationCommandData, CommandInteraction} from 'discord.js';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import MusicResultService from '../../MusicPlayer/MusicResultService';
 import Logger from '../../Structures/Logger';
 import { injectable } from 'tsyringe';
+import AbstractMusicCommand from "./AbstractMusicCommand";
+import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
 
 @injectable()
-export default class PlayCommand implements SlashCommandInterface {
+export default class PlayCommand extends AbstractMusicCommand {
   constructor(
     private ytResultService: MusicResultService,
     private logger: Logger,
-  ) {}
+  ) {
+    super();
+  }
 
-  async execute(interaction: CommandInteraction): Promise<void> {
-    if (!interaction.inCachedGuild()) {
-      const answer = embedFactory(interaction.client, 'Error');
-      answer.setDescription('Command can not be executed inside DMs!');
-      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
-      return;
-    }
+  playerExists = false;
 
+  async doExecute(interaction: CommandInteraction, existingPlayer: MusicPlayer|null): Promise<void> {
     const member = await interaction.guild.members.fetch(interaction.user);
-
     if (member.voice.channel === null) {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('You must be in a voice channel');
@@ -32,26 +29,19 @@ export default class PlayCommand implements SlashCommandInterface {
 
     const query = interaction.options.getString('query', true);
 
-    if (!await MusicPlayerRepository.has(interaction.guild.id)) {
+    let player: MusicPlayer = existingPlayer;
+    if (!player) {
       MusicPlayerRepository.create(member.voice.channel, interaction.channel);
+      player = await MusicPlayerRepository.get(interaction.guild.id);
     }
 
     await interaction.deferReply();
-
-    const player = await MusicPlayerRepository.get(interaction.guild.id);
-
-    if (member.voice.channelId !== player.getVoiceChannelId()) {
-      const answer = embedFactory(interaction.client, 'Error');
-      answer.setDescription('You must be in the same voice channel as iam in');
-      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
-      return;
-    }
 
     let result;
     try {
       result = await this.ytResultService.parseQuery(query, interaction.user.id);
     } catch (error) {
-      this.logger.warning('Error while getting YT-Result', { error });
+      this.logger.warning('Error while getting play results', { error });
 
       const answer = embedFactory(interaction.client, 'Error!');
       answer.setDescription('There was an error getting a result.');

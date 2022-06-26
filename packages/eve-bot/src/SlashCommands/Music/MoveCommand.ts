@@ -1,17 +1,12 @@
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
-import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
 import { injectable } from 'tsyringe';
+import AbstractMusicCommand from "./AbstractMusicCommand";
+import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
 
 @injectable()
-export default class MoveCommand implements SlashCommandInterface {
-  async execute(interaction: CommandInteraction): Promise<void> {
-    const player = await validateCanGetPlayer(interaction);
-    if (player === false) {
-      return;
-    }
-
+export default class MoveCommand extends AbstractMusicCommand {
+  async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
     const item = interaction.options.getInteger('item', true).valueOf();
     const newPosition = interaction.options.getInteger('new_position', true).valueOf();
 
@@ -19,15 +14,13 @@ export default class MoveCommand implements SlashCommandInterface {
 
     const success = await player.move(item, newPosition);
 
-    if (success === true) {
-      const answer = embedFactory(interaction.client, 'Moved item!');
-
+    if (!success) {
+      const answer = embedFactory(interaction.client, 'That item does not exists!');
       await interaction.editReply({ embeds: [answer] });
       return;
     }
 
-    const answer = embedFactory(interaction.client, 'That item does not exists!');
-
+    const answer = embedFactory(interaction.client, 'Moved item!');
     await interaction.editReply({ embeds: [answer] });
   }
 

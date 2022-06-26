@@ -1,14 +1,12 @@
-import {Intents, Client, ButtonInteraction, CommandInteraction, Interaction} from 'discord.js';
+import {Intents, Client} from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import SlashCommandInterface from '../SlashCommands/SlashCommandInterface';
-import ButtonInteractionInterface from '../ButtonInteractions/ButtonInteractionInterface';
 import Logger from '../Structures/Logger';
-import messageEmbedFactory from '../Factory/messageEmbedFactory';
-import { injectable, injectAll } from 'tsyringe';
+import {injectAll, singleton} from 'tsyringe';
 import EventHandlerInterface from "../EventHandler/EventHandlerInterface";
 
-@injectable()
+@singleton()
 export default class EveClient extends Client {
   private readonly slashCommands: SlashCommandInterface[];
   private readonly eventHandler: EventHandlerInterface[];

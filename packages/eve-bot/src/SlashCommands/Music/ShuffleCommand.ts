@@ -1,17 +1,12 @@
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
-import SlashCommandInterface from '../SlashCommandInterface';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import validateCanGetPlayer from '../../Validation/validateCanGetPlayer';
 import { injectable } from 'tsyringe';
+import AbstractMusicCommand from "./AbstractMusicCommand";
+import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
 
 @injectable()
-export default class ShuffleCommand implements SlashCommandInterface {
-  async execute(interaction: CommandInteraction): Promise<void> {
-    const player = await validateCanGetPlayer(interaction);
-    if (player === false) {
-      return;
-    }
-
+export default class ShuffleCommand extends AbstractMusicCommand {
+  async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
     await interaction.deferReply();
 
     await player.shuffle();

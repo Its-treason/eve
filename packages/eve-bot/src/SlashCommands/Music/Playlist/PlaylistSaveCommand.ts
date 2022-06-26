@@ -2,10 +2,10 @@ import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import embedFactory from '../../../Factory/messageEmbedFactory';
-import validateCanGetPlayer from '../../../Validation/validateCanGetPlayer';
-import {MusicResult, PlaylistItem} from '../../../types';
+import {PlaylistItem} from '../../../types';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import { injectable } from 'tsyringe';
+import MusicPlayerRepository from "../../../MusicPlayer/MusicPlayerRepository";
 
 @injectable()
 export default class PlaylistSaveCommand implements SubSlashCommandInterface {
@@ -40,10 +40,14 @@ export default class PlaylistSaveCommand implements SubSlashCommandInterface {
       return;
     }
 
-    const player = await validateCanGetPlayer(interaction, false);
-    if (player === false) {
+    if (await MusicPlayerRepository.has(interaction.guild.id) === false) {
+      const answer = embedFactory(interaction.client, 'Error');
+      answer.setDescription('I\'m currently not playing any music');
+      await interaction.reply({embeds: [answer], ephemeral: true});
       return;
     }
+
+    const player = await MusicPlayerRepository.get(interaction.guild.id);
 
     const queue = player.getQueue();
 
