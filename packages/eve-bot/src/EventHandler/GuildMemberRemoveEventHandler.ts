@@ -1,16 +1,14 @@
 import { GuildMember, TextChannel } from 'discord.js';
-import AutoActionsProjection from '../Projection/AutoActionsProjection';
 import MustacheReplace from '../Util/MustacheReplace';
-import LeaveMessageAction from '../Actions/LeaveMessageAction';
 import { injectable } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
-import Logger from "../Structures/Logger";
+import { AutoActionsRepository, LeaveMessageAction, Logger } from 'eve-core';
 
 @injectable()
 export default class GuildMemberRemoveEventHandler implements EventHandlerInterface {
   constructor(
     private logger: Logger,
-    private actionProjection: AutoActionsProjection,
+    private actionRepository: AutoActionsRepository,
     private mustacheParser: MustacheReplace,
   ) {}
 
@@ -23,7 +21,7 @@ export default class GuildMemberRemoveEventHandler implements EventHandlerInterf
   }
 
   private async sendLeaveMessage(member: GuildMember): Promise<void> {
-    const leaveAction = await this.actionProjection.getActions(member.guild.id, 'leave-message');
+    const leaveAction = await this.actionRepository.getActions(member.guild.id, 'leave-message');
     if (
       !leaveAction ||
       !(leaveAction instanceof LeaveMessageAction) ||

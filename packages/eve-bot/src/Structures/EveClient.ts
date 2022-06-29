@@ -1,10 +1,10 @@
-import {Intents, Client} from 'discord.js';
+import { Intents, Client } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import SlashCommandInterface from '../SlashCommands/SlashCommandInterface';
-import Logger from '../Structures/Logger';
 import {injectAll, singleton} from 'tsyringe';
 import EventHandlerInterface from "../EventHandler/EventHandlerInterface";
+import { Logger } from 'eve-core';
 
 @singleton()
 export default class EveClient extends Client {
@@ -75,6 +75,4 @@ export default class EveClient extends Client {
       throw error;
     }
   }
-
-
 }

@@ -1,16 +1,15 @@
 import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
-import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import embedFactory from '../../../Factory/messageEmbedFactory';
-import {PlaylistItem} from '../../../types';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import { injectable } from 'tsyringe';
 import MusicPlayerRepository from "../../../MusicPlayer/MusicPlayerRepository";
+import { PlaylistItem, PlaylistRepository } from 'eve-core';
 
 @injectable()
 export default class PlaylistSaveCommand implements SubSlashCommandInterface {
   constructor(
-    private playlistProjection: PlaylistProjection,
+    private playlistRepository: PlaylistRepository,
   ) {}
 
   getData(): ApplicationCommandSubCommandData {
@@ -67,7 +66,7 @@ export default class PlaylistSaveCommand implements SubSlashCommandInterface {
       };
     });
 
-    await this.playlistProjection.savePlaylist(name, userId, ytResultQueue);
+    await this.playlistRepository.savePlaylist(name, userId, ytResultQueue);
 
     const answer = messageEmbedFactory(interaction.client, 'Saved Playlist!');
 

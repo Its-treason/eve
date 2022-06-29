@@ -1,12 +1,12 @@
 import { VoiceState } from 'discord.js';
-import ChannelActivityProjection from '../Projection/ChannelActivityProjection';
 import EventHandlerInterface from './EventHandlerInterface';
 import { injectable } from 'tsyringe';
+import { ChannelActivityRepository } from 'eve-core';
 
 @injectable()
 export default class VoiceStateUpdateHandler implements EventHandlerInterface {
   constructor(
-    private channelActivityProjection: ChannelActivityProjection
+    private channelActivityRepository: ChannelActivityRepository,
   ) {}
 
   getNameEventName(): string {
@@ -19,7 +19,7 @@ export default class VoiceStateUpdateHandler implements EventHandlerInterface {
 
   private async recordChannelActivity(oldState: VoiceState, newState: VoiceState): Promise<void> {
     if (typeof oldState.channel?.id === 'string' && oldState.channel.id !== newState.channel?.id) {
-      await this.channelActivityProjection.recordChannelLeft(
+      await this.channelActivityRepository.recordChannelLeft(
         oldState.member?.id || 'Unknown',
         oldState.channel.id,
         oldState.guild.id,
@@ -27,7 +27,7 @@ export default class VoiceStateUpdateHandler implements EventHandlerInterface {
     }
 
     if (typeof newState.channel?.id === 'string' && oldState.channel?.id !== newState.channel.id) {
-      await this.channelActivityProjection.recordChannelJoin(
+      await this.channelActivityRepository.recordChannelJoin(
         newState.member?.id || 'Unknown',
         newState.channel.id,
         newState.guild.id,

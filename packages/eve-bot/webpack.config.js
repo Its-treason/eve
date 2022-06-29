@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/index.ts',
   mode: 'production',
   target: 'node',
-  externals: [nodeExternals()],
+  externals: [nodeExternals({ allowlist: ['eve-core'] })],
   module: {
     rules: [
       {

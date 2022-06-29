@@ -1,7 +1,7 @@
 import { Guild } from 'discord.js';
+import { Logger } from 'eve-core';
 import { injectable } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
-import Logger from "../Structures/Logger";
 
 @injectable()
 export default class GuildCreateEventHandler implements EventHandlerInterface {

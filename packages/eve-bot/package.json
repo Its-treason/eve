@@ -24,7 +24,8 @@
     "puppeteer": "^15.1.1",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.7.0",
-    "yasha": "https://github.com/ilikdoge/yasha.git"
+    "yasha": "https://github.com/ilikdoge/yasha.git",
+    "eve-core": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

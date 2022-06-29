@@ -1,11 +1,11 @@
 import EventHandlerInterface from './EventHandlerInterface';
 import { injectable } from 'tsyringe';
-import Logger from "../Structures/Logger";
+import { Logger } from 'eve-core';
 
 @injectable()
 export default class WarnEventHandler implements EventHandlerInterface {
   constructor(
-    private logger: Logger
+    private logger: Logger,
   ) {}
 
   public getNameEventName(): string {

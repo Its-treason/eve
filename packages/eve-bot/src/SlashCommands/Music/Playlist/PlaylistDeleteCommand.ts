@@ -1,20 +1,20 @@
 import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
-import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import { injectable } from 'tsyringe';
+import { PlaylistRepository } from 'eve-core';
 
 @injectable()
 export default class PlaylistDeleteCommand implements SubSlashCommandInterface {
   constructor(
-    private playlistProjection: PlaylistProjection,
+    private playlistRepository: PlaylistRepository,
   ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
     const name = interaction.options.getString('name', true);
     const userId = interaction.user.id;
 
-    const playlists = await this.playlistProjection.loadPlaylistByNameAndUserId(name, userId);
+    const playlists = await this.playlistRepository.loadPlaylistByNameAndUserId(name, userId);
 
     if (playlists === false) {
       const answer = messageEmbedFactory(interaction.client, 'Error');
@@ -23,7 +23,7 @@ export default class PlaylistDeleteCommand implements SubSlashCommandInterface {
       return;
     }
 
-    await this.playlistProjection.deletePlaylist(name, userId);
+    await this.playlistRepository.deletePlaylist(name, userId);
 
     const answer = messageEmbedFactory(interaction.client, `Deleted the playlist \`${name}\``);
 

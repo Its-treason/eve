@@ -39,12 +39,7 @@ export type ValidatorWrapper = (...args: unknown[]) => Validator;
 
 export type ParsedArg = (string|User|GuildMember|Channel|Role);
 
-export interface PlaylistItem {
-  ytId: string,
-  url: string,
-  title: string,
-  uploader: string,
-}
+
 
 export interface MusicResult {
   url: string,

@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import './dependencyDefinition';
 import EveClient from './Structures/EveClient';
-import Logger from './Structures/Logger';
 import { container } from 'tsyringe';
 import registerErrorAndShutdownHandler from './Util/registerErrorAndShutdownHandler';
+import { Logger } from 'eve-core';
 
 (async () => {
   const logger = container.resolve(Logger);

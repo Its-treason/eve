@@ -1,13 +1,13 @@
 import { ApplicationCommandSubCommandData, CommandInteraction} from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
-import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import {injectable} from 'tsyringe';
+import { PlaylistRepository } from 'eve-core';
 
 @injectable()
 export default class PlaylistListCommand implements SubSlashCommandInterface {
   constructor(
-    private playlistProjection: PlaylistProjection,
+    private playlistRepository: PlaylistRepository,
   ) {}
 
   getData(): ApplicationCommandSubCommandData {
@@ -30,7 +30,7 @@ export default class PlaylistListCommand implements SubSlashCommandInterface {
     const user = interaction.options.getUser('user') || interaction.user;
     const userId = user.id;
 
-    const playlists = await this.playlistProjection.loadPlaylistsOfUser(userId);
+    const playlists = await this.playlistRepository.loadPlaylistsOfUser(userId);
 
     if (playlists.length === 0) {
       const answer = messageEmbedFactory(interaction.client, 'Error');

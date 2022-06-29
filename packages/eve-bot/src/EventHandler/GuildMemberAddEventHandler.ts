@@ -1,17 +1,14 @@
 import { GuildMember, TextChannel } from 'discord.js';
-import AutoActionsProjection from '../Projection/AutoActionsProjection';
-import JoinMessageAction from '../Actions/JoinMessageAction';
 import MustacheReplace from '../Util/MustacheReplace';
-import AutoRolesAction from '../Actions/AutoRolesAction';
 import { injectable } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
-import Logger from "../Structures/Logger";
+import { AutoActionsRepository, AutoRolesAction, JoinMessageAction, Logger } from 'eve-core';
 
 @injectable()
 export default class GuildMemberAddEventHandler implements EventHandlerInterface {
   constructor(
     private logger: Logger,
-    private actionProjection: AutoActionsProjection,
+    private actionRepository: AutoActionsRepository,
     private mustacheReplace: MustacheReplace,
   ) {}
 
@@ -25,7 +22,7 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
   }
 
   private async applyRoles(member: GuildMember): Promise<void> {
-    const autoRolesAction = await this.actionProjection.getActions(member.guild.id, 'auto-roles');
+    const autoRolesAction = await this.actionRepository.getActions(member.guild.id, 'auto-roles');
     if (
       !autoRolesAction ||
       !(autoRolesAction instanceof AutoRolesAction) ||
@@ -49,7 +46,7 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
   }
 
   private async sendJoinMessage(member: GuildMember): Promise<void> {
-    const joinAction = await this.actionProjection.getActions(member.guild.id, 'join-message');
+    const joinAction = await this.actionRepository.getActions(member.guild.id, 'join-message');
     if (
       !joinAction ||
       !(joinAction instanceof JoinMessageAction) ||

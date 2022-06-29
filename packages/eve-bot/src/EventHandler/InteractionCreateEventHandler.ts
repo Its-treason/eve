@@ -3,8 +3,8 @@ import {injectable, injectAll} from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
 import messageEmbedFactory from "../Factory/messageEmbedFactory";
 import SlashCommandInterface from "../SlashCommands/SlashCommandInterface";
-import Logger from "../Structures/Logger";
 import ButtonInteractionInterface from "../ButtonInteractions/ButtonInteractionInterface";
+import { Logger } from 'eve-core';
 
 @injectable()
 export default class InteractionCreateEventHandler implements EventHandlerInterface {

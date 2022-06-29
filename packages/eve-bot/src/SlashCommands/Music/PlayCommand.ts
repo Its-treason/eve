@@ -2,10 +2,10 @@ import {ApplicationCommandData, CommandInteraction} from 'discord.js';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import MusicResultService from '../../MusicPlayer/MusicResultService';
-import Logger from '../../Structures/Logger';
 import { injectable } from 'tsyringe';
 import AbstractMusicCommand from "./AbstractMusicCommand";
 import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import { Logger } from 'eve-core';
 
 @injectable()
 export default class PlayCommand extends AbstractMusicCommand {

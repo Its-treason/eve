@@ -21,7 +21,7 @@ export default class MenuInteraction implements ButtonInteractionInterface {
       } catch (e) {
         answer.addField(
           'Error',
-          `I couldn't remove the \`${role.name}\` role from you, because i don't have enough permission.`,
+          `I couldn't remove your \`${role.name}\` role. Because i don't have enough permission.`,
         );
         await interaction.reply({
           embeds: [answer],
@@ -43,7 +43,7 @@ export default class MenuInteraction implements ButtonInteractionInterface {
     } catch (e) {
       answer.addField(
         'Error',
-        `I couldn't add the \`${role.name}\` role to you. Because i don't have enough permission.`,
+        `I couldn't give you the \`${role.name}\` role. Because i don't have enough permission.`,
       );
       await interaction.reply({
         embeds: [answer],

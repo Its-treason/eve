@@ -1,13 +1,13 @@
 import 'reflect-metadata';
 import GuildCreateEventHandler from './GuildCreateEventHandler';
 import { Guild } from 'discord.js';
-import Logger from "../Structures/Logger";
+import { Logger } from 'eve-core';
 
-jest.mock('../Util/Logger');
+jest.mock('eve-core');
 
 describe('GuildCreateEventHandler', () => {
   test('Can log new guild', async () => {
-    const logger = new Logger();
+    const logger = new Logger(null);
 
     const guild = {
       id: 'some-id',

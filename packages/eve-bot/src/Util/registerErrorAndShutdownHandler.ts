@@ -1,5 +1,5 @@
+import { Logger } from 'eve-core';
 import EveClient from '../Structures/EveClient';
-import Logger from '../Structures/Logger';
 
 export default function registerErrorAndShutdownHandler(logger: Logger, client?: EveClient): void {
   const shutDown = (exitCode = 0) => {

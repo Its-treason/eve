@@ -1,18 +1,18 @@
 import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
-import PlaylistProjection from '../../../Projection/PlaylistProjection';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import embedFactory from '../../../Factory/messageEmbedFactory';
 import MusicPlayerRepository from '../../../MusicPlayer/MusicPlayerRepository';
 import { injectable } from 'tsyringe';
-import { MusicResult, PlaylistItem } from '../../../types';
+import { MusicResult } from '../../../types';
 import * as yasha from 'yasha';
 import { MultiDownloader } from '../../../Util/MultiDownloader';
+import { PlaylistItem, PlaylistRepository } from 'eve-core';
 
 @injectable()
 export default class PlaylistLoadCommand implements SubSlashCommandInterface {
   constructor(
-    private playlistProjection: PlaylistProjection,
+    private playlistRepository: PlaylistRepository,
   ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
@@ -21,7 +21,7 @@ export default class PlaylistLoadCommand implements SubSlashCommandInterface {
     const clear = interaction.options.getBoolean('clear') || false;
     const userId = user.id;
 
-    const playlistItems = await this.playlistProjection.loadPlaylistByNameAndUserId(playlistName, userId);
+    const playlistItems = await this.playlistRepository.loadPlaylistByNameAndUserId(playlistName, userId);
 
     if (playlistItems === false) {
       const answer = messageEmbedFactory(interaction.client, 'Error');

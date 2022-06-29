@@ -4,8 +4,6 @@ import PlaylistListCommand from './SlashCommands/Music/Playlist/PlaylistListComm
 import PlaylistLoadCommand from './SlashCommands/Music/Playlist/PlaylistLoadCommand';
 import PlaylistSaveCommand from './SlashCommands/Music/Playlist/PlaylistSaveCommand';
 import PlaylistCommand from './SlashCommands/Music/Playlist/PlaylistCommand';
-import MySQLClient from './Structures/MySQLClient';
-import mySqlClientFactory from './Factory/mySqlClientFactory';
 import AvatarCommand from './SlashCommands/AvatarCommand';
 import ClearCommand from './SlashCommands/Music/ClearCommand';
 import DeleteCommand from './SlashCommands/Music/DeleteCommand';
@@ -34,8 +32,6 @@ import WarnEventHandler from "./EventHandler/WarnEventHandler";
 import GuildMemberAddEventHandler from "./EventHandler/GuildMemberAddEventHandler";
 import GuildMemberRemoveEventHandler from "./EventHandler/GuildMemberRemoveEventHandler";
 import InteractionCreateEventHandler from "./EventHandler/InteractionCreateEventHandler";
-
-container.register(MySQLClient, { useFactory: instanceCachingFactory(mySqlClientFactory) });
 
 container.register('EventHandler', { useClass: GuildCreateEventHandler });
 container.register('EventHandler', { useClass: GuildDeleteEventHandler });
