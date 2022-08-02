@@ -10,11 +10,16 @@ import PlaylistRepository from './Repository/PlaylistRepository';
 import AutoRolesAction from './Actions/AutoRolesAction';
 import LeaveMessageAction from './Actions/LeaveMessageAction';
 import JoinMessageAction from './Actions/JoinMessageAction';
+import ApiKeysRepository from './Repository/ApiKeysRepository';
+import PermissionRepository from './Repository/PermissionRepository';
+import RoleMenuRepository from './Repository/RoleMenuRepository';
+import ApiClient from "./ApiClient";
 
 export * from './types';
 export type { AutoActionInterface };
 
 export {
+  ApiClient,
   Logger,
   MySQLClient,
 
@@ -23,7 +28,10 @@ export {
   JoinMessageAction,
   LeaveMessageAction,
 
+  ApiKeysRepository,
   AutoActionsRepository,
   ChannelActivityRepository,
-  PlaylistRepository
+  PermissionRepository,
+  PlaylistRepository,
+  RoleMenuRepository,
 };

@@ -13,7 +13,9 @@
     "jsx": "preserve",
     "noImplicitAny": true,
     "allowUnreachableCode": true,
-    "noEmit": false
+    "noEmit": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "**/*.ts",

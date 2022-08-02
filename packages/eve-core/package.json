@@ -18,8 +18,11 @@
     "dev": "nodemon --ignore build --exec \"tsc\""
   },
   "dependencies": {
+    "@discordjs/rest": "^0.5.0",
     "@elastic/elasticsearch": "^8.2.1",
+    "discord-api-types": "^0.36.0",
     "mariadb": "^3.0.0",
+    "redis": "^4.1.1",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.7.0"
   },

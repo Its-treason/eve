@@ -12,6 +12,8 @@ RUN apk add libsodium-dev libtool cmake g++ gcc ffmpeg-dev chromium make git aut
 
 USER 1000:1000
 
+ENTRYPOINT ["yarn", "run"]
+
 FROM base AS development
 
 ENV APP_ENV=development

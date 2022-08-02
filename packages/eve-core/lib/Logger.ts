@@ -44,7 +44,7 @@ export default class Logger {
       level,
       'level_name': levelName,
       channel: 'eve-bot',
-      timestamp: (new Date()).toISOString(),
+      timestamp: new Date().toISOString(),
       context: normalisedContext,
     };
 
@@ -78,7 +78,7 @@ export default class Logger {
       context.error = Logger.formatError(context.error);
     }
 
-    this.log(message, 100,'debug', context);
+    this.log(message, 100, 'debug', context);
   }
 
   /**
@@ -91,7 +91,7 @@ export default class Logger {
       context.error = Logger.formatError(context.error);
     }
 
-    this.log(message, 200,'info', context);
+    this.log(message, 200, 'info', context);
   }
 
   /**
@@ -102,7 +102,7 @@ export default class Logger {
       context.error = Logger.formatError(context.error);
     }
 
-    this.log(message, 250,'notice', context);
+    this.log(message, 250, 'notice', context);
   }
 
   /**
@@ -116,7 +116,7 @@ export default class Logger {
       context.error = Logger.formatError(context.error);
     }
 
-    this.log(message, 300,'warning', context);
+    this.log(message, 300, 'warning', context);
   }
 
   /**
@@ -127,7 +127,7 @@ export default class Logger {
       context.error = Logger.formatError(context.error);
     }
 
-    this.log(message, 400,'error', context);
+    this.log(message, 400, 'error', context);
   }
 
   /**
@@ -140,7 +140,7 @@ export default class Logger {
       context.error = Logger.formatError(context.error);
     }
 
-    this.log(message, 500,'critical', context);
+    this.log(message, 500, 'critical', context);
   }
 
   /**
@@ -154,7 +154,7 @@ export default class Logger {
       context.error = Logger.formatError(context.error);
     }
 
-    this.log(message, 550,'alert', context);
+    this.log(message, 550, 'alert', context);
   }
 
   /**
@@ -165,6 +165,6 @@ export default class Logger {
       context.error = Logger.formatError(context.error);
     }
 
-    this.log(message, 600,'emergency', context);
+    this.log(message, 600, 'emergency', context);
   }
 }

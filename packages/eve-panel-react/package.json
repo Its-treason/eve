@@ -24,8 +24,8 @@
     "vite-plugin-swc-react": "^0.1.12"
   },
   "scripts": {
-    "build": "vite build",
-    "dev": "vite",
+    "build": "vite build --debug",
+    "dev": "vite --host",
     "start": "vite preview --host --port 3000",
     "lint": "eslint ./src/**/*.ts ./src/**/*.tsx --fix"
   },

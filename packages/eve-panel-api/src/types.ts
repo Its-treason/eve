@@ -1,4 +1,13 @@
-import { PlaylistItem } from './web/sharedApiTypes';
+import { APIGuild, APIUser } from 'discord-api-types/v9';
+import { Response } from 'express';
+import { PlaylistItem } from './Web/sharedApiTypes';
+
+export type ResponseWithLocals = Response<any, {
+  isAdmin: boolean,
+  apiKey: string,
+  user: APIUser,
+  server: APIGuild,
+}>
 
 export interface DiscordAccessToken {
   accessToken: string|null,

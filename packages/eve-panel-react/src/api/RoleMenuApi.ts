@@ -1,8 +1,8 @@
 import {RoleMenu, RoleMenuEntry} from "./sharedApiTypes";
 import Ajax from "./Ajax";
 
-export async function createRoleMenu(serverId: string, name: string, channelId: string): Promise<true|string> {
-  const body = JSON.stringify({ name, channelId });
+export async function createRoleMenu(serverId: string, name: string, channel: string): Promise<true|string> {
+  const body = JSON.stringify({ name, channel });
   const response = await Ajax.post(`/v1/server/${serverId}/roleMenu/create`, body);
 
   if (response.code !== 200) {
@@ -18,7 +18,7 @@ export async function updateRoleMenu(
   message: string,
   entries: RoleMenuEntry[],
 ): Promise<true|string> {
-  const body = JSON.stringify({ message, id: roleMenuId, entries });
+  const body = JSON.stringify({ message, roleMenu: roleMenuId, entries });
   const response = await Ajax.post(`/v1/server/${serverId}/roleMenu/update`, body);
 
   if (response.code !== 200) {
@@ -29,7 +29,7 @@ export async function updateRoleMenu(
 }
 
 export async function deleteRoleMenu(serverId: string, roleMenuId: string): Promise<true|string> {
-  const body = JSON.stringify({ id: roleMenuId });
+  const body = JSON.stringify({ roleMenu: roleMenuId });
   const response = await Ajax.post(`/v1/server/${serverId}/roleMenu/delete`, body);
 
   if (response.code !== 200) {

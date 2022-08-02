@@ -2,8 +2,26 @@
   "name": "root",
   "private": true,
   "license": "MIT",
+  "scripts": {
+    "build": "lerna run build",
+
+    "api": "lerna exec --scope=eve-panel-api -- yarn run start",
+    "api:dev": "lerna exec --scope=eve-panel-api -- yarn run dev",
+    "api:build": "lerna exec --scope=eve-panel-api -- yarn run build",
+
+    "react": "lerna exec --scope=eve-panel-react -- yarn run start",
+    "react:dev": "lerna exec --scope=eve-panel-react -- yarn run dev",
+    "react:build": "lerna exec --scope=eve-panel-react -- yarn run build",
+
+    "core:dev": "lerna exec --scope=eve-core -- yarn run dev",
+    "core:build": "lerna exec --scope=eve-core -- yarn run build"
+  },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
     "lerna": "^5.1.4",
-    "nx": "^14.3.6"
+    "nx": "^14.3.6",
+    "typescript": "^4.7.4"
   }
 }

@@ -1,28 +1,31 @@
 import 'source-map-support/register';
-import express, { json, NextFunction, Request, Response } from 'express';
+import 'reflect-metadata';
+import { Logger } from 'eve-core';
+import './dependencyDefinition';
+import express, { json } from 'express';
 import http from 'http';
-import getConnection from './structures/getConnection';
-import corsMiddleware from './web/middleware/corsMiddleware';
-import routerV1 from './web/RouterV1';
-import getLogger from './structures/getLogger';
-import getApiClient from './structures/getApiClient';
 import helmet from 'helmet';
-import loggerMiddleware from "./web/middleware/loggerMiddleware";
+import { container } from 'tsyringe';
+import UtilMiddlewares from './Web/Middleware/UtilMiddlewares';
+import RouterV1 from './Web/RouterV1';
+import registerErrorAndShutdownHandler from './Util/registerErrorAndShutdownHandler';
 
 (async () => {
   // Init the client and connection
-  await getConnection();
-  const logger = getLogger();
-  await getApiClient();
+  const logger = container.resolve(Logger);
+  const utilMiddlewares = container.resolve(UtilMiddlewares);
+  const routerV1 = container.resolve(RouterV1);
+
+  registerErrorAndShutdownHandler(logger);
 
   const app = express();
   const server = http.createServer(app);
 
   app.use(helmet());
-  app.use(loggerMiddleware);
-  app.use(corsMiddleware);
+  app.use(utilMiddlewares.corsMiddleware.bind(utilMiddlewares));
+  app.use(utilMiddlewares.loggerMiddleware.bind(utilMiddlewares));
   app.use(json({ limit: '50MB' }));
-  app.use('/v1/', routerV1);
+  app.use('/v1/', routerV1.createRouter());
 
   server.listen(3030, () => {
     logger.info('Started eve-panel-api');
