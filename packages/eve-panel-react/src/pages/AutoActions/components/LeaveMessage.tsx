@@ -1,9 +1,8 @@
-import React from "react";
 import {Button, Checkbox, Group, Textarea, Text, Code, Anchor, Select} from "@mantine/core";
 import useAutoActions from "../hooks/useAutoActions";
 import produce from "immer";
-import {useNotifications} from "@mantine/notifications";
 import useServerChannel from "../../../hooks/useServerChannel";
+import { showNotification } from '@mantine/notifications';
 
 interface LeaveMessagePayload {
   message: string,
@@ -19,12 +18,11 @@ interface LeaveMessageProps {
 function LeaveMessage({serverId, openDocs}: LeaveMessageProps) {
   const { payload, loading: actionLoading, error, save, setPayload } = useAutoActions<LeaveMessagePayload>('leave-message', serverId);
   const { channel, channelLoading } = useServerChannel(serverId, 'text');
-  const { showNotification } = useNotifications();
 
   const loading = actionLoading || channelLoading;
 
   return (
-    <Group direction={'column'}>
+    <Group>
       <Text>A message that is automatically send when a new member leaves the Server!</Text>
       <Text>
         Available template objects are: <Code>user</Code> & <Code>guild</Code>.

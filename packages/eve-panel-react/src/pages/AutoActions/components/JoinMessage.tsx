@@ -1,8 +1,7 @@
-import React from "react";
 import {Button, Checkbox, Group, Textarea, Text, Code, Anchor, Select} from "@mantine/core";
 import useAutoActions from "../hooks/useAutoActions";
 import produce from "immer";
-import {useNotifications} from "@mantine/notifications";
+import {showNotification} from "@mantine/notifications";
 import useServerChannel from "../../../hooks/useServerChannel";
 
 interface JoinMessagePayload {
@@ -19,12 +18,11 @@ interface JoinMessageProps {
 function JoinMessage({serverId, openDocs}: JoinMessageProps) {
   const { payload, loading: actionLoading, error, save, setPayload } = useAutoActions<JoinMessagePayload>('join-message', serverId);
   const { channel, channelLoading } = useServerChannel(serverId, 'text');
-  const { showNotification } = useNotifications();
 
   const loading = actionLoading || channelLoading;
 
   return (
-    <Group direction={'column'}>
+    <Group>
       <Text>A message that is automatically send when a new member joins the Server!</Text>
       <Text>
         Available template objects are: <Code>user</Code> & <Code>guild</Code>.

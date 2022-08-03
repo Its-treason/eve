@@ -1,8 +1,8 @@
-import React, {useMemo} from "react";
+import {useMemo} from "react";
 import {Button, Checkbox, Group, Text, Code, MultiSelect} from "@mantine/core";
 import useAutoActions from "../hooks/useAutoActions";
 import produce from "immer";
-import {useNotifications} from "@mantine/notifications";
+import {showNotification} from "@mantine/notifications";
 import useServerRoles from "../../../hooks/useServerRoles";
 
 interface AutoRolesPayload {
@@ -17,7 +17,6 @@ interface AutoRolesProps {
 function JoinMessage({serverId}: AutoRolesProps) {
   const { payload, loading: actionLoading, error, save, setPayload } = useAutoActions<AutoRolesPayload>('auto-roles', serverId);
   const { roles, rolesLoading } = useServerRoles(serverId);
-  const { showNotification } = useNotifications();
 
   const roleData = useMemo(() => {
     return roles.map(role => {
@@ -31,7 +30,7 @@ function JoinMessage({serverId}: AutoRolesProps) {
   const loading = actionLoading || rolesLoading;
 
   return (
-    <Group direction={'column'}>
+    <Group>
       <Text>Automatically give new members roles when they join!</Text>
       <MultiSelect
         data={roleData}

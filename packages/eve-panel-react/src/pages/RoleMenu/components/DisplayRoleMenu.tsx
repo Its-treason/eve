@@ -1,5 +1,5 @@
 import {ReducedChannel, RoleMenu} from "../../../api/sharedApiTypes";
-import {Button, Code, Group, Select, Text, Textarea, TextInput} from "@mantine/core";
+import {Button, Code, Group, Select, Stack, Text, Textarea, TextInput} from "@mantine/core";
 import useUpdateRoleMenu from "../hooks/useUpdateRoleMenu";
 import deepCopyState from "../../../util/deepCopyState";
 import {useState} from "react";
@@ -34,7 +34,7 @@ export default function DisplayRoleMenu(
   const loading = parentLoading || updateRoleMenuLoading;
 
   return (
-    <Group direction={'column'}>
+    <Stack>
       <DeleteRoleMenu
         opened={deleteDialogOpen}
         roleMenuId={roleMenu.id}
@@ -82,7 +82,7 @@ export default function DisplayRoleMenu(
       >Add Role</Button>
       {roleMenu.entries.map((entry, index) => {
         return (
-          <Group direction={'row'} align={'end'} key={index} style={{width: '100%'}}>
+          <Group align={'flex-end'}>
             <Select
               data={formattedRoles}
               value={entry.role}
@@ -140,6 +140,6 @@ export default function DisplayRoleMenu(
         fullWidth
       >Delete role menu</Button>
       <Text color={'red'}>{updateRoleMenuError}</Text>
-    </Group>
+    </Stack>
   )
 }

@@ -4,15 +4,12 @@
   "license": "MIT",
   "scripts": {
     "build": "lerna run build",
-
     "api": "lerna exec --scope=eve-panel-api -- yarn run start",
     "api:dev": "lerna exec --scope=eve-panel-api -- yarn run dev",
     "api:build": "lerna exec --scope=eve-panel-api -- yarn run build",
-
     "react": "lerna exec --scope=eve-panel-react -- yarn run start",
     "react:dev": "lerna exec --scope=eve-panel-react -- yarn run dev",
     "react:build": "lerna exec --scope=eve-panel-react -- yarn run build",
-
     "core:dev": "lerna exec --scope=eve-core -- yarn run dev",
     "core:build": "lerna exec --scope=eve-core -- yarn run build"
   },

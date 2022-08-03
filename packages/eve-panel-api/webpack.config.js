@@ -25,6 +25,10 @@ module.exports = {
     new WebPackShellPlugin({
       onDoneWatch: {
         scripts: [() => {
+          if (env === 'production') {
+            return;
+          }
+
           if (child) {
             console.log('Killing old process...');
             child.kill();

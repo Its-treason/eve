@@ -12,14 +12,14 @@ export default function LoginPage(): ReactElement {
   return (
     <Layout containerSize={"xs"}>
       <Title>Greetings!</Title>
-      <Text>Welcome to the EVE Control Panel!</Text>
-      <Text>Please login with your Discord account first.</Text>
-      <Space />
+      <Text>Welcome to EVE's control panel!</Text>
+      <Space h={'xl'} />
       <KibanaButton
         // @ts-ignore - See https://vitejs.dev/guide/env-and-mode.html
         href={import.meta.env.VITE_AUTH_URL}
         icon={'/assets/discord-logo.png'}
         text={'Login with Discord'}
+        subtext={'Please login to configure the bot settings for your server'}
       />
       <Space h={'xs'} />
       <Text color={'red'}>{error}</Text>

@@ -1,6 +1,6 @@
-import React, { ReactElement, useContext } from 'react';
+import { ReactElement, useContext } from 'react';
 import Layout from '../../components/Layout';
-import {Container, Space, Title, Text, Group, Avatar} from '@mantine/core';
+import {Space, Title, Text, Group, Avatar, SimpleGrid} from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import useUserServerFromParams from '../../hooks/useUserServerFromParams';
 import KibanaButton from '../../components/KibanaButton';
@@ -27,26 +27,32 @@ export default function EditServerHome(): ReactElement {
   ];
 
   return (
-    <Layout navItems={navItems} containerSize={'xs'}>
-      <Group direction="row" align="center">
-        <Title>Edit server settings!</Title>
+    <Layout navItems={navItems} containerSize={'sm'}>
+      <Group align="center">
+        <Title>{server.name}</Title>
         <Avatar src={server.icon} alt={'Profile icon'} />
       </Group>
-      <Text color={'dimmed'}>Edit settings for {server.name}</Text>
-      <Space />
-      <KibanaButton
-        icon={autoIcon}
-        text={'Auto actions'}
-        subtext={'Automatic actions'}
-        to={`/server/${server.id}/actions`}
-      />
-      <Space h={'sm'} />
-      <KibanaButton
-        icon={roleMenuIcon}
-        text={'Role menu'}
-        subtext={'Create a role menu where user can give themself roles'}
-        to={`/server/${server.id}/roleMenu`}
-      />
+      <Text color={'dimmed'}>Here you can edit the settings for your Server</Text>
+      <Space h={'xl'} />
+      <SimpleGrid
+        cols={2}
+        breakpoints={[
+          { maxWidth: 700, cols: 1 },
+        ]}
+      >
+        <KibanaButton
+          icon={autoIcon}
+          text={'Auto actions'}
+          subtext={'Automatic actions'}
+          to={`/server/${server.id}/actions`}
+        />
+        <KibanaButton
+          icon={roleMenuIcon}
+          text={'Role menu'}
+          subtext={'Create a role menu where user can give themself roles'}
+          to={`/server/${server.id}/roleMenu`}
+        />
+      </SimpleGrid>
     </Layout>
   );
 }

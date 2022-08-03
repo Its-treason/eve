@@ -1,10 +1,11 @@
-import React, { ReactElement, useContext } from 'react';
+import { ReactElement, useContext } from 'react';
 import LoggedInUserContext from '../../context/LoggedInUserContext';
-import { Container, Divider, Space, Title, Text, ActionIcon, Tooltip } from '@mantine/core';
+import { Divider, Space, Title, ActionIcon, Tooltip, SimpleGrid } from '@mantine/core';
 import KibanaButton from '../../components/KibanaButton';
 import Layout from '../../components/Layout';
 import useCreateInvite from '../../hooks/useCreateInvite';
 import {LogoutButton} from "../../components/LogoutButton";
+import EmptyState from '../../components/EmptyState';
 
 export default function AdminHome(): ReactElement {
   const user = useContext(LoggedInUserContext);
@@ -29,20 +30,31 @@ export default function AdminHome(): ReactElement {
       />
       <Space h={'xl'} />
       <>
-        {user.server.length === 0 ?? <Text>No Server to edit!</Text>}
-        {user.server.map((server) => {
-          return (
-            <span key={server.id}>
+        {user.server.length === 0 && (
+          <EmptyState
+            text={'You dont have any Server to edit'}
+            subText={'Invite the bot to your server to edit settings'} 
+            action={{ callback: openInviteDialog, text: 'Invite EVE' }}
+          />
+        )}
+        <SimpleGrid
+          cols={2}
+          sx={{justifyContent: 'center'}}
+          breakpoints={[
+            { maxWidth: 700, cols: 1 },
+          ]}
+        >
+          {user.server.map((server) => {
+            return (
               <KibanaButton
                 to={`/server/${server.id}/home`}
                 text={server.name}
                 icon={server.icon}
                 subtext={'Configure server settings'}
               />
-              <Space h={'sm'} />
-            </span>
-          );
-        })}
+            );
+          })}
+        </SimpleGrid>
       </>
     </Layout>
   );

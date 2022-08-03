@@ -11,6 +11,7 @@ import CreatePlaylistDialog from './components/CreatePlaylistDialog';
 import DeletePlaylistDialog from './components/DeletePlaylistDialog';
 import PlaylistTable from './components/PlaylistTable';
 import { useNotifications } from '@mantine/notifications';
+import EmptyState from '../../components/EmptyState';
 
 export default function PlaylistHome(): ReactElement {
   const { user } = useUserServerFromParams(useParams(), useContext(LoggedInUserContext));
@@ -75,11 +76,22 @@ export default function PlaylistHome(): ReactElement {
         />
         {loading ?
           <Loading /> :
-          <PlaylistTable
-            playlists={playlists}
-            userId={user.id}
-            setDeleteDialogOpen={setDeleteDialogOpen}
-          />
+          playlists.length === 0 ? (
+            <EmptyState
+              text={'You dont have any playlists'}
+              subText={'Start by creating a new playlist'}
+              action={{
+                callback: () => setCreateDialogOpen(true),
+                text: 'Create new Playlist'
+              }}
+            />
+          ) : (
+            <PlaylistTable
+              playlists={playlists}
+              userId={user.id}
+              setDeleteDialogOpen={setDeleteDialogOpen}
+            />
+          ) 
         }
       </Container>
     </Layout>

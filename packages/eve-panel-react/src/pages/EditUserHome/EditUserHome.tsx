@@ -1,6 +1,6 @@
-import React, { ReactElement, useContext } from 'react';
+import { ReactElement, useContext } from 'react';
 import Layout from '../../components/Layout';
-import {Avatar, Container, Group, Space, ThemeIcon, Title} from '@mantine/core';
+import {Avatar, Group, SimpleGrid, Space, Title, Text} from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import useUserServerFromParams from '../../hooks/useUserServerFromParams';
 import KibanaButton from '../../components/KibanaButton';
@@ -26,25 +26,32 @@ export default function EditUserHome(): ReactElement {
   ];
 
   return (
-    <Layout navItems={navItems} containerSize={'xs'}>
-      <Group direction="row" align="center">
+    <Layout navItems={navItems} containerSize={'sm'}>
+      <Group align="center">
         <Title>Greetings {user.name}!</Title>
         <Avatar src={user.icon} alt={'Profile icon'} />
       </Group>
-      <Space h={'sm'} />
-      <KibanaButton
-        icon={'/assets/playlist.png'}
-        text={'Playlist'}
-        subtext={'Edit your Playlists'}
-        to={`/user/${user.id}/playlist`}
-      />
-      <Space h={'sm'} />
-      <KibanaButton
-        icon={voiceActivity}
-        text={'Voice activity'}
-        subtext={'Show your voice activity'}
-        to={`/user/${user.id}/activity`}
-      />
+      <Text color={'dimmed'}>Here you can edit various of your user settings</Text>
+      <Space h={'xl'} />
+      <SimpleGrid
+        cols={2}
+        breakpoints={[
+          { maxWidth: 700, cols: 1 },
+        ]}
+      >
+        <KibanaButton
+          icon={'/assets/playlist.png'}
+          text={'Playlist'}
+          subtext={'Edit your Playlists'}
+          to={`/user/${user.id}/playlist`}
+        />
+        <KibanaButton
+          icon={voiceActivity}
+          text={'Voice activity'}
+          subtext={'Show your voice activity'}
+          to={`/user/${user.id}/activity`}
+        />
+      </SimpleGrid>
     </Layout>
   );
 }

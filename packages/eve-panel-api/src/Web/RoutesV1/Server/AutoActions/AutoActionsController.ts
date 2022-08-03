@@ -26,9 +26,6 @@ export default class AutoActionsController extends AbstractController {
     const { type } = validationResult.data;
 
     const action = await this.autoActionsRepository.getActions(res.locals.server.id, type);
-    if (action === false) {
-      return this.userErrorResponse(res, 'Invalid Auto action');
-    }
 
     const response: GetAutoActionsResponseData = action.getPayload();
     this.successResponse(res, response);

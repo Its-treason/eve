@@ -20,7 +20,7 @@ function TemplateLegendDialog({opened, close}: PlaceholderLegendDialogProps): Re
       <Text>
         Mustache is used the render the templates. So all variables surrounded with
         <Code>{'{{'} {'}}'}</Code> will be replaced. For example <Code>Welcome {'{{ '}
-        user.name {'}}'} to the Server!</Code> will become <Code>Welcome NuclearTestUser to the Server!</Code>.
+        user.name {'}}'} to the Server!</Code> will become <Code>Welcome MySuperCoolServer to the Server!</Code>.
       </Text>
       <Space h={'md'} />
       <Title order={5}>User</Title>

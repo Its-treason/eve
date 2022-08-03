@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { Loader } from '@mantine/core';
 import styles from './styles/Loading.module.css';
 

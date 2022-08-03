@@ -28,7 +28,7 @@ function CreateRoleMenu({ opened, close, serverId }: CreateRoleMenuProps): React
 
   return (
     <Modal opened={opened} onClose={cancelCreate} title={'Create role menu'}>
-      <Group direction={'column'}>
+      <Group>
         <TextInput
           label={'Name'}
           disabled={createRoleMenuLoading}

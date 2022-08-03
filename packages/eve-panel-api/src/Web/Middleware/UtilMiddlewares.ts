@@ -1,6 +1,6 @@
-import { Logger } from "eve-core";
-import { NextFunction, Request, Response } from "express";
-import { injectable } from "tsyringe";
+import { Logger } from 'eve-core';
+import { NextFunction, Request, Response } from 'express';
+import { injectable } from 'tsyringe';
 
 @injectable()
 export default class UtilMiddlewares {
@@ -18,7 +18,8 @@ export default class UtilMiddlewares {
       path: req.path,
       method: req.method,
       // The `cf-connecting-ip` header is set by Cloudflare
-      ip: req.headers['cf-connecting-ip'] || req.ips,
+      ip: req.headers['cf-connecting-ip'] || req.ip,
+      userAgent: req.headers['User-Agent'] || 'N/A',
       protocol: req.protocol,
       requestTime,
     });

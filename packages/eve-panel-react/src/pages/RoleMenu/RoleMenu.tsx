@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import {useContext, useState} from "react";
 import Layout from "../../components/Layout";
 import {BreadCrumpItem} from "../../types";
 import useUserServerFromParams from "../../hooks/useUserServerFromParams";
@@ -13,6 +13,7 @@ import produce from "immer";
 import useServerRoles from "../../hooks/useServerRoles";
 import CreateRoleMenu from "./components/CreateRoleMenu";
 import EmptyState from "../../components/EmptyState";
+import { Plus } from 'tabler-icons-react';
 
 function RoleMenu() {
   const [createRoleMenuDialogOpen, setCreateRoleMenuDialogOpen] = useState(false);
@@ -48,6 +49,7 @@ function RoleMenu() {
   return (
     <Layout navItems={navItems}>
       <Button
+        leftIcon={<Plus />}
         onClick={() => setCreateRoleMenuDialogOpen(true)}
         disabled={createRoleMenuDialogOpen}
       >Create role menu</Button>
@@ -67,25 +69,32 @@ function RoleMenu() {
         <EmptyState
           text={'Looks like you dont have any role menus created yet'}
           subText={'Create a role menu by clicking the button in the top left corner'}
+          action={{
+            callback: () => setCreateRoleMenuDialogOpen(true),
+            text: 'Create role menu',
+          }}
         />
       }
       <Accordion>
         {roleMenus.map((menu, index) => {
           return (
-            <Accordion.Item label={menu.name} key={index}>
-              <DisplayRoleMenu
-                roleMenu={menu}
-                channel={channel}
-                formattedRoles={formattedRoles}
-                updateMenus={updateRoleMenus}
-                setRoleMenu={roleMenu => {
-                  setRoleMenus(produce(draft => {
-                    draft[index] = roleMenu;
-                  }))
-                }}
-                parentLoading={loading}
-                serverId={server.id}
-              />
+            <Accordion.Item value={menu.name} key={index}>
+              <Accordion.Control>{menu.name}</Accordion.Control>
+              <Accordion.Panel>
+                <DisplayRoleMenu
+                  roleMenu={menu}
+                  channel={channel}
+                  formattedRoles={formattedRoles}
+                  updateMenus={updateRoleMenus}
+                  setRoleMenu={roleMenu => {
+                    setRoleMenus(produce(draft => {
+                      draft[index] = roleMenu;
+                    }))
+                  }}
+                  parentLoading={loading}
+                  serverId={server.id}
+                />
+              </Accordion.Panel>
             </Accordion.Item>
           )
         })}

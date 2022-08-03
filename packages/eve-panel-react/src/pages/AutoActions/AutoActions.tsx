@@ -42,14 +42,23 @@ function AutoActions() {
       <Text>EVE can react to various events (e.g. a new member joining the server) and perform an action.</Text>
       <Text color={'dimmed'}>Actions will not be saved automatically, be sure to save them before exiting this page.</Text>
       <Accordion multiple>
-        <Accordion.Item label={'Join message'}>
-          <JoinMessage serverId={server.id} openDocs={openDocs} />
+        <Accordion.Item value={'Join message'}>
+          <Accordion.Control>Join message</Accordion.Control>
+          <Accordion.Panel>
+            <JoinMessage serverId={server.id} openDocs={openDocs} />
+          </Accordion.Panel>
         </Accordion.Item>
-        <Accordion.Item label={'Leave message'}>
-          <LeaveMessage serverId={server.id} openDocs={openDocs} />
+        <Accordion.Item value={'Leave message'}>
+          <Accordion.Control>Leave message</Accordion.Control>
+          <Accordion.Panel>
+            <LeaveMessage serverId={server.id} openDocs={openDocs} />
+          </Accordion.Panel>
         </Accordion.Item>
-        <Accordion.Item label={'Auto roles'}>
-          <AutoRoles serverId={server.id} />
+        <Accordion.Item value={'Auto roles'}>
+          <Accordion.Control>Auto roles</Accordion.Control>
+          <Accordion.Panel>
+            <AutoRoles serverId={server.id} />
+          </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
       <TemplateLegendDialog opened={templateDialogOpen} close={closeDocs} />

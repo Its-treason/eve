@@ -6,10 +6,10 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "webpack",
+    "build": "NODE_ENV=production webpack",
     "lint": "eslint ./src/**/*.ts --fix",
     "start": "node build/index.js",
-    "dev": "webpack",
+    "dev": "NODE_ENV=development webpack",
     "test": "jest --coverage --collectCoverageFrom=src/**/*.ts --coverageReporters=lcov --restoreMocks",
     "test:watch": "jest --watchAll --coverage --collectCoverageFrom=src/**/*.ts --coverageReporters=lcov --restoreMocks"
   },
