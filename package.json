@@ -4,6 +4,9 @@
   "license": "MIT",
   "scripts": {
     "build": "lerna run build",
+    "bot": "lerna exec --scope=eve-bot -- yarn run start",
+    "bot:dev": "lerna exec --scope=eve-bot -- yarn run dev",
+    "bot:build": "lerna exec --scope=eve-bot -- yarn run build",
     "api": "lerna exec --scope=eve-panel-api -- yarn run start",
     "api:dev": "lerna exec --scope=eve-panel-api -- yarn run dev",
     "api:build": "lerna exec --scope=eve-panel-api -- yarn run build",

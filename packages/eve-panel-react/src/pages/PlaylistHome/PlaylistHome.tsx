@@ -10,7 +10,7 @@ import Loading from '../../components/Loading';
 import CreatePlaylistDialog from './components/CreatePlaylistDialog';
 import DeletePlaylistDialog from './components/DeletePlaylistDialog';
 import PlaylistTable from './components/PlaylistTable';
-import { useNotifications } from '@mantine/notifications';
+import { showNotification } from '@mantine/notifications';
 import EmptyState from '../../components/EmptyState';
 
 export default function PlaylistHome(): ReactElement {
@@ -18,7 +18,6 @@ export default function PlaylistHome(): ReactElement {
   const { playlists, loading, loadPlaylist } = useListPlaylist(user.id);
   const [createDialogOpen, setCreateDialogOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<false|string>(false);
-  const notifications = useNotifications();
   const location = useLocation();
 
   const closeCreateDialog = async () => {
@@ -33,7 +32,7 @@ export default function PlaylistHome(): ReactElement {
 
   useEffect(() => {
     if (location.search === '?invalidName=true') {
-      notifications.showNotification({
+      showNotification({
         title: 'Redirected',
         message: 'Looks like you tried to edit a playlist that doesn\'t exist. Because of that you got redirected here.' ,
         autoClose: false,

@@ -1,4 +1,4 @@
-FROM node:18.4.0-alpine AS base
+FROM node:18.7.0-alpine AS base
 
 RUN mkdir /app
 WORKDIR /app
@@ -10,10 +10,6 @@ RUN pip3 install --no-cache --upgrade pip setuptools
 
 RUN apk add libsodium-dev libtool cmake g++ gcc ffmpeg-dev chromium make git autoconf automake opus-dev libuv-dev protoc
 
-USER 1000:1000
-
-ENTRYPOINT ["yarn", "run"]
-
 FROM base AS development
 
 ENV APP_ENV=development
@@ -24,13 +20,16 @@ FROM base AS production
 COPY . /app
 
 RUN rm -rf /build/node_modules \
-    && yarn install \
-    && npx lerna bootstrap \
-    && npx lerna run build
+ && yarn install \
+ && npx lerna exec -- rm -rf ./node_modules \
+ && npx lerna exec --concurrency 1 -- yarn install \
+ && yarn run core:build \
+ && npx lerna link \
+ && npx lerna run build \
+ && npx lerna exec -- rm -rf ./node_modules \
+ && npx lerna exec --concurrency 1 -- yarn install --prod
 
 ENV APP_ENV=production
 ENV NODE_ENV=production
 
-# Delete all dependencies and just install production deps
-RUN npx lerna exec -- rm -rf ./node_modules \
-    && npx lerna bootstrap --production
+ENTRYPOINT ["yarn", "run"]
