@@ -11,7 +11,7 @@ export default class AutoActionsRepository {
   ) {}
 
   public async getActions(serverId: string, type: string): Promise<AutoActionInterface> {
-    const sql = 'SELECT payload FROM auto_actions WHERE action = ? AND server_id';
+    const sql = 'SELECT payload FROM auto_actions WHERE action = ? AND server_id = ?';
     const result = await this.connection.query(sql, [type, serverId]);
 
     if (!result[0]) {
