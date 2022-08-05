@@ -117,6 +117,12 @@ export default class RouterV1 {
       this.authMiddlewares.canAccessUserMiddleware.bind(this.authMiddlewares),
       this.catchError(this.userActivityController.getUserActivity.bind(this.userActivityController)),
     );
+    router.post(
+      '/user/:userId/activityCsv',
+      this.authMiddlewares.authMiddleware(false),
+      this.authMiddlewares.canAccessUserMiddleware.bind(this.authMiddlewares),
+      this.catchError(this.userActivityController.getUserActivityAsCsv.bind(this.userActivityController)),
+    );
 
     router.post(
       '/user/:userId/playlist/delete',

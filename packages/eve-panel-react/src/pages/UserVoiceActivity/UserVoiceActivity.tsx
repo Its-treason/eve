@@ -1,14 +1,15 @@
 import React, {ReactElement, useContext, useMemo, useState} from 'react';
 import Layout from '../../components/Layout';
-import {Title, Text, Table} from '@mantine/core';
+import {Title, Text, Table, Container} from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import useUserServerFromParams from '../../hooks/useUserServerFromParams';
 import Loading from '../../components/Loading';
 import { BreadCrumpItem } from '../../types';
 import LoggedInUserContext from '../../context/LoggedInUserContext';
 import useUserActivity from './hooks/useUserActivity';
-import ActivityTableRow from "./components/ActivityTableRow";
 import ActivityDatePicker from "./components/ActivityDatePicker";
+import useCsvExport from './hooks/useCsvExport';
+import ActivityTable from './components/ActivityTable';
 
 export default function UserVoiceActivity(): ReactElement {
   const { user } = useUserServerFromParams(useParams(), useContext(LoggedInUserContext));
@@ -16,20 +17,7 @@ export default function UserVoiceActivity(): ReactElement {
   const [date, setDate] = useState<[Date, Date]>([new Date(Date.now() - 8.64e+7), new Date()]);
 
   const { items, loading, error } = useUserActivity(user.id, date[0], date[1]);
-
-  const rows: ReactElement[] = useMemo(() => {
-    return items.map((item, index) => {
-      return <ActivityTableRow row={item} key={index} />
-    })
-  }, [items]);
-
-  if (user.id === '') {
-    return (
-      <Layout>
-        <Loading/>
-      </Layout>
-    );
-  }
+  const { loading: exportLoading, doExport } = useCsvExport(user.id, date[0], date[1]);
 
   const navItems: BreadCrumpItem[] = [
     { label: 'Home', to: '/home' },
@@ -37,41 +25,27 @@ export default function UserVoiceActivity(): ReactElement {
     { label: 'Voice activity' },
   ];
 
-  if (loading) {
+  if (loading || exportLoading || user.id === '') {
     return <Layout>
       <Loading />
     </Layout>
   }
 
   return (
-    <Layout navItems={navItems}>
-      <Title>Voice activity!</Title>
-      <Text color={'red'}>{error}</Text>
-      <ActivityDatePicker
-        from={date[0]}
-        to={date[1]}
-        setDate={(from, to) => setDate([from, to])}
-      />
-      <Table striped highlightOnHover captionSide={"bottom"}>
-        <caption>
-          {rows.length === 0 ?
-            'Nothing to show for this time range' :
-            'Values with "Not available" mean that the user/guild/channel was deleted or is not accessible to the bot'
-          }
-        </caption>
-        <thead>
-          <tr>
-            <th>Server</th>
-            <th>Server ID</th>
-            <th>Channel</th>
-            <th>Channel ID</th>
-            <th>Joined at</th>
-            <th>Left at</th>
-            <th>Duration</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>
+    <Layout navItems={navItems} containerSize={'xl'}>
+      <Container>
+        <Title>Voice activity!</Title>
+        <Text color={'red'}>{error}</Text>
+        <ActivityDatePicker
+          from={date[0]}
+          to={date[1]}
+          setDate={(from, to) => setDate([from, to])}
+          exportCsvData={doExport}
+        />
+      </Container>
+      <Container size={'xl'} sx={{ height: 'calc(100vh - 210px)', overflowY: 'scroll' }}>
+        <ActivityTable items={items} />
+      </Container>
     </Layout>
   );
 }

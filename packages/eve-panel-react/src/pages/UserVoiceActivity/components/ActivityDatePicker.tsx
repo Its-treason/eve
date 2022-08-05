@@ -1,18 +1,19 @@
-import React from 'react';
 import {DateRangePicker} from "@mantine/dates";
-import {Button, Group} from "@mantine/core";
+import {Button, Divider, Group, SegmentedControl} from "@mantine/core";
 import styles from '../styles/ActivityDatePicker.module.css';
 import createDateInPast from "../../../util/createDateInPast";
+import { FileExport } from 'tabler-icons-react';
 
-interface ActivityDatePickerProps {
+type ActivityDatePickerProps = {
   from: Date,
   to: Date,
   setDate: (from: Date, to: Date) => void,
+  exportCsvData: () => void,
 }
 
-function ActivityDatePicker({from, to, setDate}: ActivityDatePickerProps) {
+function ActivityDatePicker({from, to, setDate, exportCsvData}: ActivityDatePickerProps) {
   return (
-    <Group direction="row" align="end" className={styles.group}>
+    <Group align="end" className={styles.group}>
       <DateRangePicker
         className={styles.picker}
         value={[from, to]}
@@ -35,6 +36,14 @@ function ActivityDatePicker({from, to, setDate}: ActivityDatePickerProps) {
         onClick={() => setDate(createDateInPast(2.628e+9), createDateInPast(0))}
       >
         Last 30 Days
+      </Button>
+      <Divider sx={{ height: 34 }} orientation="vertical" />
+      <Button
+        rightIcon={<FileExport size={20} />}
+        variant="filled"
+        onClick={exportCsvData}
+      >
+        Export as Csv
       </Button>
     </Group>
   )

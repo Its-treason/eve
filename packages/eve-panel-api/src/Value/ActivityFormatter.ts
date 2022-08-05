@@ -39,7 +39,7 @@ export default class ActivityFormatter {
     }
 
     this.userCache[userId] = {
-      name: user.username + user.discriminator,
+      name: user.username + '#' + user.discriminator,
       icon: this.client.getUserAvatar(user),
     };
     return this.userCache[userId];
