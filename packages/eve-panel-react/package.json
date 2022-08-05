@@ -28,6 +28,7 @@
     "build": "vite build",
     "dev": "vite --host --port 3000",
     "start": "vite preview --host --port 3000",
+    "prestart": "vite build",
     "lint": "eslint ./src/**/*.ts ./src/**/*.tsx --fix"
   },
   "browserslist": {

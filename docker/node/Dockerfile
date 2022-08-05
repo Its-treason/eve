@@ -21,7 +21,7 @@ COPY . /app
 
 RUN rm -rf /build/node_modules \
  && yarn install \
- && npx lerna exec -- rm -rf ./node_modules \
+ && npx lerna exec -- rm -rf ./node_modules ./build ./dist \
  && npx lerna exec --concurrency 1 -- yarn install \
  && yarn run core:build \
  && npx lerna link \
