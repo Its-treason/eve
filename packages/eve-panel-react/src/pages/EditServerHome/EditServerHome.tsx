@@ -9,6 +9,7 @@ import { BreadCrumpItem } from '../../types';
 import LoggedInUserContext from '../../context/LoggedInUserContext';
 import autoIcon from '../../assets/icons/auto.svg';
 import roleMenuIcon from '../../assets/icons/role_menu.svg';
+import voiceActivity from '../../assets/icons/voiceActivity.svg';
 
 export default function EditServerHome(): ReactElement {
   const { server } = useUserServerFromParams(useParams(), useContext(LoggedInUserContext));
@@ -51,6 +52,12 @@ export default function EditServerHome(): ReactElement {
           text={'Role menu'}
           subtext={'Create a role menu where user can give themself roles'}
           to={`/server/${server.id}/roleMenu`}
+        />
+        <KibanaButton
+          icon={voiceActivity}
+          text={'Voice Activity'}
+          subtext={'Show your voice activity'}
+          to={`/server/${server.id}/activity`}
         />
       </SimpleGrid>
     </Layout>

@@ -8,10 +8,11 @@ import AutoActionsController from './RoutesV1/Server/AutoActions/AutoActionsCont
 import { ResponseWithLocals } from '../types';
 import RoleMenuController from './RoutesV1/Server/RoleMenu/RoleMenuController';
 import UserController from './RoutesV1/User/UserController';
-import UserActivityController from './RoutesV1/User/UserActivity/UserActivityController';
+import UserActivityController from './RoutesV1/User/VoiceActivity/UserActivityController';
 import PlaylistController from './RoutesV1/User/Playlist/PlaylistController';
 import MusicSearchController from './RoutesV1/User/Playlist/Search/MusicSearchController';
 import InviteController from './RoutesV1/InviteController';
+import ServerActivityController from './RoutesV1/Server/VoiceActivity/ServerActivityController';
 
 @singleton()
 export default class RouterV1 {
@@ -22,6 +23,7 @@ export default class RouterV1 {
     private serverController: ServerController,
     private autoActionsController: AutoActionsController,
     private roleMenuController: RoleMenuController,
+    private serverActivityController: ServerActivityController,
     private userController: UserController,
     private userActivityController: UserActivityController,
     private playlistController: PlaylistController,
@@ -102,6 +104,19 @@ export default class RouterV1 {
       this.authMiddlewares.authMiddleware(false),
       this.authMiddlewares.canAccessServerMiddleware.bind(this.authMiddlewares),
       this.catchError(this.roleMenuController.deleteRoleMenu.bind(this.roleMenuController)),
+    );
+
+    router.post(
+      '/server/:serverId/activity',
+      this.authMiddlewares.authMiddleware(false),
+      this.authMiddlewares.canAccessServerMiddleware.bind(this.authMiddlewares),
+      this.catchError(this.serverActivityController.getServerActivity.bind(this.serverActivityController)),
+    );
+    router.post(
+      '/server/:serverId/activityCsv',
+      this.authMiddlewares.authMiddleware(false),
+      this.authMiddlewares.canAccessServerMiddleware.bind(this.authMiddlewares),
+      this.catchError(this.serverActivityController.getServerActivityAsCsv.bind(this.serverActivityController)),
     );
 
     router.get(

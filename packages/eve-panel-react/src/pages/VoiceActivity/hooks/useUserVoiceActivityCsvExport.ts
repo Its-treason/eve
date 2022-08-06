@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import ActivityApi from '../../../api/ActivityApi';
 
-type UseCsvExportData = {
+type UseUserVoiceActivityCsvExportData = {
   loading: boolean,
   doExport: () => void,
 }
 
-export default function useCsvExport(userId: string, start: Date, end: Date): UseCsvExportData {
+export default function useUserVoiceActivityCsvExport(
+  userId: string, start: Date, end: Date,
+): UseUserVoiceActivityCsvExportData {
   const [loading, setLoading] = useState(false);
 
   async function doExport() {

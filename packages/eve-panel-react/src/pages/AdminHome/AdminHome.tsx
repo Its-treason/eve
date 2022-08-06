@@ -50,6 +50,7 @@ export default function AdminHome(): ReactElement {
           {user.server.map((server) => {
             return (
               <KibanaButton
+                key={server.id}
                 to={`/server/${server.id}/home`}
                 text={server.name}
                 icon={server.icon}

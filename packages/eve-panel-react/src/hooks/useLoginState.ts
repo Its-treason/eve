@@ -42,7 +42,6 @@ export default function useLoginState(): LoginState {
       }
 
       const verifyRes = await LoginApi.verify();
-
       if (verifyRes === false) {
         window.history.replaceState(null, '', '/loginFirst');
         localStorage.removeItem('apiKey');

@@ -5,13 +5,12 @@ import { ResponseWithLocals } from '../../../../types';
 import FormattingHelper from '../../../../Util/FormattingHelper';
 import ActivityFormatter from '../../../../Value/ActivityFormatter';
 import AbstractController from '../../../AbstractController';
-import { UserActivityApiResponseData } from '../../../sharedApiTypes';
-import UserActivityBodyValidator from './UserActivityBodyValidator';
+import ServerActivityBodyValidator from './ServerActivityBodyValidator';
 
 @injectable()
-export default class UserActivityController extends AbstractController {
+export default class ServerActivityController extends AbstractController {
   constructor(
-    private bodyValidator: UserActivityBodyValidator,
+    private bodyValidator: ServerActivityBodyValidator,
     private channelActivityRepository: ChannelActivityRepository,
     private apiClient: ApiClient,
     private formattingHelper: FormattingHelper,
@@ -19,45 +18,45 @@ export default class UserActivityController extends AbstractController {
     super();
   }
 
-  public async getUserActivity(req: Request, res: ResponseWithLocals) {
-    const validationResult = await this.bodyValidator.validateGetUserActivityBody(req);
+  public async getServerActivity(req: Request, res: ResponseWithLocals) {
+    const validationResult = await this.bodyValidator.validateGetServerActivityBody(req);
     if (!validationResult.success) {
-      this.userErrorResponse(res, 'Body validation failed', validationResult.error.issues);
+      this.serverErrorResponse(res, 'Body validation failed', validationResult.error.issues);
       return;
     }
 
-    const { userId } = req.params;
+    const { serverId } = req.params;
     const { startDate, endDate } = validationResult.data;
 
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    const rows = await this.channelActivityRepository.getActivityOForUser(userId, start, end);
+    const rows = await this.channelActivityRepository.getActivityForServer(serverId, start, end);
 
     const formatter = new ActivityFormatter(this.apiClient, this.formattingHelper);
-    const response: UserActivityApiResponseData = await formatter.format(rows);
+    const response = await formatter.format(rows);
     this.successResponse(res, response);
   }
 
-  public async getUserActivityAsCsv(req: Request, res: ResponseWithLocals) {
-    const validationResult = await this.bodyValidator.validateGetUserActivityBody(req);
+  public async getServerActivityAsCsv(req: Request, res: ResponseWithLocals) {
+    const validationResult = await this.bodyValidator.validateGetServerActivityBody(req);
     if (!validationResult.success) {
-      this.userErrorResponse(res, 'Body validation failed', validationResult.error.issues);
+      this.serverErrorResponse(res, 'Body validation failed', validationResult.error.issues);
       return;
     }
 
-    const { userId } = req.params;
+    const { serverId } = req.params;
     const { startDate, endDate } = validationResult.data;
 
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    const rows = await this.channelActivityRepository.getActivityOForUser(userId, start, end);
+    const rows = await this.channelActivityRepository.getActivityForServer(serverId, start, end);
 
     const formatter = new ActivityFormatter(this.apiClient, this.formattingHelper);
     const activityRows = await formatter.format(rows);
 
-    const csvHeader = 'channelName,channelId,userName,userId,guildName,guildId,joinedAt,leftAt';
+    const csvHeader = 'channelName,channelId,serverName,serverId,guildName,guildId,joinedAt,leftAt';
 
     const csvData = activityRows.reduce((acc, value) => {
       const csvLine = [value.channelName, value.channelId, value.userName, value.userId, value.guildName, value.guildId, value.joinedAt, value.leftAt].join('","');

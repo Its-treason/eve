@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `channel_activity` (
   `id` int(11) NOT NULL,
-  `user_id` varchar(18) NOT NULL,
+  `user_id` varchar(19) NOT NULL,
   `guild_id` varchar(18) NOT NULL,
   `channel_id` varchar(18) NOT NULL,
   `joined_at` datetime NOT NULL,

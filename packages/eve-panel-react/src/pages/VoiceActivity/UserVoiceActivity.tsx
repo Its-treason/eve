@@ -1,15 +1,14 @@
-import React, {ReactElement, useContext, useMemo, useState} from 'react';
+import React, { ReactElement, useContext, useMemo, useState } from 'react';
 import Layout from '../../components/Layout';
-import {Title, Text, Table, Container} from '@mantine/core';
+import { Title, Text, Table, Container } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import useUserServerFromParams from '../../hooks/useUserServerFromParams';
 import Loading from '../../components/Loading';
 import { BreadCrumpItem } from '../../types';
 import LoggedInUserContext from '../../context/LoggedInUserContext';
 import useUserActivity from './hooks/useUserActivity';
-import ActivityDatePicker from "./components/ActivityDatePicker";
-import useCsvExport from './hooks/useCsvExport';
-import ActivityTable from './components/ActivityTable';
+import useCsvExport from './hooks/useUserVoiceActivityCsvExport';
+import VoiceActivity from './components/VoiceActivity';
 
 export default function UserVoiceActivity(): ReactElement {
   const { user } = useUserServerFromParams(useParams(), useContext(LoggedInUserContext));
@@ -26,26 +25,20 @@ export default function UserVoiceActivity(): ReactElement {
   ];
 
   if (loading || exportLoading || user.id === '') {
-    return <Layout>
-      <Loading />
-    </Layout>
+    return <Layout><Loading /></Layout>;
   }
 
   return (
     <Layout navItems={navItems} containerSize={'xl'}>
-      <Container>
-        <Title>Voice activity!</Title>
-        <Text color={'red'}>{error}</Text>
-        <ActivityDatePicker
-          from={date[0]}
-          to={date[1]}
-          setDate={(from, to) => setDate([from, to])}
-          exportCsvData={doExport}
-        />
-      </Container>
-      <Container size={'xl'} sx={{ height: 'calc(100vh - 210px)', overflowY: 'scroll' }}>
-        <ActivityTable items={items} />
-      </Container>
+      <VoiceActivity
+        items={items}
+        fromDate={date[0]}
+        toDate={date[1]}
+        doExport={doExport}
+        setDate={setDate}
+        error={error}
+        type={'User'}
+      />
     </Layout>
   );
 }

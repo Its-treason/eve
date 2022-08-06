@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import Loading from './components/Loading';
 import useLoginState from './hooks/useLoginState';
 import LoginPage from './pages/LoginFirst/LoginFirstPage';
@@ -10,10 +10,11 @@ import EditUserHome from './pages/EditUserHome/EditUserHome';
 import Layout from './components/Layout';
 import PlaylistHome from './pages/PlaylistHome/PlaylistHome';
 import PlaylistEdit from './pages/PlaylistEdit/PlaylistEdit';
-import UserVoiceActivity from './pages/UserVoiceActivity/UserVoiceActivity';
+import UserVoiceActivity from './pages/VoiceActivity/UserVoiceActivity';
 import EditServerHome from './pages/EditServerHome/EditServerHome';
 import AutoActions from "./pages/AutoActions/AutoActions";
 import RoleMenu from "./pages/RoleMenu/RoleMenu";
+import ServerVoiceActivity from './pages/VoiceActivity/ServerVoiceActivity';
 
 export default function Router(): ReactElement {
   const loginState = useLoginState();
@@ -40,6 +41,7 @@ export default function Router(): ReactElement {
               <Route path="/server/:serverId/home" element={<EditServerHome />} />
               <Route path="/server/:serverId/actions" element={<AutoActions />} />
               <Route path="/server/:serverId/roleMenu" element={<RoleMenu />} />
+              <Route path="/server/:serverId/activity" element={<ServerVoiceActivity />} />
 
               {/* Redirect everything unknown to /home */}
               <Route path="*" element={<Navigate replace to="/home" />} />
@@ -64,6 +66,7 @@ export default function Router(): ReactElement {
               <Route path="/server/:serverId/home" element={<EditServerHome />} />
               <Route path="/server/:serverId/actions" element={<AutoActions />} />
               <Route path="/server/:serverId/roleMenu" element={<RoleMenu />} />
+              <Route path="/server/:serverId/activity" element={<ServerVoiceActivity />} />
 
               <Route path="*" element={<Navigate replace to="/home" />} />
             </Routes>
