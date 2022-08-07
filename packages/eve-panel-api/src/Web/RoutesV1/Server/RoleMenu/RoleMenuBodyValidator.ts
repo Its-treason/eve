@@ -85,7 +85,11 @@ export default class RoleMenuBodyValidator {
 
         // Change this to an Emoji validator when emoji picker was added to the frontend
         // Should be empty for now
-        emoji: z.string().transform(() => ''),
+        emoji: z.object({
+          name: z.nullable(z.string()),
+          id: z.nullable(z.string()),
+          animated: z.boolean().optional(),
+        }).optional(),
       })),
     });
 

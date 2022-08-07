@@ -1,3 +1,5 @@
+import { APIPartialEmoji } from 'discord-api-types/v9';
+
 export type PlaylistItem = {
   ytId: string,
   url: string,
@@ -35,7 +37,7 @@ export interface DiscordApiGuildsResponse {
 export interface RoleMenuEntry {
   role: string,
   label: string,
-  emoji: string,
+  emoji?: APIPartialEmoji,
 }
 
 export interface RoleMenu {

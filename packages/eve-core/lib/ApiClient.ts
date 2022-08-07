@@ -1,5 +1,5 @@
 import { RequestData, REST, RouteLike } from '@discordjs/rest';
-import { APIChannel, APIGuild, APIGuildMember, APIMessage, APIRole, APIUser, Routes } from 'discord-api-types/v9';
+import { APIChannel, APIEmoji, APIGuild, APIGuildMember, APIMessage, APIRole, APIUser, Routes } from 'discord-api-types/v9';
 import { RedisClientType } from 'redis';
 import { RESTPatchAPIChannelMessageJSONBody, RESTPostAPIChannelMessageJSONBody } from 'discord-api-types/rest/v9/channel';
 import { singleton } from 'tsyringe';
@@ -73,6 +73,12 @@ export default class ApiClient {
     }
 
     return null;
+  }
+
+  public async getEmojis(guildId: string): Promise<APIEmoji[]|null> {
+    const redisKey = `eve-emojis-${guildId}`;
+
+    return await this.cacheExec<APIRole[]>(redisKey, 'GET', Routes.guildEmojis(guildId));
   }
 
   public async getBotUser(): Promise<APIUser|null> {

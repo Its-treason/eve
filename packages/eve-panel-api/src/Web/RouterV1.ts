@@ -62,6 +62,12 @@ export default class RouterV1 {
       this.catchError(this.serverController.roleList.bind(this.serverController)),
     );
     router.get(
+      '/server/:serverId/emojiList',
+      this.authMiddlewares.authMiddleware(false),
+      this.authMiddlewares.canAccessServerMiddleware.bind(this.authMiddlewares),
+      this.catchError(this.serverController.emojiList.bind(this.serverController)),
+    );
+    router.get(
       '/server/:serverId/basicInfo',
       this.authMiddlewares.authMiddleware(false),
       this.authMiddlewares.canAccessServerMiddleware.bind(this.authMiddlewares),

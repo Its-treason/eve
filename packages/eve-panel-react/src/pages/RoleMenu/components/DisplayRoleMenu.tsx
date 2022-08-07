@@ -4,6 +4,7 @@ import useUpdateRoleMenu from "../hooks/useUpdateRoleMenu";
 import deepCopyState from "../../../util/deepCopyState";
 import {useState} from "react";
 import DeleteRoleMenu from "./DeleteRoleMenu";
+import EmojiPicker from '../../../components/EmojiPicker';
 
 interface SelectItem {
   label: string,
@@ -73,7 +74,7 @@ export default function DisplayRoleMenu(
           copy.entries.push({
             role: '',
             label: '',
-            emoji: '',
+            emoji: null,
           });
           setRoleMenu(copy);
         }}
@@ -82,7 +83,7 @@ export default function DisplayRoleMenu(
       >Add Role</Button>
       {roleMenu.entries.map((entry, index) => {
         return (
-          <Group align={'flex-end'}>
+          <Group align={'flex-end'} key={index}>
             <Select
               data={formattedRoles}
               value={entry.role}
@@ -94,6 +95,15 @@ export default function DisplayRoleMenu(
                 setRoleMenu(copy);
               }}
               style={{width: 'clamp(100px, 20%, 250px)'}}
+            />
+            <EmojiPicker
+              emoji={entry.emoji}
+              onChange={(value) => {
+                const copy = deepCopyState(roleMenu);
+                copy.entries[index].emoji = value;
+                setRoleMenu(copy);
+              }}
+              clearable={true}
             />
             <TextInput
               maxLength={24}

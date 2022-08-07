@@ -1,7 +1,7 @@
 import { Logger } from 'eve-core';
 import { createClient, RedisClientType } from 'redis';
 import { container } from 'tsyringe';
-import DiscordApiRepository from '../Repository/DiscordApiRepository';
+import DiscordApiRepository from '../DiscordApiRepository';
 
 export default function discordApiRepositoryFactory(): DiscordApiRepository {
   const logger = container.resolve(Logger);

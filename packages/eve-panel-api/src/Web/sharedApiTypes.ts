@@ -26,6 +26,13 @@ export interface ReducedChannel {
   id: string,
 }
 
+// ReducedEmoji === PartialEmoji
+export type ReducedEmoji = {
+  id: string | null;
+  name: string | null;
+  animated?: boolean;
+}
+
 // YTResult === PlaylistItem
 export interface PlaylistItem {
   url: string,
@@ -52,7 +59,7 @@ export interface ActivityRow {
 export interface RoleMenuEntry {
   role: string,
   label: string,
-  emoji: string,
+  emoji?: ReducedEmoji,
 }
 
 export interface RoleMenu {

@@ -7,11 +7,14 @@ import { BasicServerInfoApiResponseData, ReducedChannel, RoleListApiResponseData
 import { PermissionFlagsBits } from 'discord-api-types/v8';
 import { ApiClient } from 'eve-core';
 import { ChannelType } from 'discord-api-types/v9';
+import { ResponseWithLocals } from '../../../types';
+import EmojiService from '../../../Service/EmojiService';
 
 @injectable()
 export default class ServerController extends AbstractController {
   constructor(
     private api: ApiClient,
+    private emojiService: EmojiService,
   ) {
     super();
   }
@@ -103,11 +106,15 @@ export default class ServerController extends AbstractController {
     ResponseHelper.successResponse(res, response);
   }
 
-  async basicInfo(req: Request, res: Response): Promise<void> {
-    if (!res.locals.server) {
-      throw new BadHandlerCallError('Server is not defined');
-    }
+  async emojiList(req: Request, res: ResponseWithLocals): Promise<void> {
+    const guildEmojis = await this.emojiService.getGuildEmojis(res.locals.server.id);
+    const generalEmojis = await this.emojiService.getGeneralEmojis();
 
+    const response = { guildEmojis, generalEmojis };
+    this.successResponse(res, response);
+  }
+
+  async basicInfo(req: Request, res: Response): Promise<void> {
     const response: BasicServerInfoApiResponseData = {
       id: res.locals.server.id,
       name: res.locals.server.name,

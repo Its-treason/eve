@@ -75,11 +75,16 @@ export default class RoleMenuService {
         style: ButtonStyle.Primary,
         'custom_id': `menu-${roleMenu.id}-${entry.role}-${index}`,
       };
-  
-      if (entry.emoji !== '') {
-        button.emoji = { name: entry.emoji };
+
+      if (entry.emoji) {
+        // For reasons APIMessageComponentEmoji and ApiPartialEmoji are inkompatible
+        button.emoji = {
+          name: entry.emoji.name || undefined,
+          id: entry.emoji.id || undefined,
+          animated: entry.emoji.animated,
+        };
       }
-  
+
       components.at(-1)?.components.push(button);
     });
   
