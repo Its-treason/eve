@@ -20,6 +20,12 @@ export default class ChannelActivityRepository {
     await this.connection.query(sql, [userId, guildId, channelId]);
   }
 
+  public async recordChannelLeftForServer(guildId: string): Promise<void> {
+    const sql = 'UPDATE `channel_activity` SET left_at = CURRENT_TIMESTAMP WHERE guild_id = ? AND left_at IS NULL';
+
+    await this.connection.query(sql, [guildId]);
+  }
+
   public async getActivityForUser(userId: string, startDate: Date, endDate: Date): Promise<ChannelActivityRow[]> {
     const sql = `
       SELECT

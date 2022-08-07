@@ -1,5 +1,5 @@
 import { Guild } from 'discord.js';
-import { Logger } from 'eve-core';
+import { ChannelActivityRepository, Logger } from 'eve-core';
 import { injectable } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
 
@@ -7,6 +7,7 @@ import EventHandlerInterface from './EventHandlerInterface';
 export default class GuildDeleteEventHandler implements EventHandlerInterface {
   constructor(
     private logger: Logger,
+    private channelActivityRepository: ChannelActivityRepository,
   ) {}
 
   public getNameEventName(): string {
@@ -18,5 +19,7 @@ export default class GuildDeleteEventHandler implements EventHandlerInterface {
       serverName: guild.name,
       serverId: guild.id,
     });
+
+    this.channelActivityRepository.recordChannelLeftForServer(guild.id);
   }
 }
