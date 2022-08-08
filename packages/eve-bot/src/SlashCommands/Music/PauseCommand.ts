@@ -1,8 +1,8 @@
-import {ApplicationCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class PauseCommand extends AbstractMusicCommand {
@@ -18,6 +18,7 @@ export default class PauseCommand extends AbstractMusicCommand {
     return {
       name: 'pause',
       description: 'Pause or Unpause the music player',
+      type: ApplicationCommandType.ChatInput,
       options: [],
     };
   }

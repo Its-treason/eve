@@ -2,8 +2,8 @@ import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { MusicResult } from '../../types';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class QueueCommand extends AbstractMusicCommand {
@@ -12,7 +12,7 @@ export default class QueueCommand extends AbstractMusicCommand {
   async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
     const items = player.getQueue();
     const pointer = player.getPointer();
-    const startItemPointer = (interaction.options.getInteger('offset') || (pointer - 1)) - 1;
+    const startItemPointer = (Number(interaction.options.get('offset').value) || (pointer - 1)) - 1;
 
     if (items.length === 0) {
       const answer = embedFactory(interaction.client, 'Queue is empty');

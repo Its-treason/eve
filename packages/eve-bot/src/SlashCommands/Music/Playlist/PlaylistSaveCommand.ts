@@ -1,9 +1,9 @@
-import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import embedFactory from '../../../Factory/messageEmbedFactory';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import { injectable } from 'tsyringe';
-import MusicPlayerRepository from "../../../MusicPlayer/MusicPlayerRepository";
+import MusicPlayerRepository from '../../../MusicPlayer/MusicPlayerRepository';
 import { PlaylistItem, PlaylistRepository } from 'eve-core';
 
 @injectable()
@@ -14,9 +14,9 @@ export default class PlaylistSaveCommand implements SubSlashCommandInterface {
 
   getData(): ApplicationCommandSubCommandData {
     return {
-      type: 1,
       name: 'save',
       description: 'Save the current queue as a Playlist',
+      type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
           name: 'name',
@@ -29,7 +29,7 @@ export default class PlaylistSaveCommand implements SubSlashCommandInterface {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const name = interaction.options.getString('name', true);
+    const name = String(interaction.options.get('name', true).value);
     const userId = interaction.user.id;
 
     if (name.length > 32) {
@@ -42,7 +42,7 @@ export default class PlaylistSaveCommand implements SubSlashCommandInterface {
     if (await MusicPlayerRepository.has(interaction.guild.id) === false) {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('I\'m currently not playing any music');
-      await interaction.reply({embeds: [answer], ephemeral: true});
+      await interaction.reply({ embeds: [answer], ephemeral: true });
       return;
     }
 

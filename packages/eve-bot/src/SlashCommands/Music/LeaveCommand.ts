@@ -1,9 +1,9 @@
-import {ApplicationCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
-import {injectable} from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import { injectable } from 'tsyringe';
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class LeaveCommand extends AbstractMusicCommand {
@@ -19,6 +19,7 @@ export default class LeaveCommand extends AbstractMusicCommand {
     return {
       name: 'leave',
       description: 'Leave the audio channel',
+      type: ApplicationCommandType.ChatInput,
       options: [],
     };
   }

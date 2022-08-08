@@ -19,10 +19,10 @@ export default class MenuInteraction implements ButtonInteractionInterface {
       try {
         await interactionUser.roles.remove(role.id);
       } catch (e) {
-        answer.addField(
-          'Error',
-          `I couldn't remove your \`${role.name}\` role. Because i don't have enough permission.`,
-        );
+        answer.addFields([{
+          name: 'Error',
+          value: `I couldn't remove your \`${role.name}\` role. Because i don't have enough permission.`,
+        }]);
         await interaction.reply({
           embeds: [answer],
           ephemeral: true,
@@ -30,7 +30,7 @@ export default class MenuInteraction implements ButtonInteractionInterface {
         return;
       }
 
-      answer.addField('Role removed', `\`${role.name}\` removed`);
+      answer.addFields([{ name: 'Role removed', value: `\`${role.name}\` removed` }]);
       await interaction.reply({
         embeds: [answer],
         ephemeral: true,
@@ -41,10 +41,10 @@ export default class MenuInteraction implements ButtonInteractionInterface {
     try {
       await interactionUser.roles.add(role.id);
     } catch (e) {
-      answer.addField(
-        'Error',
-        `I couldn't give you the \`${role.name}\` role. Because i don't have enough permission.`,
-      );
+      answer.addFields([{
+        name: 'Error',
+        value: `I couldn't give you the \`${role.name}\` role. Because i don't have enough permission.`,
+      }]);
       await interaction.reply({
         embeds: [answer],
         ephemeral: true,
@@ -52,7 +52,7 @@ export default class MenuInteraction implements ButtonInteractionInterface {
       return;
     }
 
-    answer.addField('Role added', `\`${role.name}\` added`);
+    answer.addFields([{ name: 'Role added', value: `\`${role.name}\` added` }]);
     await interaction.reply({
       embeds: [answer],
       ephemeral: true,

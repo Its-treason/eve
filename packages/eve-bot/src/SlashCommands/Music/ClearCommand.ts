@@ -1,8 +1,8 @@
-import {ApplicationCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class ClearCommand extends AbstractMusicCommand {
@@ -18,6 +18,7 @@ export default class ClearCommand extends AbstractMusicCommand {
     return {
       name: 'clear',
       description: 'Clear the music queue',
+      type: ApplicationCommandType.ChatInput,
     };
   }
 }

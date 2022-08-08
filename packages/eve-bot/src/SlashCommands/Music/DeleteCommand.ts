@@ -1,13 +1,13 @@
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class DeleteCommand extends AbstractMusicCommand {
   async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
-    const item = interaction.options.getInteger('item', true).valueOf();
+    const item = Number(interaction.options.get('item', true).value);
 
     await interaction.deferReply();
 

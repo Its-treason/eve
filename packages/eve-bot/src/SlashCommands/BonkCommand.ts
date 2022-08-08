@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction, User } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, CommandInteraction, User } from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 import BrowserWrapper from '../Structures/BrowserWrapper';
@@ -13,23 +13,24 @@ export default class BonkCommand implements SlashCommandInterface {
       return {
         name: 'bonk',
         description: 'Send a image of the "Go to Horny Jail" meme with users Avatars',
+        type: ApplicationCommandType.ChatInput,
         options: [
           {
             name: 'bonkee',
             description: 'User to Bonk',
-            type: 6,
+            type: ApplicationCommandOptionType.User,
             required: true,
           },
           {
             name: 'bonker',
             description: 'User thats Bonks',
-            type: 6,
+            type: ApplicationCommandOptionType.User,
             required: false,
           },
           {
             name: 'title',
             description: 'A title for the image',
-            type: 3,
+            type: ApplicationCommandOptionType.String,
             required: false,
           },
         ],

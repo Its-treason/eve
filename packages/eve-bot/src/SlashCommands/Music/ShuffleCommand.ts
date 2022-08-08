@@ -1,8 +1,8 @@
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class ShuffleCommand extends AbstractMusicCommand {
@@ -19,7 +19,8 @@ export default class ShuffleCommand extends AbstractMusicCommand {
   getData(): ApplicationCommandData {
     return {
       name: 'shuffle',
-        description: 'shuffle the queue',
+      description: 'shuffle the queue',
+      type: ApplicationCommandType.ChatInput,
       options: [],
     };
   }

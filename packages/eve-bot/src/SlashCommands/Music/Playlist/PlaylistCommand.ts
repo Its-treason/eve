@@ -2,7 +2,7 @@ import { ApplicationCommandData, ApplicationCommandSubCommandData, CommandIntera
 import SlashCommandInterface from '../../SlashCommandInterface';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import SubCommandNotFoundError from '../../../Error/SubCommandNotFoundError';
-import {injectable, injectAll} from 'tsyringe';
+import { injectable, injectAll } from 'tsyringe';
 
 @injectable()
 export default class PlaylistCommand implements SlashCommandInterface {
@@ -11,7 +11,11 @@ export default class PlaylistCommand implements SlashCommandInterface {
   ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const subCommandName = interaction.options.getSubcommand(true);
+    if (!interaction.isChatInputCommand()) {
+      return;
+    }
+
+    const subCommandName = interaction.options.getSubcommand();
 
     const subCommand = this.subCommands.find(subcommand => subcommand.getData().name === subCommandName);
 

@@ -1,8 +1,8 @@
-import {ApplicationCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class LoopCommand extends AbstractMusicCommand {
@@ -12,10 +12,10 @@ export default class LoopCommand extends AbstractMusicCommand {
 
     const answer = embedFactory(interaction.client, loopState ? 'Now Looping!' : 'Stopped Loop!');
     answer.setDescription(`Currently playing \`${nowPlaying.title}\` uploaded by \`${nowPlaying.uploader}\``);
-    answer.addField('Link', nowPlaying.url);
+    answer.addFields([{ name: 'Link', value: nowPlaying.url }]);
     answer.setImage(`https://img.youtube.com/vi/${nowPlaying.ytId}/0.jpg`);
 
-    await interaction.reply({ embeds: [answer] });  
+    await interaction.reply({ embeds: [answer] });
   }
 
   getData(): ApplicationCommandData {

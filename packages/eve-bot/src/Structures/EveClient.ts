@@ -1,4 +1,4 @@
-import { Intents, Client } from 'discord.js';
+import { GatewayIntentBits, Client } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import SlashCommandInterface from '../SlashCommands/SlashCommandInterface';
@@ -17,12 +17,13 @@ export default class EveClient extends Client {
     @injectAll('EventHandler') eventHandler: EventHandlerInterface[],
     logger: Logger,
   ) {
-    const intents = new Intents();
-    intents.add('GUILDS');
-    intents.add('GUILD_VOICE_STATES');
-    intents.add('GUILD_BANS');
-
-    super({ intents });
+    super({ 
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildBans,
+      ],
+    });
 
     this.slashCommands = slashCommands;
     this.eventHandler = eventHandler;

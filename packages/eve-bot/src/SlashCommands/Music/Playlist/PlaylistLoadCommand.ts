@@ -1,4 +1,4 @@
-import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import embedFactory from '../../../Factory/messageEmbedFactory';
@@ -16,9 +16,9 @@ export default class PlaylistLoadCommand implements SubSlashCommandInterface {
   ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const playlistName = interaction.options.getString('name');
+    const playlistName = String(interaction.options.get('name').value);
     const user = interaction.options.getUser('user') || interaction.user;
-    const clear = interaction.options.getBoolean('clear') || false;
+    const clear = interaction.options.get('clear').value || false;
     const userId = user.id;
 
     const playlistItems = await this.playlistRepository.loadPlaylistByNameAndUserId(playlistName, userId);
@@ -78,7 +78,7 @@ export default class PlaylistLoadCommand implements SubSlashCommandInterface {
       `\`${firstResult.title}\` uploaded by \`${firstResult.uploader}\` 
       and **${queue.length}** more songs were added to the queue`,
     );
-    answer.addField('Link', firstResult.url);
+    answer.addFields([{ name: 'Link', value: firstResult.url }]);
     answer.setImage(`https://img.youtube.com/vi/${firstResult.ytId}/0.jpg`);
     await interaction.editReply({ embeds: [answer] });
   }
@@ -121,9 +121,9 @@ export default class PlaylistLoadCommand implements SubSlashCommandInterface {
 
   getData(): ApplicationCommandSubCommandData {
     return {
-      type: 1,
       name: 'load',
       description: 'Load Playlists of a user',
+      type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
           name: 'name',

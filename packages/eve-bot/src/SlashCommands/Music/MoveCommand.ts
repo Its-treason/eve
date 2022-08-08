@@ -1,14 +1,14 @@
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class MoveCommand extends AbstractMusicCommand {
   async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
-    const item = interaction.options.getInteger('item', true).valueOf();
-    const newPosition = interaction.options.getInteger('new_position', true).valueOf();
+    const item = Number(interaction.options.get('item', true).value);
+    const newPosition = Number(interaction.options.get('new_position', true).value);
 
     await interaction.deferReply();
 
@@ -32,13 +32,13 @@ export default class MoveCommand extends AbstractMusicCommand {
         {
           name: 'item',
           description: 'the song to be moved',
-          type: 4,
+          type: ApplicationCommandOptionType.Integer,
           required: true,
         },
         {
           name: 'new_position',
           description: 'The new position. 0 or a negative number will put the item at the start.',
-          type: 4,
+          type: ApplicationCommandOptionType.Integer,
           required: true,
         },
       ],

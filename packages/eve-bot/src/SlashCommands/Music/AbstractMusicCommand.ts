@@ -1,8 +1,8 @@
-import SlashCommandInterface from "../SlashCommandInterface";
-import {ApplicationCommandData, CommandInteraction} from "discord.js";
-import embedFactory from "../../Factory/messageEmbedFactory";
-import MusicPlayerRepository from "../../MusicPlayer/MusicPlayerRepository";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import SlashCommandInterface from '../SlashCommandInterface';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import embedFactory from '../../Factory/messageEmbedFactory';
+import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 export default abstract class AbstractMusicCommand implements SlashCommandInterface {
   protected sameVc = true;
@@ -12,7 +12,7 @@ export default abstract class AbstractMusicCommand implements SlashCommandInterf
     if (!interaction.inCachedGuild()) {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('Command can not be executed inside DMs!');
-      await interaction.reply({embeds: [answer], ephemeral: true});
+      await interaction.reply({ embeds: [answer], ephemeral: true });
       return;
     }
 
@@ -23,7 +23,7 @@ export default abstract class AbstractMusicCommand implements SlashCommandInterf
 
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('I\'m currently not playing any music');
-      await interaction.reply({embeds: [answer], ephemeral: true});
+      await interaction.reply({ embeds: [answer], ephemeral: true });
       return;
     }
 
@@ -33,7 +33,7 @@ export default abstract class AbstractMusicCommand implements SlashCommandInterf
     if (member.voice.channelId !== player.getVoiceChannelId() && this.sameVc) {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('You must be in the same voice channel as i\'m in');
-      await interaction.reply({embeds: [answer], ephemeral: true});
+      await interaction.reply({ embeds: [answer], ephemeral: true });
       return;
     }
 

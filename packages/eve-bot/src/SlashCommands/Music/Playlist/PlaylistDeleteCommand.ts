@@ -1,4 +1,4 @@
-import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import { injectable } from 'tsyringe';
@@ -11,7 +11,7 @@ export default class PlaylistDeleteCommand implements SubSlashCommandInterface {
   ) {}
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const name = interaction.options.getString('name', true);
+    const name = String(interaction.options.get('name', true).value);
     const userId = interaction.user.id;
 
     const playlists = await this.playlistRepository.loadPlaylistByNameAndUserId(name, userId);
@@ -32,14 +32,14 @@ export default class PlaylistDeleteCommand implements SubSlashCommandInterface {
 
   public getData(): ApplicationCommandSubCommandData {
     return {
-      type: 1,
       name: 'delete',
       description: 'Delete a playlist',
+      type: ApplicationCommandOptionType.Subcommand,
       options: [
         {
           name: 'name',
           description: 'Name of the Playlist to be deleted',
-          type: 3,
+          type: ApplicationCommandOptionType.String,
           required: true,
         },
       ],

@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
 import validateInput from '../Validation/validateInput';
 import notEquals from '../Validation/Validators/notEquals';
@@ -39,7 +39,7 @@ export default class BanCommand implements SlashCommandInterface {
     if (banInfo !== undefined) {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription(`${targetUser} is already banned in this guild!`);
-      answer.addField('Ban reason', banInfo.reason);
+      answer.addFields([{ name: 'Ban reason', value: banInfo.reason }]);
       await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
       return;
     }
@@ -51,7 +51,7 @@ export default class BanCommand implements SlashCommandInterface {
 
     const answer = embedFactory(interaction.client, 'Banned');
     answer.setDescription(`${targetUser} was successfully banned!`);
-    answer.addField('Reason', reason);
+    answer.addFields([{ name: 'Reason', value: reason }]);
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
   }
 
@@ -59,17 +59,18 @@ export default class BanCommand implements SlashCommandInterface {
     return {
       name: 'ban',
       description: 'Ban a user',
+      type: ApplicationCommandType.ChatInput,
       options: [
         {
           name: 'user',
           description: 'User to Ban',
-          type: 6,
+          type: ApplicationCommandOptionType.User,
           required: true,
         },
         {
           name: 'reason',
           description: 'Ban reason',
-          type: 3,
+          type: ApplicationCommandOptionType.String,
         },
       ],
     };

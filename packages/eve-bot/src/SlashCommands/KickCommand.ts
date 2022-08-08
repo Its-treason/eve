@@ -1,4 +1,4 @@
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import validateInput from '../Validation/validateInput';
 import notEquals from '../Validation/Validators/notEquals';
 import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
@@ -34,7 +34,7 @@ export default class KickCommand implements SlashCommandInterface {
 
     const answer = embedFactory(interaction.client, 'Kicked');
     answer.setDescription(`${targetUser} was successfully kicked!`);
-    answer.addField('Reason', reason);
+    answer.addFields([{ name: 'Reason', value: reason }]);
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
   }
 
@@ -42,17 +42,18 @@ export default class KickCommand implements SlashCommandInterface {
     return {
       name: 'kick',
       description: 'Kick a user',
+      type: ApplicationCommandType.ChatInput,
       options: [
         {
           name: 'user',
           description: 'User to kick',
-          type: 6,
+          type: ApplicationCommandOptionType.User,
           required: true,
         },
         {
           name: 'reason',
           description: 'Kick reason',
-          type: 3,
+          type: ApplicationCommandOptionType.String,
         },
       ],
     };

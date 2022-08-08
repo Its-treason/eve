@@ -7,7 +7,7 @@ import { injectable } from 'tsyringe';
 export default class AvatarCommand implements SlashCommandInterface {
   async execute(interaction: CommandInteraction): Promise<void> {
     const user = interaction.options.getUser('user', false) || interaction.user;
-    const size = interaction.options.getInteger('size', false) || 128;
+    const size = interaction.options.get('size', false).value || 128;
 
     if (size !== 64 && size !== 128 && size !== 512 && size !== 2048 && size !== 4096) {
       const answer = embedFactory(interaction.client, 'Error');
@@ -16,10 +16,10 @@ export default class AvatarCommand implements SlashCommandInterface {
       return;
     }
 
-    const link = user.displayAvatarURL({ format: 'png', size: size });
+    const link = user.displayAvatarURL({ extension: 'png', size: size });
 
     const answer = embedFactory(interaction.client, `Avatar of ${user.username}`);
-    answer.addField('Link', link);
+    answer.addFields([{ name: 'Link', value: link }]);
     answer.setImage(link);
     await interaction.reply({ embeds: [answer] });
   }

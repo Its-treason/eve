@@ -1,8 +1,8 @@
-import {ApplicationCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class SkipCommand extends AbstractMusicCommand {
@@ -21,8 +21,10 @@ export default class SkipCommand extends AbstractMusicCommand {
     answer.setDescription('Reached end of the queue!');
     if (nowPlaying !== skipped) {
       answer.setDescription(`Now playing \`${nowPlaying.title}\` uploaded by \`${nowPlaying.uploader}\``);
-      answer.addField('Link', nowPlaying.url);
-      answer.addField('Skipped', `${skipped.title}\` uploaded by \`${skipped.uploader}\` was skipped!`);
+      answer.addFields([
+        { name: 'Link', value: nowPlaying.url },
+        { name: 'Skipped', value: `${skipped.title}\` uploaded by \`${skipped.uploader}\` was skipped!` },
+      ]);
       answer.setImage(`https://img.youtube.com/vi/${nowPlaying.ytId}/0.jpg`);
     }
 
@@ -33,6 +35,7 @@ export default class SkipCommand extends AbstractMusicCommand {
     return {
       name: 'skip',
       description: 'skip the current playing song',
+      type: ApplicationCommandType.ChatInput,
       options: [],
     };
   }

@@ -1,5 +1,5 @@
 import embedFactory from '../Factory/messageEmbedFactory';
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import validateInput from '../Validation/validateInput';
 import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
 import hasPermissions from '../Validation/Validators/hasPermissions';
@@ -40,19 +40,20 @@ export default class PardonCommand implements SlashCommandInterface {
 
     const answer = embedFactory(interaction.client, 'Pardoned');
     answer.setDescription(`${targetUser} was successfully pardoned!`);
-    answer.addField('Original ban reason', banInfo.reason);
+    answer.addFields([{ name: 'Original ban reason', value: banInfo.reason }]);
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
   }
 
   getData(): ApplicationCommandData {
     return {
       name: 'pardon',
-      description: 'Revoke a users ban',
+      description: 'Revoke a ban',
+      type: ApplicationCommandType.ChatInput,
       options: [
         {
           name: 'user',
-          description: 'User to unban',
-          type: 6,
+          description: 'User to pardon',
+          type: ApplicationCommandOptionType.User,
           required: true,
         },
       ],

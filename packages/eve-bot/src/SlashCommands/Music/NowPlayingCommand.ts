@@ -1,8 +1,8 @@
 import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class NowPlayingCommand extends AbstractMusicCommand {
@@ -14,8 +14,10 @@ export default class NowPlayingCommand extends AbstractMusicCommand {
 
     const answer = embedFactory(interaction.client, 'Currently playing track');
     answer.setDescription(`\`${item.title}\` uploaded by \`${item.uploader}\``);
-    answer.addField('Link', item.url);
-    answer.addField('Current position', `\`${pointer + 1}\``);
+    answer.addFields([
+      { name: 'Current position', value: item.url },
+      { name: 'Link', value: `\`${pointer + 1}\`` },
+    ]);
     answer.setImage(`https://img.youtube.com/vi/${item.ytId}/0.jpg`);
 
     await interaction.reply({ embeds: [answer] });

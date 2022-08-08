@@ -1,6 +1,6 @@
 import formatSeconds from '../Util/formatSeconds';
 import embedFactory from '../Factory/messageEmbedFactory';
-import { ApplicationCommandData, CommandInteraction, MessageEmbed, User } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, CommandInteraction, EmbedBuilder, User } from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 
@@ -20,15 +20,18 @@ export default class WhoisCommand implements SlashCommandInterface {
   private static async sendWhoIs(user: User, interaction: CommandInteraction) {
     const answer = embedFactory(interaction.client, `WhoIs: ${user.username}#${user.discriminator}`);
     answer.setDescription(`${user}`);
-    answer.setThumbnail(user.avatarURL({ format: 'png', size: 4096 }));
-    answer.addField('User-Id:', user.id);
-    answer.addField('Account Created:', user.createdAt.toUTCString());
-    answer.addField('Account Age:', formatSeconds(Math.floor((Date.now() - user.createdTimestamp) / 1000)));
+    answer.setThumbnail(user.avatarURL({ extension: 'png', size: 4096 }));
+    answer.addFields([
+      { name: 'User-Id:', value: user.id },
+      { name: 'Account Created:', value: user.createdAt.toUTCString() },
+      { name: 'Account Age:', value: formatSeconds(Math.floor((Date.now() - user.createdTimestamp) / 1000)) },
+    ]);
+
     await WhoisCommand.getAttributes(user, answer, interaction);
     await interaction.reply({ embeds: [answer], allowedMentions: { users: [] } });
   }
 
-  private static async getAttributes(user: User, answer: MessageEmbed, interaction: CommandInteraction): Promise<void> {
+  private static async getAttributes(user: User, answer: EmbedBuilder, interaction: CommandInteraction): Promise<void> {
     const attributes = [];
 
     if (user.bot === true) {
@@ -45,18 +48,21 @@ export default class WhoisCommand implements SlashCommandInterface {
       return;
     }
 
-    answer.addField('Attributes:', '```yml\n' + attributes.join('\n') + '```');
+    answer.addFields([
+      { name: 'Attributes:', value: '```yml\n' + attributes.join('\n') + '```' },
+    ]);
   }
 
   getData(): ApplicationCommandData {
     return {
       name: 'whois',
       description: 'Get info about user',
+      type: ApplicationCommandType.ChatInput,
       options: [
         {
           name: 'user',
           description: 'User to lookup',
-          type: 6,
+          type: ApplicationCommandOptionType.User,
         },
       ],
     };

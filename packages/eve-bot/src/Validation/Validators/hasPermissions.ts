@@ -1,7 +1,7 @@
 import { ValidatorWrapper } from '../../types';
-import { PermissionString, User } from 'discord.js';
+import { PermissionsString, User } from 'discord.js';
 
-const validator: ValidatorWrapper = function validator(user: User, permission: PermissionString, msg: string) {
+const validator: ValidatorWrapper = function validator(user: User, permission: PermissionsString, msg: string) {
   return async (guild) => {
     const member = await guild.members.fetch(user);
 

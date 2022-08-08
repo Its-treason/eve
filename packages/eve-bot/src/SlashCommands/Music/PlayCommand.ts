@@ -1,10 +1,10 @@
-import {ApplicationCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandData, CommandInteraction } from 'discord.js';
 import MusicPlayerRepository from '../../MusicPlayer/MusicPlayerRepository';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import MusicResultService from '../../MusicPlayer/MusicResultService';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 import { Logger } from 'eve-core';
 
 @injectable()
@@ -27,7 +27,7 @@ export default class PlayCommand extends AbstractMusicCommand {
       return;
     }
 
-    const query = interaction.options.getString('query', true);
+    const query = String(interaction.options.get('query', true).value);
 
     let player: MusicPlayer = existingPlayer;
     if (!player) {
@@ -68,7 +68,7 @@ export default class PlayCommand extends AbstractMusicCommand {
     answer.setDescription(
       `\`${firstResult.title}\` uploaded by \`${firstResult.uploader}\` ${hasMoreText} added to queue.`,
     );
-    answer.addField('Link', firstResult.url);
+    answer.addFields([{ name: 'Link', value: firstResult.url }]);
     answer.setImage(`https://img.youtube.com/vi/${firstResult.ytId}/0.jpg`);
     await interaction.editReply({ embeds: [answer] });
 

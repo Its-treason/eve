@@ -1,15 +1,15 @@
-import {ApplicationCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, CommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { injectable } from 'tsyringe';
-import AbstractMusicCommand from "./AbstractMusicCommand";
-import {MusicPlayer} from "../../MusicPlayer/MusicPlayer";
+import AbstractMusicCommand from './AbstractMusicCommand';
+import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class GotoCommand extends AbstractMusicCommand {
   async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
     await interaction.deferReply();
 
-    const position = interaction.options.getInteger('position', true);
+    const position = Number(interaction.options.get('position', true).value);
 
     const success = await player.goto(position);
     const nowPlaying = player.getCurrentPlaying();
@@ -17,7 +17,7 @@ export default class GotoCommand extends AbstractMusicCommand {
     if (success === true) {
       const answer = embedFactory(interaction.client, `Changed position to ${position}!`);
       answer.setDescription(`Now playing \`${nowPlaying.title}\` uploaded by \`${nowPlaying.uploader}\``);
-      answer.addField('Link', nowPlaying.url);
+      answer.addFields([{ name: 'Link', value: nowPlaying.url }]);
       answer.setImage(`https://img.youtube.com/vi/${nowPlaying.ytId}/0.jpg`);
       await interaction.editReply({ embeds: [answer] });
       return;
@@ -31,11 +31,12 @@ export default class GotoCommand extends AbstractMusicCommand {
     return {
       name: 'goto',
       description: 'Goto a position in the queue',
+      type: ApplicationCommandType.ChatInput,
       options: [
         {
           name: 'position',
           description: 'The position to goto',
-          type: 4,
+          type: ApplicationCommandOptionType.Integer,
           required: true,
         },
       ],

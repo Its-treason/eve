@@ -1,7 +1,7 @@
-import { ApplicationCommandSubCommandData, CommandInteraction} from 'discord.js';
+import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
-import {injectable} from 'tsyringe';
+import { injectable } from 'tsyringe';
 import { PlaylistRepository } from 'eve-core';
 
 @injectable()

@@ -1,4 +1,4 @@
-import {StageChannel, TextBasedChannel, TextChannel, ThreadChannel, VoiceBasedChannel, VoiceChannel} from 'discord.js';
+import { TextBasedChannel, VoiceBasedChannel } from 'discord.js';
 import { MusicResult } from '../types';
 import shuffleArray from '../Util/shuffleArray';
 import messageEmbedFactory from '../Factory/messageEmbedFactory';
@@ -193,7 +193,7 @@ export class MusicPlayer {
 
     const answer = messageEmbedFactory(this.textChannel.client, 'An error occurred while playing a track');
     answer.setDescription(`\`${title}\` uploaded by \`${uploader}\` could not be loaded!`);
-    answer.addField('Error Message', msg);
+    answer.addFields([{ name: 'Error Message', value: msg }]);
     this.textChannel.send({ embeds: [answer] });
 
     // Disable the loop to make sure the player tries to play the same track again and then die again
