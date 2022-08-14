@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "api": "packages/api",
+    "bot": "packages/bot",
+    "core": "packages/core",
+    "react": "packages/react",
+    "storage": "packages/storage"
+  }
+}

@@ -27,15 +27,41 @@
       "space-before-blocks": ["error"],
       "no-multi-spaces": ["error", {"exceptions": {"VariableDeclarator": false, "Property": false}}],
       "block-spacing": "error",
-      "keyword-spacing": ["error", {"after": true, "before": true}],
+      "keyword-spacing": ["error", {"after": true, "before": true}]
   },
   "ignorePatterns": ["webpack.config.js"],
   "plugins": [
-      "@typescript-eslint"
+      "@typescript-eslint",
+      "@nrwl/nx"
   ],
   "overrides": [
-      {
-        "files": ["*.ts"]
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@nrwl/nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
+          }
+        ]
       }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nrwl/nx/typescript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nrwl/nx/javascript"],
+      "rules": {}
+    }
   ]
 }

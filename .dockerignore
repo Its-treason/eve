@@ -1,1 +1,5 @@
 .git
+tmp
+.env.example
+.env
+yarn-error.log
