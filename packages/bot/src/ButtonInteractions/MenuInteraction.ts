@@ -7,13 +7,20 @@ export default class MenuInteraction implements ButtonInteractionInterface {
     return 'menu';
   }
 
- async execute(args: string[], interaction: ButtonInteraction): Promise<void> {
+  async execute(args: string[], interaction: ButtonInteraction): Promise<void> {
+    if (!interaction.inCachedGuild()) {
+      return;
+    }
+
     const answer = embedFactory(interaction.client, 'Role-Menu');
     const guild = interaction.guild;
 
     const roleId = args[1];
     const role = guild.roles.cache.get(`${BigInt(roleId)}`);
     const interactionUser = guild.members.cache.get(interaction.user.id);
+    if (!interactionUser || !role) {
+      return;
+    }
 
     if (interactionUser.roles.cache.find(r => r.id === role.id)) {
       try {

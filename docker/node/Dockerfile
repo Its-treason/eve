@@ -3,17 +3,21 @@ FROM node:18.7.0-alpine AS base
 RUN mkdir /app
 WORKDIR /app
 
+################################################################################
+FROM base AS development
+
 ENV PYTHONUNBUFFERED=1
-RUN apk add --update --no-cache python3 libsodium-dev libtool cmake g++ gcc ffmpeg-dev chromium make git autoconf automake opus-dev libuv-dev protoc \
+RUN apk add --no-cache --virtual .build-deps pango-dev jpeg-dev build-base g++ cairo-dev giflib-dev python3 libsodium-dev libtool cmake g++ gcc ffmpeg-dev make git autoconf automake opus-dev libuv-dev protoc msttcorefonts-installer \
  && ln -sf python3 /usr/bin/python \
  && python3 -m ensurepip \
  && pip3 install --no-cache --upgrade pip setuptools
-
-FROM base AS development
+ && update-ms-fonts
+ && fc-cache -f
 
 ENV APP_ENV=development
 ENV NODE_ENV=development
 
+################################################################################
 FROM base AS production
 
 COPY . /app

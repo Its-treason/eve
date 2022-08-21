@@ -1,8 +1,8 @@
 /* eslint-disable semi */
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, ChatInputCommandInteraction } from 'discord.js';
 
 export default interface SlashCommandInterface {
-  execute(interaction: CommandInteraction): Promise<void>;
+  execute(interaction: ChatInputCommandInteraction): Promise<void>;
 
   getData(): ApplicationCommandData;
 }

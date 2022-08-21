@@ -1,4 +1,4 @@
-import {ButtonInteraction, CommandInteraction, Interaction} from 'discord.js';
+import {ButtonInteraction, ChatInputCommandInteraction, CommandInteraction, Interaction} from 'discord.js';
 import {injectable, injectAll} from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
 import messageEmbedFactory from "../Factory/messageEmbedFactory";
@@ -23,7 +23,7 @@ export default class InteractionCreateEventHandler implements EventHandlerInterf
       return this.handleButtonInteraction(interaction);
     }
 
-    if (interaction.isCommand()) {
+    if (interaction.isChatInputCommand()) {
       return this.handleCommandInteraction(interaction);
     }
 
@@ -33,7 +33,7 @@ export default class InteractionCreateEventHandler implements EventHandlerInterf
     )
   }
 
-  private async handleCommandInteraction(interaction: CommandInteraction): Promise<void> {
+  private async handleCommandInteraction(interaction: ChatInputCommandInteraction): Promise<void> {
     this.logger.info('Handling SlashCommand', {
       commandName: interaction.commandName,
       serverId: interaction.guild?.id,

@@ -16,7 +16,8 @@ export default abstract class AbstractMusicCommand implements SlashCommandInterf
       return;
     }
 
-    if (await MusicPlayerRepository.has(interaction.guild.id) === false) {
+    const player = await MusicPlayerRepository.get(interaction.guild.id);
+    if (!player) {
       if (!this.playerExists) {
         return this.doExecute(interaction, null);
       }
@@ -26,8 +27,6 @@ export default abstract class AbstractMusicCommand implements SlashCommandInterf
       await interaction.reply({ embeds: [answer], ephemeral: true });
       return;
     }
-
-    const player = await MusicPlayerRepository.get(interaction.guild.id);
 
     const member = await interaction.guild.members.fetch(interaction.user);
     if (member.voice.channelId !== player.getVoiceChannelId() && this.sameVc) {

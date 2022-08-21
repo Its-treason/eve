@@ -35,7 +35,7 @@ export type EventTopic = 'ban-interaction.create'
 
 export type Validator = (guild: Guild) => Promise<{valid: boolean, msg?: string}>
 
-export type ValidatorWrapper = (...args: unknown[]) => Validator;
+export type ValidatorWrapper = (...args: any[]) => Validator;
 
 export type ParsedArg = (string|User|GuildMember|Channel|Role);
 

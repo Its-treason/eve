@@ -1,50 +1,43 @@
-import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, CommandInteraction, PermissionFlagsBits, User } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
-import validateInput from '../Validation/validateInput';
-import notEquals from '../Validation/Validators/notEquals';
-import isNotGuildOwner from '../Validation/Validators/isNotGuildOwner';
-import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
-import hasPermissions from '../Validation/Validators/hasPermissions';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
+import CommandValidator from '../Validation/CommandValidator';
+import NotEqualsValidationHandler from '../Validation/Validators/NotEqualsValidationHandler';
+import NotGuildOwnerValidationHandler from '../Validation/Validators/NotGuildOwnerValidationHandler';
+import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
+import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 
 @injectable()
 export default class BanCommand implements SlashCommandInterface {
-  async execute(interaction: CommandInteraction): Promise<void> {
-    const targetUser = interaction.options.get('user').user;
+  constructor(
+    private commandValidator: CommandValidator,
+  ) {}
+
+  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+    const targetUser = interaction.options.getUser('user', true);
     const actionUser = interaction.user;
-    const reason = interaction.options.get('reason')?.value as string || 'No reason given';
+    const reason = interaction.options.getString('reason', false) || 'No reason given';
 
-    const inputValidationResult = await validateInput(
-      interaction.guild,
+    this.commandValidator.validate(
       interaction,
-      notEquals(actionUser.id, targetUser.id, 'You cannot ban yourself!'),
-      isNotGuildOwner(targetUser.id, 'The owner of this server cannot be banned!'),
-      isNotDmChannel('This command cannot be used in a DMs!'),
-      hasPermissions(interaction.user, 'BAN_MEMBERS', 'You dont have the permission to ban member!'),
-    );
-    if (inputValidationResult === false) {
-      return;
-    }
+      [
+        new NotInDmChannelValidationHandler(),
+        new NotEqualsValidationHandler(actionUser.id, targetUser.id, 'You cannot ban yourself'),
+        new NotGuildOwnerValidationHandler(targetUser, 'Cannot ban the server owner'),
+        new PermissionValidationHandler(PermissionFlagsBits.BanMembers, actionUser),
+      ],
+      () => this.doBan(interaction, targetUser, actionUser, reason),
+    )
+  }
 
-    let banInfo;
-    try {
-      banInfo = await interaction.guild.bans.fetch({ user: targetUser, force: true });
-    } catch (e) {
-      if (e.message !== 'Unknown Ban') {
-        throw e;
-      }
-    }
-
-    if (banInfo !== undefined) {
-      const answer = embedFactory(interaction.client, 'Error');
-      answer.setDescription(`${targetUser} is already banned in this guild!`);
-      answer.addFields([{ name: 'Ban reason', value: banInfo.reason }]);
-      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
-      return;
-    }
-
-    await interaction.guild.members.ban(
+  private async doBan(
+    interaction: ChatInputCommandInteraction,
+    targetUser: User,
+    actionUser: User,
+    reason: string,
+  ): Promise<void> {
+    await interaction.guild?.members.ban(
       targetUser.id,
       { reason: `"${reason}" by "${actionUser.username}#${actionUser.discriminator}" using EVE` },
     );

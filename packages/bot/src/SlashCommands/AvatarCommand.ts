@@ -1,13 +1,13 @@
-import { ApplicationCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, ChatInputCommandInteraction } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 
 @injectable()
 export default class AvatarCommand implements SlashCommandInterface {
-  async execute(interaction: CommandInteraction): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const user = interaction.options.getUser('user', false) || interaction.user;
-    const size = interaction.options.get('size', false).value || 128;
+    const size = interaction.options.getNumber('size', false) || 128;
 
     if (size !== 64 && size !== 128 && size !== 512 && size !== 2048 && size !== 4096) {
       const answer = embedFactory(interaction.client, 'Error');

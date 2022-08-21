@@ -51,8 +51,14 @@ export default class EveClient extends Client {
   private async registerSlashCommands(): Promise<void> {
     const slashCommandsData = this.slashCommands.map((slashCommand) => slashCommand.getData());
 
+    if (!process.env.DISCORD_TOKEN) {
+      throw new Error('Env var "DISCORD_TOKEN" not set');
+    }
     const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
 
+    if (!process.env.CLIENT_ID) {
+      throw new Error('Env var "CLIENT_ID" not set');
+    }
     await rest.put(
       Routes.applicationCommands(process.env.CLIENT_ID),
       { body: [] },
@@ -60,6 +66,9 @@ export default class EveClient extends Client {
 
     try {
       if (process.env.NODE_ENV === 'development') {
+        if (!process.env.GUILD_ID) {
+          throw new Error('Env var "GUILD_ID" not set');
+        }
         await rest.put(
           Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
           { body: slashCommandsData },

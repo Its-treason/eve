@@ -1,12 +1,12 @@
 import formatSeconds from '../Util/formatSeconds';
 import embedFactory from '../Factory/messageEmbedFactory';
-import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, CommandInteraction, EmbedBuilder, User } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, EmbedBuilder, User } from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 
 @injectable()
 export default class WhoisCommand implements SlashCommandInterface {
-  async execute(interaction: CommandInteraction): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const targetUser = interaction.options.getUser('user', false);
 
     if (!(targetUser instanceof User)) {
@@ -17,7 +17,7 @@ export default class WhoisCommand implements SlashCommandInterface {
     await WhoisCommand.sendWhoIs(targetUser, interaction);
   }
 
-  private static async sendWhoIs(user: User, interaction: CommandInteraction) {
+  private static async sendWhoIs(user: User, interaction: ChatInputCommandInteraction) {
     const answer = embedFactory(interaction.client, `WhoIs: ${user.username}#${user.discriminator}`);
     answer.setDescription(`${user}`);
     answer.setThumbnail(user.avatarURL({ extension: 'png', size: 4096 }));
@@ -31,7 +31,7 @@ export default class WhoisCommand implements SlashCommandInterface {
     await interaction.reply({ embeds: [answer], allowedMentions: { users: [] } });
   }
 
-  private static async getAttributes(user: User, answer: EmbedBuilder, interaction: CommandInteraction): Promise<void> {
+  private static async getAttributes(user: User, answer: EmbedBuilder, interaction: ChatInputCommandInteraction): Promise<void> {
     const attributes = [];
 
     if (user.bot === true) {
@@ -40,7 +40,7 @@ export default class WhoisCommand implements SlashCommandInterface {
     if (user.system === true) {
       attributes.push('- Official Discord System User');
     }
-    if (user.id === interaction.guild.ownerId) {
+    if (user.id === interaction.guild?.ownerId) {
       attributes.push('- Owner of this Server');
     }
 

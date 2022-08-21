@@ -2,12 +2,17 @@ import { injectable } from 'tsyringe';
 import { MusicResult } from '../types';
 import * as yasha from 'yasha';
 import { MultiDownloader } from '../Util/MultiDownloader';
+import { Logger } from '@eve/core';
 
 @injectable()
 export default class MusicResultService {
+  constructor(
+    private logger: Logger,
+  ) {}
+
   public async parseQuery(query: string, requesterId: string): Promise<MusicResult[]|false> {
     const resultTracks = await this.findResult(query);
-    if (resultTracks === false) {
+    if (resultTracks === null) {
       return false;
     }
 
@@ -36,22 +41,33 @@ export default class MusicResultService {
       return track;
     }
 
-    const searchResult = await yasha.api.Youtube.search(`${track.author} - ${track.title}`);
-    if (!searchResult[0]) {
+    const searchResults = await yasha.api.Youtube.search(`${track.author} - ${track.title}`);
+
+    if (!searchResults) {
       return false;
     }
 
-    return searchResult[0];
+    for (const result of searchResults) {
+      console.log(result);
+      return result;
+    }
+
+    return false;
   }
 
-  private async findResult(query: string): Promise<yasha.Track.Track[]|false> {
-    const resolveResult = await yasha.Source.resolve(query);
+  private async findResult(query: string): Promise<yasha.Track.Track[]|null> {
+    let resolveResult: yasha.Track.Track|yasha.Track.TrackPlaylist|null = null
+    try {
+      resolveResult = await yasha.Source.resolve(query);
+    } catch (error) {
+      this.logger.notice('Error while resolving a query', { error, query });
+    }
 
-    let searchResult: yasha.Track.TrackResults = null;
+    let searchResult: yasha.Track.TrackResults|null = null;
     if (resolveResult === null) {
       searchResult = await yasha.Source.Youtube.search(query);
-      if (searchResult.length === 0) {
-        return false;
+      if (!searchResult || searchResult.length === 0) {
+        return null;
       }
 
       return [searchResult[0]];

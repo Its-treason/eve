@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandSubCommandData, ChatInputCommandInteraction, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import embedFactory from '../../../Factory/messageEmbedFactory';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
@@ -28,9 +28,16 @@ export default class PlaylistSaveCommand implements SubSlashCommandInterface {
     };
   }
 
-  async execute(interaction: CommandInteraction): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const name = String(interaction.options.get('name', true).value);
     const userId = interaction.user.id;
+
+    if (!interaction.inCachedGuild() || !interaction.channel) {
+      const answer = embedFactory(interaction.client, 'Error');
+      answer.setDescription('Command can not be executed inside DMs!');
+      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true }, ephemeral: true });
+      return;
+    }
 
     if (name.length > 32) {
       const answer = embedFactory(interaction.client, 'Error');
@@ -39,14 +46,13 @@ export default class PlaylistSaveCommand implements SubSlashCommandInterface {
       return;
     }
 
-    if (await MusicPlayerRepository.has(interaction.guild.id) === false) {
+    const player = await MusicPlayerRepository.get(interaction.guild.id);
+    if (player === null) {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('I\'m currently not playing any music');
       await interaction.reply({ embeds: [answer], ephemeral: true });
       return;
     }
-
-    const player = await MusicPlayerRepository.get(interaction.guild.id);
 
     const queue = player.getQueue();
 

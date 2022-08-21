@@ -8,7 +8,7 @@ export class MusicPlayer {
   public destroyed = false;
 
   private readonly player: yasha.TrackPlayer;
-  private connection: yasha.VoiceConnection;
+  private connection: yasha.VoiceConnection | null = null;
 
   private queue: MusicResult[];
   private pointer = -1;
@@ -17,7 +17,7 @@ export class MusicPlayer {
 
   private textChannel: TextBasedChannel;
 
-  private leaveTimeout: NodeJS.Timeout = null;
+  private leaveTimeout?: NodeJS.Timeout;
 
   private readonly voiceChannelId: string;
 
@@ -51,7 +51,7 @@ export class MusicPlayer {
     if (this.queue[this.pointer + 1] === undefined) {
       this.leaveTimeout = setTimeout(() => {
         this.destroy();
-      }, 1.8e+6); // 1.8e+6 => 30 minutes
+      }, 30_000);
       this.player.cleanup();
       return;
     }
@@ -90,7 +90,7 @@ export class MusicPlayer {
   public async destroy(): Promise<void> {
     this.player.destroy();
     await this.clear();
-    this.connection.disconnect();
+    this.connection?.disconnect();
     this.destroyed = true;
   }
 

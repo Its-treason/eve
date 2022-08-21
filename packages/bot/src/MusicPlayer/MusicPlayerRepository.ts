@@ -21,7 +21,7 @@ export default class MusicPlayerRepository {
   public static async get(serverId: string): Promise<MusicPlayer|null> {
     const player = this.musicPlayers.get(serverId);
 
-    if (player?.destroyed !== false) {
+    if (player?.destroyed === true) {
       await MusicPlayerRepository.destroy(serverId);
       return null;
     }
@@ -43,7 +43,7 @@ export default class MusicPlayerRepository {
     }
 
     const player = this.musicPlayers.get(serverId);
-    await player.destroy();
+    await player?.destroy();
     this.musicPlayers.delete(serverId);
 
     return true;

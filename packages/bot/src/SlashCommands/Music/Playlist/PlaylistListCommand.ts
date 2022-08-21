@@ -1,4 +1,4 @@
-import { ApplicationCommandSubCommandData, CommandInteraction } from 'discord.js';
+import { ApplicationCommandSubCommandData, ChatInputCommandInteraction, CommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import { injectable } from 'tsyringe';
@@ -26,8 +26,8 @@ export default class PlaylistListCommand implements SubSlashCommandInterface {
     };
   }
 
-  async execute(interaction: CommandInteraction): Promise<void> {
-    const user = interaction.options.getUser('user') || interaction.user;
+  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+    const user = interaction.options.getUser('user', false) || interaction.user;
     const userId = user.id;
 
     const playlists = await this.playlistRepository.loadPlaylistsOfUser(userId);

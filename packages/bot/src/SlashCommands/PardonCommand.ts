@@ -1,46 +1,44 @@
 import embedFactory from '../Factory/messageEmbedFactory';
-import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, CommandInteraction } from 'discord.js';
-import validateInput from '../Validation/validateInput';
-import isNotDmChannel from '../Validation/Validators/isNotDmChannel';
-import hasPermissions from '../Validation/Validators/hasPermissions';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, PermissionFlagsBits, User } from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
+import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
+import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
+import UserBannedValidationHandler from '../Validation/Validators/UserBannedValidationHandler';
+import CommandValidator from '../Validation/CommandValidator';
 
 @injectable()
 export default class PardonCommand implements SlashCommandInterface {
-  async execute(interaction: CommandInteraction): Promise<void> {
+  constructor(
+    private commandValidator: CommandValidator,
+  ) {}
+
+  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const actionUser = interaction.user;
-    const targetUser = interaction.options.get('user').user;
+    const targetUser = interaction.options.getUser('user', true);
 
-    const inputValidationResult = await validateInput(
-      interaction.guild,
+    this.commandValidator.validate(
       interaction,
-      isNotDmChannel('This command cannot be used in a DMs!'),
-      hasPermissions(actionUser, 'BAN_MEMBERS', 'You dont have the permission to ban/unban member!'),
-    );
-    if (inputValidationResult === false) {
-      return;
-    }
+      [
+        new NotInDmChannelValidationHandler(),
+        new PermissionValidationHandler(PermissionFlagsBits.BanMembers),
+        new UserBannedValidationHandler(targetUser, 'You don\'t have permission to pardon member'),
+      ],
+      () => this.doPardon(interaction, targetUser),
+    )
+  }
 
-    let banInfo;
-    try {
-      banInfo = await interaction.guild.bans.fetch({ user: targetUser, force: true });
-    } catch (e) {
-      if (e.message !== 'Unknown Ban') {
-        throw e;
-      }
+  private async doPardon(
+    interaction: ChatInputCommandInteraction,
+    targetUser: User
+  ): Promise<void> {
+    let banInfo = await interaction.guild?.bans.fetch({ user: targetUser });
 
-      const answer = embedFactory(interaction.client, 'Error');
-      answer.setDescription(`${targetUser} is currently not banned in this guild!`);
-      await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
-      return;
-    }
-
-    await interaction.guild.bans.remove(targetUser);
+    await interaction.guild?.bans.remove(targetUser);
 
     const answer = embedFactory(interaction.client, 'Pardoned');
     answer.setDescription(`${targetUser} was successfully pardoned!`);
-    answer.addFields([{ name: 'Original ban reason', value: banInfo.reason }]);
+    answer.addFields([{ name: 'Original ban reason', value: banInfo?.reason || 'N/A' }]);
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
   }
 
