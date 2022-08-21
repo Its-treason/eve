@@ -14,7 +14,6 @@ export default class PardonCommand implements SlashCommandInterface {
   ) {}
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
-    const actionUser = interaction.user;
     const targetUser = interaction.options.getUser('user', true);
 
     this.commandValidator.validate(
@@ -25,7 +24,7 @@ export default class PardonCommand implements SlashCommandInterface {
         new UserBannedValidationHandler(targetUser, 'You don\'t have permission to pardon member'),
       ],
       () => this.doPardon(interaction, targetUser),
-    )
+    );
   }
 
   private async doPardon(

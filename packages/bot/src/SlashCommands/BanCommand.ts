@@ -7,6 +7,7 @@ import NotEqualsValidationHandler from '../Validation/Validators/NotEqualsValida
 import NotGuildOwnerValidationHandler from '../Validation/Validators/NotGuildOwnerValidationHandler';
 import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
+import UserNotBannedValidationHandler from '../Validation/Validators/UserNotBannedValidationHandler';
 
 @injectable()
 export default class BanCommand implements SlashCommandInterface {
@@ -23,9 +24,10 @@ export default class BanCommand implements SlashCommandInterface {
       interaction,
       [
         new NotInDmChannelValidationHandler(),
-        new NotEqualsValidationHandler(actionUser.id, targetUser.id, 'You cannot ban yourself'),
-        new NotGuildOwnerValidationHandler(targetUser, 'Cannot ban the server owner'),
         new PermissionValidationHandler(PermissionFlagsBits.BanMembers, actionUser),
+        new UserNotBannedValidationHandler(targetUser, 'This user is already banned'),
+        new NotEqualsValidationHandler(actionUser.id, targetUser.id, 'You cannot ban yourself'),
+        new NotGuildOwnerValidationHandler(targetUser, 'You cannot ban the server owner'),
       ],
       () => this.doBan(interaction, targetUser, actionUser, reason),
     )

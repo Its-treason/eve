@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, CacheType, User } from 'discord.js';
 import AbstractValidationHandler from '../AbstractValidationHandler';
 
-export default class GuildOwnerValidationHandler extends AbstractValidationHandler {
+export default class UserIsGuildMember extends AbstractValidationHandler {
   constructor(
     private user?: User,
     private errorMsg?: string,
@@ -11,7 +11,7 @@ export default class GuildOwnerValidationHandler extends AbstractValidationHandl
 
   public async handle(command: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (!command.guild) {
-      throw new Error('"GuildOwnerValidationHandler" can only be used in Guild context');
+      throw new Error('"UserIsGuildMember" can only be used in Guild context');
     }
 
     if (!this.user) {
@@ -19,12 +19,13 @@ export default class GuildOwnerValidationHandler extends AbstractValidationHandl
       return
     }
 
-    if (command.guild.ownerId !== this.user.id) {
-      const content = this.errorMsg || `Error "${this.user.username}" must be the owner of this server`;
-      await this.reply(command, 'Error', content);
+    try {
+      await command.guild.members.fetch({ user: this.user, force: true });
+    } catch (e) {
+      await this.reply(command, 'Error', this.errorMsg || `"${this.user.username}" is not a member of this server`);
       return;
     }
 
-    this.next?.handle(command);
+    await this.next?.handle(command);
   }
 }

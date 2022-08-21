@@ -11,7 +11,7 @@ export default class UserBannedValidationHandler extends AbstractValidationHandl
 
   public async handle(command: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (!command.guild) {
-      throw new Error('"UserNotBannedValidationHandler" can only be used in Guild context');
+      throw new Error('"UserBannedValidationHandler" can only be used in Guild context');
     }
 
     if (!this.user) {
@@ -26,10 +26,10 @@ export default class UserBannedValidationHandler extends AbstractValidationHandl
         throw e;
       }
 
-      this.next?.handle(command);
+      await this.reply(command, 'Error', this.errorMsg || `"${this.user.username}" is banned in this server!`);
       return;
     }
 
-    await this.reply(command, 'Error', this.errorMsg || `"${this.user.username}" is not banned in this server!`);
+    this.next?.handle(command);
   }
 }

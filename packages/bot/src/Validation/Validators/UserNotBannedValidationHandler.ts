@@ -26,10 +26,10 @@ export default class UserNotBannedValidationHandler extends AbstractValidationHa
         throw e;
       }
 
-      await this.reply(command, 'Error', this.errorMsg || `"${this.user.username}" is banned in this server!`);
+      this.next?.handle(command);
       return;
     }
 
-    this.next?.handle(command);
+    await this.reply(command, 'Error', this.errorMsg || `"${this.user.username}" is not banned in this server!`);
   }
 }

@@ -7,6 +7,7 @@ import NotEqualsValidationHandler from '../Validation/Validators/NotEqualsValida
 import NotGuildOwnerValidationHandler from '../Validation/Validators/NotGuildOwnerValidationHandler';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 import CommandValidator from '../Validation/CommandValidator';
+import UserIsGuildMember from '../Validation/Validators/UserIsGuildMember';
 
 @injectable()
 export default class KickCommand implements SlashCommandInterface {
@@ -24,6 +25,7 @@ export default class KickCommand implements SlashCommandInterface {
       [
         new NotInDmChannelValidationHandler(),
         new PermissionValidationHandler(PermissionFlagsBits.KickMembers, actionUser),
+        new UserIsGuildMember(targetUser),
         new NotEqualsValidationHandler(actionUser.id, targetUser.id, 'You cannot kick yourself'),
         new NotGuildOwnerValidationHandler(targetUser, 'Cannot kick the server owner'),
       ],
