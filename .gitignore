@@ -1,8 +1,8 @@
 .idea
 .vscode
 
-mariadb_data
-elastic_data
+mariadb-data
+elastic-data
 
 .env
 lerna-debug.log

@@ -10,17 +10,25 @@ ENV PYTHONUNBUFFERED=1
 RUN apk add --no-cache --virtual .build-deps pango-dev jpeg-dev build-base g++ cairo-dev giflib-dev python3 libsodium-dev libtool cmake g++ gcc ffmpeg-dev make git autoconf automake opus-dev libuv-dev protoc msttcorefonts-installer \
  && ln -sf python3 /usr/bin/python \
  && python3 -m ensurepip \
- && pip3 install --no-cache --upgrade pip setuptools
- && update-ms-fonts
+ && pip3 install --no-cache --upgrade pip setuptools \
+ && update-ms-fonts \
  && fc-cache -f
 
 ENV APP_ENV=development
 ENV NODE_ENV=development
 
 ################################################################################
-FROM base AS production
+FROM base AS build
 
 COPY . /app
+
+ENV PYTHONUNBUFFERED=1
+RUN apk add --no-cache --virtual .build-deps pango-dev jpeg-dev build-base cairo-dev giflib-dev python3 libsodium-dev libtool cmake g++ gcc ffmpeg-dev make git autoconf automake opus-dev libuv-dev protoc msttcorefonts-installer \
+ && ln -sf python3 /usr/bin/python \
+ && python3 -m ensurepip \
+ && pip3 install --no-cache --upgrade pip setuptools \
+ && update-ms-fonts \
+ && fc-cache -f
 
 RUN rm -rf ./node_modules ./packages/react/node_modules ./dist ./packages/react/dist \
  && yarn install \
@@ -30,3 +38,21 @@ RUN rm -rf ./node_modules ./packages/react/node_modules ./dist ./packages/react/
 
 ENV APP_ENV=production
 ENV NODE_ENV=production
+
+################################################################################
+FROM base AS production
+
+COPY --from=build --chown=1000:1000 /app /app
+COPY --from=build /usr/share/fonts/truetype/msttcorefonts/Impact.ttf /usr/share/fonts/Impact.ttf
+COPY docker/node/entrypoint.sh /app/entrypoint.sh
+
+RUN apk add --no-cache pango jpeg cairo giflib libsodium ffmpeg opus libuv \
+ && fc-cache -f \
+ && chmod +x /app/entrypoint.sh
+
+USER node
+
+ENV APP_ENV=production
+ENV NODE_ENV=production
+
+#ENTRYPOINT ['/app/entrypoint.sh']

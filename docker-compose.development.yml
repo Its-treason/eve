@@ -8,7 +8,7 @@ services:
       MARIADB_ROOT_PASSWORD: "1234"
       MARIADB_DATABASE: "eve-dev"
     volumes:
-      - "eve-mariadb-data:/var/src/mysql"
+      - "./mariadb-data:/var/src/mysql"
     networks:
       - eve-storage
 
@@ -31,7 +31,7 @@ services:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
       xpack.security.enabled: "false"
     volumes:
-      - "eve-elastic-data:/usr/share/elasticsearch/data"
+      - "./elastic-data:/usr/share/elasticsearch/data"
     networks:
       - eve-storage
 
@@ -51,19 +51,11 @@ services:
     networks:
       - eve-storage
 
-  eve-rabbitmq:
-    image: rabbitmq:3.10.5-management-alpine
-    restart: "no"
-    ports:
-      - "15672:15672"
-    networks:
-      - eve-storage
-
   eve-cli:
     build:
       context: .
       dockerfile: docker/node/Dockerfile
-      target: "development"
+      target: "production"
     restart: "no"
     command: "sleep infinity"
     ports:
@@ -80,9 +72,3 @@ networks:
   eve-storage:
     driver: "bridge"
     name: eve-storage
-
-volumes:
-  eve-elastic-data:
-    external: true
-  eve-mariadb-data:
-    external: true

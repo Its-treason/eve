@@ -3,3 +3,5 @@ tmp
 .env.example
 .env
 yarn-error.log
+mariadb-data
+elastic-data
