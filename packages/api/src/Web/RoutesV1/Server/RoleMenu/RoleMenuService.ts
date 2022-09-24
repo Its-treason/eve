@@ -72,7 +72,7 @@ export default class RoleMenuService {
       const button: APIButtonComponentWithCustomId = {
         type: ComponentType.Button,
         label: entry.label,
-        style: ButtonStyle.Primary,
+        style: ButtonStyle.Success,
         'custom_id': `menu-${roleMenu.id}-${entry.role}-${index}`,
       };
 

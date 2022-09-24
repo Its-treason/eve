@@ -11,14 +11,55 @@
     "importHelpers": true,
     "target": "ES2016",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "noPropertyAccessFromIndexSignature": false,
     "paths": {
-      "@eve/core": ["packages/core/lib/index.ts"]
+      "@eve/core": [
+        "packages/core/lib/index.ts"
+      ],
+      "@eve/panel/feature/activity": [
+        "packages/panel/feature/activity/src/index.ts"
+      ],
+      "@eve/panel/feature/auto-actions": [
+        "packages/panel/feature/auto-actions/src/index.tsx"
+      ],
+      "@eve/panel/feature/core": [
+        "packages/panel/feature/core/src/index.ts"
+      ],
+      "@eve/panel/feature/home": [
+        "packages/panel/feature/home/src/index.tsx"
+      ],
+      "@eve/panel/feature/login-first": [
+        "packages/panel/feature/login-first/src/index.tsx"
+      ],
+      "@eve/panel/feature/playlist": [
+        "packages/panel/feature/playlist/src/index.tsx"
+      ],
+      "@eve/panel/feature/playlist-edit": [
+        "packages/panel/feature/playlist-edit/src/index.tsx"
+      ],
+      "@eve/panel/feature/role-menu": [
+        "packages/panel/feature/role-menu/src/index.tsx"
+      ],
+      "@eve/panel/feature/server-home": [
+        "packages/panel/feature/server-home/src/index.tsx"
+      ],
+      "@eve/panel/feature/user-home": [
+        "packages/panel/feature/user-home/src/index.tsx"
+      ],
+      "@eve/types/api": [
+        "packages/types/api/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

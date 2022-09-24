@@ -5,3 +5,5 @@ tmp
 yarn-error.log
 mariadb-data
 elastic-data
+.next
+node_modules

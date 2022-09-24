@@ -5,24 +5,34 @@
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/packages/storage",
         "main": "packages/storage/lib/index.ts",
         "tsConfig": "packages/storage/tsconfig.lib.json",
-        "assets": ["packages/storage/*.md"]
+        "assets": [
+          "packages/storage/*.md"
+        ]
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["packages/storage/**/*.ts"]
+        "lintFilePatterns": [
+          "packages/storage/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/packages/storage"],
+      "outputs": [
+        "coverage/packages/storage"
+      ],
       "options": {
         "jestConfig": "packages/storage/jest.config.ts",
         "passWithNoTests": true

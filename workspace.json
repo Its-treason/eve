@@ -5,7 +5,18 @@
     "api": "packages/api",
     "bot": "packages/bot",
     "core": "packages/core",
-    "react": "packages/react",
-    "storage": "packages/storage"
+    "panel": "packages/panel",
+    "panel-feature-activity": "packages/panel/feature/activity",
+    "panel-feature-auto-actions": "packages/panel/feature/auto-actions",
+    "panel-feature-core": "packages/panel/feature/core",
+    "panel-feature-home": "packages/panel/feature/home",
+    "panel-feature-login-first": "packages/panel/feature/login-first",
+    "panel-feature-playlist": "packages/panel/feature/playlist",
+    "panel-feature-playlist-edit": "packages/panel/feature/playlist-edit",
+    "panel-feature-role-menu": "packages/panel/feature/role-menu",
+    "panel-feature-server-home": "packages/panel/feature/server-home",
+    "panel-feature-user-home": "packages/panel/feature/user-home",
+    "storage": "packages/storage",
+    "types-api": "packages/types/api"
   }
 }
