@@ -1,6 +1,6 @@
 import { getAllPlaylists } from '@eve/panel/feature/core';
 import { getCookie } from 'cookies-next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface UseListPlaylist {
   playlists: string[],

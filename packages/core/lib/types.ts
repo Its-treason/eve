@@ -1,4 +1,4 @@
-import { APIPartialEmoji } from 'discord-api-types/v9';
+import { APIPartialEmoji, ButtonStyle } from 'discord-api-types/v9';
 
 export type PlaylistItem = {
   ytId: string,
@@ -37,6 +37,7 @@ export interface DiscordApiGuildsResponse {
 export interface RoleMenuEntry {
   role: string,
   label: string,
+  color: ButtonStyle.Primary | ButtonStyle.Secondary | ButtonStyle.Success | ButtonStyle.Danger
   emoji?: APIPartialEmoji,
 }
 

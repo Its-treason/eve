@@ -59,6 +59,7 @@ export interface ActivityRow {
 export interface RoleMenuEntry {
     role: string,
     label: string,
+    color: number,
     emoji?: ReducedEmoji,
 }
 

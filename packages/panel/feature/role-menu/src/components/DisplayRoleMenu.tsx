@@ -17,22 +17,19 @@ interface DisplayRoleMenuProps {
   formattedRoles: SelectItem[],
   updateMenus: () => void,
   setRoleMenu: (roleMenu: RoleMenu) => void,
-  parentLoading: boolean,
   serverId: string,
 }
 
 export default function DisplayRoleMenu(
-  {roleMenu, setRoleMenu, updateMenus, channel, parentLoading, formattedRoles, serverId}: DisplayRoleMenuProps,
+  {roleMenu, setRoleMenu, updateMenus, channel, formattedRoles, serverId}: DisplayRoleMenuProps,
 ) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const { updateRoleMenuError, updateRoleMenu, updateRoleMenuLoading } = useUpdateRoleMenu(serverId);
+  const { updateRoleMenuError, updateRoleMenu, updateRoleMenuLoading: loading } = useUpdateRoleMenu(serverId);
 
   const selectedChannel = channel.find(singleChannel => {
     return singleChannel.id === roleMenu.channelId
   });
-
-  const loading = parentLoading || updateRoleMenuLoading;
 
   return (
     <Stack>
@@ -50,7 +47,7 @@ export default function DisplayRoleMenu(
       <TextInput
         readOnly
         label={'Channel'}
-        disabled={loading}
+        disabled
         width={'100%'}
         defaultValue={selectedChannel !== undefined ? selectedChannel.name : ''}
         icon={<Code>#</Code>}
@@ -61,6 +58,7 @@ export default function DisplayRoleMenu(
         label={'Message'}
         value={roleMenu.message}
         maxLength={2000}
+        required
         onChange={evt => {
           setRoleMenu(produce(roleMenu, (roleMenuDraft) => {
             roleMenuDraft.message = evt.target.value;
@@ -75,6 +73,7 @@ export default function DisplayRoleMenu(
               role: '',
               label: '',
               emoji: undefined,
+              color: 1,
             });
           }));
         }}
@@ -89,6 +88,7 @@ export default function DisplayRoleMenu(
               value={entry.role}
               label={'Role'}
               disabled={loading}
+              required
               onChange={value => {
                 setRoleMenu(produce(roleMenu, (roleMenuDraft) => {
                   roleMenuDraft.entries[index].role = String(value);
@@ -106,6 +106,7 @@ export default function DisplayRoleMenu(
               clearable={true}
             />
             <TextInput
+              required
               maxLength={24}
               label={'Button label'}
               value={entry.label}
@@ -116,6 +117,23 @@ export default function DisplayRoleMenu(
                 }));
               }}
               style={{flexGrow: '1'}}
+            />
+            <Select
+              data={[
+                { value: '1', label: 'Primary' },
+                { value: '2', label: 'Secondary' },
+                { value: '3', label: 'Success' },
+                { value: '4', label: 'Danger' },
+              ]}
+              value={entry.color.toString()}
+              label={'Button Color'}
+              disabled={loading}
+              onChange={value => {
+                setRoleMenu(produce(roleMenu, (roleMenuDraft) => {
+                  roleMenuDraft.entries[index].color = Number(value);
+                }));
+              }}
+              style={{width: '100px'}}
             />
             <Button
               color={'red'}

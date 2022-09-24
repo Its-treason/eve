@@ -62,7 +62,7 @@ function RoleMenu({ server, initialRoleMenus}: RoleMenuProps) {
       <Accordion>
         {roleMenus.map((menu, index) => {
           return (
-            <Accordion.Item value={menu.name} key={index}>
+            <Accordion.Item value={menu.name} key={menu.id}>
               <Accordion.Control>{menu.name}</Accordion.Control>
               <Accordion.Panel>
                 <DisplayRoleMenu
@@ -75,7 +75,6 @@ function RoleMenu({ server, initialRoleMenus}: RoleMenuProps) {
                       draft[index] = roleMenu;
                     }))
                   }}
-                  parentLoading={loading}
                   serverId={server.id}
                 />
               </Accordion.Panel>

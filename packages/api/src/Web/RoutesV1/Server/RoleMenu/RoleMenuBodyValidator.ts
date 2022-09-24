@@ -83,6 +83,8 @@ export default class RoleMenuBodyValidator {
           return false;
         }, { message: 'Invalid role id' }),
 
+        color: z.number().min(1).max(4),
+
         // Change this to an Emoji validator when emoji picker was added to the frontend
         // Should be empty for now
         emoji: z.object({

@@ -72,7 +72,7 @@ export default class RoleMenuService {
       const button: APIButtonComponentWithCustomId = {
         type: ComponentType.Button,
         label: entry.label,
-        style: ButtonStyle.Success,
+        style: entry.color,
         'custom_id': `menu-${roleMenu.id}-${entry.role}-${index}`,
       };
 
@@ -87,7 +87,7 @@ export default class RoleMenuService {
 
       components.at(-1)?.components.push(button);
     });
-  
+
     return {
       components,
       message: roleMenu.message.length !== 0 ? roleMenu.message : ' ',
@@ -103,12 +103,12 @@ export default class RoleMenuService {
     if (channel === null) {
       return false;
     }
-  
+
     const message = await this.apiClient.getMessage(channelId, messageId);
     if (message === null) {
       return false;
     }
-  
+
     return message;
   }
 
@@ -116,17 +116,17 @@ export default class RoleMenuService {
     if (roleMenu.messageId === '') {
       return;
     }
-  
+
     const channel = await this.apiClient.getChannel(roleMenu.channelId);
     if (channel === null) {
       return;
     }
-  
+
     const message = await this.apiClient.getMessage(channel.id, roleMenu.messageId);
     if (message === null) {
       return;
     }
-  
+
     await this.apiClient.deleteMessage(channel.id, message.id);
   }
 }
