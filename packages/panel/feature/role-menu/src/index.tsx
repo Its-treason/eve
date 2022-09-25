@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import useRoleMenus from "./hooks/useRoleMenus";
 import { Accordion, Button, Text } from "@mantine/core";
 import DisplayRoleMenu from "./components/DisplayRoleMenu";
@@ -23,12 +23,14 @@ function RoleMenu({ server, initialRoleMenus}: RoleMenuProps) {
 
   const loading = channelLoading || roleMenuLoading || rolesLoading;
 
-  const formattedRoles = roles.map(role => {
-    return {
-      value: role.id,
-      label: `${role.name} ${role.isModerator ? '[M]' : ''} ${role.isModerator ? '[A]' : ''}`,
-    };
-  });
+  const formattedRoles = useMemo(() => {
+    return roles.map(role => {
+      return {
+        value: role.id,
+        label: `${role.name} ${role.isModerator ? '[M]' : ''} ${role.isModerator ? '[A]' : ''}`,
+      };
+    });
+  }, [roles]);
 
   return (
     <EmojiContext.Provider value={emojis}>

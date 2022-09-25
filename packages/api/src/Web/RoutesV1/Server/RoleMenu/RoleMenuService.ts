@@ -1,9 +1,10 @@
-import { APIActionRowComponent, APIButtonComponentWithCustomId, APIMessage, APIMessageActionRowComponent, ButtonStyle, ComponentType } from 'discord-api-types/v9';
+import { APIActionRowComponent, APIButtonComponentWithCustomId, APIEmbed, APIMessage, APIMessageActionRowComponent, ButtonStyle, ComponentType } from 'discord-api-types/v9';
 import { ApiClient, RoleMenu } from '@eve/core';
 import { injectable } from 'tsyringe';
 
 type MessageOptions = {
   message: string,
+  embed?: [APIEmbed],
   components: APIActionRowComponent<APIMessageActionRowComponent>[],
 }
 
@@ -35,6 +36,7 @@ export default class RoleMenuService {
         roles: [],
       },
       content: options.message,
+      embeds: options.embed,
       components: options.components,
     });
 
@@ -53,6 +55,7 @@ export default class RoleMenuService {
         roles: [],
       },
       content: options.message,
+      embeds: options.embed,
       components: options.components,
     });
     if (!message) {
@@ -88,9 +91,23 @@ export default class RoleMenuService {
       components.at(-1)?.components.push(button);
     });
 
+    let embed: [APIEmbed]|undefined = undefined;
+    if (roleMenu.embed !== null) {
+      embed = [{
+        title: roleMenu.embed.title,
+        description: roleMenu.embed.description,
+        fields: roleMenu.embed.fields,
+        color: Number.parseInt(roleMenu.embed.color.replace('#', ''), 16),
+        footer: {
+          text: roleMenu.embed.footer,
+        }
+      }];
+    }
+
     return {
       components,
-      message: roleMenu.message.length !== 0 ? roleMenu.message : ' ',
+      message: roleMenu.message,
+      embed,
     };
   }
 

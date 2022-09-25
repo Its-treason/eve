@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe';
 import { Request } from 'express';
 import AbstractController from '../../../AbstractController';
-import { RoleMenu, RoleMenuRepository, RoleMenuEntry } from '@eve/core';
+import { RoleMenu, RoleMenuRepository } from '@eve/core';
 import RoleMenuBodyValidator from './RoleMenuBodyValidator';
 import { ResponseWithLocals } from '../../../../types';
 import RoleMenuService from './RoleMenuService';
@@ -18,7 +18,7 @@ export default class RoleMenuController extends AbstractController {
     super();
   }
 
-  async getRoleMenusHandler(req: Request, res: ResponseWithLocals): Promise<void> {
+  async getRoleMenusHandler(_req: Request, res: ResponseWithLocals): Promise<void> {
     const response = await this.roleMenuRepository.getAllForServer(res.locals.server.id);
     this.successResponse(res, response);
   }
@@ -67,16 +67,17 @@ export default class RoleMenuController extends AbstractController {
       return;
     }
 
-    const { entries, roleMenu: oldRoleMenu, message } = validationResult.data;
+    const { entries, roleMenu: oldRoleMenu, message, embed } = validationResult.data;
 
     const roleMenu: RoleMenu = {
       ...oldRoleMenu,
       message,
       entries,
+      embed,
     };
 
     const messageId = await this.roleMenuService.createRoleMenuMessage(roleMenu);
-    await this.roleMenuRepository.updateEntry(roleMenu.id, roleMenu.entries, roleMenu.message, messageId);
+    await this.roleMenuRepository.updateEntry(roleMenu.id, roleMenu.entries, roleMenu.message, roleMenu.embed, messageId);
 
     this.successResponse(res, { acknowledged: true });
   }

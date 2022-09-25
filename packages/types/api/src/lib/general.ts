@@ -70,6 +70,7 @@ export interface RoleMenu {
     messageId: string,
     entries: RoleMenuEntry[],
     message: string,
+    embed: ReducedEmbed|null,
     name: string,
 }
 
@@ -81,4 +82,18 @@ export interface BreadCrumpItem {
 export interface CheckablePlaylistItem {
     checked: boolean,
     item: PlaylistItem,
+}
+
+export type ReducedEmbed = {
+    title: string,
+    description: string,
+    color: string,
+    footer: string,
+    fields: ReducedEmbedField[],
+}
+
+export type ReducedEmbedField = {
+    name: string,
+    value: string,
+    inline: boolean,
 }

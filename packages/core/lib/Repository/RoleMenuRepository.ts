@@ -1,3 +1,4 @@
+import { ReducedEmbed } from '@eve/types/api';
 import { injectable } from 'tsyringe';
 import MySQLClient from '../MySQLClient';
 import { RoleMenu, RoleMenuEntry } from '../types';
@@ -9,6 +10,7 @@ type RoleMenuRow = {
   'message_id': string,
   entries: string,
   message: string,
+  embed: string,
   name: string,
 }
 
@@ -37,6 +39,11 @@ export default class RoleMenuRepository {
     const result = await this.connection.query('SELECT * FROM `role_menu` WHERE server_id = ?', [guildId]);
 
     return (result as RoleMenuRow[]).map((row): RoleMenu => {
+      let embed = null;
+      try {
+        embed = JSON.parse(result[0].embed)
+      } catch (e) {}
+
       return {
         id: row.id,
         serverId: row.server_id,
@@ -44,6 +51,7 @@ export default class RoleMenuRepository {
         messageId: row.message_id,
         entries: JSON.parse(row.entries),
         message: row.message,
+        embed,
         name: row.name,
       };
     });
@@ -51,10 +59,15 @@ export default class RoleMenuRepository {
 
   async getRoleMenuRowById(id: string): Promise<RoleMenu | null> {
     const result = await this.connection.query('SELECT * FROM `role_menu` WHERE id = ?', [id]);
-  
+
     if (result[0] === undefined) {
       return null;
     }
+
+    let embed = null;
+    try {
+      embed = JSON.parse(result[0].embed)
+    } catch {}
 
     return {
       id: result[0].id,
@@ -63,6 +76,7 @@ export default class RoleMenuRepository {
       messageId: result[0].message_id,
       entries: JSON.parse(result[0].entries),
       message: result[0].message,
+      embed,
       name: result[0].name,
     };
   }
@@ -71,11 +85,14 @@ export default class RoleMenuRepository {
     id: string,
     entries: RoleMenuEntry[],
     message: string,
+    embed: ReducedEmbed|null,
     messageId: string,
   ): Promise<void> {
+    let parsedEmbed: string|null = embed !== null ? JSON.stringify(embed) : '';
+
     await this.connection.query(
-      'UPDATE `role_menu` SET entries = ?, message = ?, message_id = ? WHERE id = ?;',
-      [JSON.stringify(entries), message, messageId, id],
+      'UPDATE `role_menu` SET entries = ?, message = ?, embed = ?, message_id = ? WHERE id = ?;',
+      [JSON.stringify(entries), message, parsedEmbed, messageId, id],
     );
   }
 

@@ -1,4 +1,4 @@
-import { RoleMenu, RoleMenuEntry } from '@eve/types/api';
+import { ReducedEmbed, RoleMenu, RoleMenuEntry } from '@eve/types/api';
 import Ajax from "./Ajax";
 
 export async function createRoleMenu(
@@ -18,10 +18,11 @@ export async function updateRoleMenu(
   serverId: string,
   roleMenuId: string,
   message: string,
+  embed: ReducedEmbed|null,
   entries: RoleMenuEntry[],
   apiKey: string,
 ): Promise<true|string> {
-  const body = JSON.stringify({ message, roleMenu: roleMenuId, entries });
+  const body = JSON.stringify({ message, roleMenu: roleMenuId, entries, embed });
   const response = await Ajax.post(`/v1/server/${serverId}/roleMenu/update`, body, apiKey);
 
   if (response.error !== null) {

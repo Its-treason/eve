@@ -1,4 +1,4 @@
-import { RoleMenuEntry } from '@eve/types/api';
+import { ReducedEmbed, RoleMenuEntry } from '@eve/types/api';
 import {useState} from "react";
 import { updateRoleMenu as doUpdateRoleMenu } from '@eve/panel/feature/core';
 import { getCookie } from 'cookies-next';
@@ -7,7 +7,7 @@ import { showNotification } from '@mantine/notifications';
 interface UseUpdateRoleMenuData {
   updateRoleMenuLoading: boolean,
   updateRoleMenuError: string|null,
-  updateRoleMenu: (roleMenuId: string, message: string, entries: RoleMenuEntry[]) => Promise<boolean>,
+  updateRoleMenu: (roleMenuId: string, message: string, embed: ReducedEmbed|null, entries: RoleMenuEntry[]) => Promise<boolean>,
 }
 
 export default function useUpdateRoleMenu(serverId: string): UseUpdateRoleMenuData {
@@ -17,13 +17,14 @@ export default function useUpdateRoleMenu(serverId: string): UseUpdateRoleMenuDa
   async function updateRoleMenu(
     roleMenuId: string,
     message: string,
+    embed: ReducedEmbed|null,
     entries: RoleMenuEntry[],
   ): Promise<boolean> {
     const apiKey = String(getCookie('apiKey'));
 
     setUpdateRoleMenuLoading(true);
 
-    const result = await doUpdateRoleMenu(serverId, roleMenuId, message, entries, apiKey);
+    const result = await doUpdateRoleMenu(serverId, roleMenuId, message, embed, entries, apiKey);
 
     setUpdateRoleMenuLoading(false);
     if (typeof result === "string") {

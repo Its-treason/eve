@@ -1,3 +1,4 @@
+import { ReducedEmbed } from '@eve/types/api';
 import { APIPartialEmoji, ButtonStyle } from 'discord-api-types/v9';
 
 export type PlaylistItem = {
@@ -48,5 +49,6 @@ export interface RoleMenu {
   messageId: string,
   entries: RoleMenuEntry[],
   message: string,
+  embed: ReducedEmbed|null,
   name: string,
 }

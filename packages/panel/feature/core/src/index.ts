@@ -16,6 +16,9 @@ export { default as ProminentButton } from './components/ProminentButton';
 export { default as Layout } from './components/Layout/Layout';
 export { default as Loading } from './components/Loading';
 export { default as RouterTransition } from './components/RouterTransition';
+export { default as EmbedBuilder } from './components/Embed/EmbedBuilder';
+export { default as EmbedBuilderOrText } from './components/Embed/EmbedBuilderOrText';
+export { default as EmbedBuilderOrNull } from './components/Embed/EmbedBuilderOrNull';
 
 // context Exports
 export { default as EmojiContext } from './context/EmojiContext';

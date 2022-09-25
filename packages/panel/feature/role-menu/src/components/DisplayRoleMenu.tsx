@@ -4,7 +4,8 @@ import {useState} from "react";
 import DeleteRoleMenu from "./DeleteRoleMenu";
 import { ReducedChannel, RoleMenu } from '@eve/types/api';
 import produce from 'immer';
-import { EmojiPicker } from '@eve/panel/feature/core';
+import { EmbedBuilderOrNull, EmojiPicker } from '@eve/panel/feature/core';
+import { DeviceFloppy, Plus, TrashX } from 'tabler-icons-react';
 
 interface SelectItem {
   label: string,
@@ -54,17 +55,23 @@ export default function DisplayRoleMenu(
         style={{width: '100%'}}
       />
       <Textarea
-        disabled={loading}
         label={'Message'}
-        value={roleMenu.message}
-        maxLength={2000}
         required
-        onChange={evt => {
+        maxLength={1900}
+        value={roleMenu.message}
+        onChange={(evt) => {
           setRoleMenu(produce(roleMenu, (roleMenuDraft) => {
             roleMenuDraft.message = evt.target.value;
           }));
         }}
-        style={{width: '100%'}}
+      />
+      <EmbedBuilderOrNull
+        value={roleMenu.embed}
+        onChange={(value) => {
+          setRoleMenu(produce(roleMenu, (roleMenuDraft) => {
+            roleMenuDraft.embed = value;
+          }));
+        }}
       />
       <Button
         onClick={() => {
@@ -77,7 +84,7 @@ export default function DisplayRoleMenu(
             });
           }));
         }}
-        fullWidth
+        leftIcon={<Plus />}
         disabled={loading || roleMenu.entries.length >= 25}
       >Add Role</Button>
       {roleMenu.entries.map((entry, index) => {
@@ -133,7 +140,7 @@ export default function DisplayRoleMenu(
                   roleMenuDraft.entries[index].color = Number(value);
                 }));
               }}
-              style={{width: '100px'}}
+              style={{width: '110px'}}
             />
             <Button
               color={'red'}
@@ -151,13 +158,14 @@ export default function DisplayRoleMenu(
       <Button
         disabled={loading}
         onClick={() => {
-          updateRoleMenu(roleMenu.id, roleMenu.message, roleMenu.entries).then((result) => {
+          updateRoleMenu(roleMenu.id, roleMenu.message, roleMenu.embed, roleMenu.entries).then((result) => {
             if (result) {
               updateMenus();
             }
           })
         }}
         fullWidth
+        leftIcon={<DeviceFloppy />}
       >Save role menu</Button>
       <Button
         disabled={loading}
@@ -166,6 +174,8 @@ export default function DisplayRoleMenu(
           setDeleteDialogOpen(true);
         }}
         fullWidth
+        variant={'outline'}
+        leftIcon={<TrashX />}
       >Delete role menu</Button>
       <Text color={'red'}>{updateRoleMenuError}</Text>
     </Stack>

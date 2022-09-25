@@ -54,6 +54,24 @@ export default class RoleMenuBodyValidator {
     const body = z.object({
       message: z.string().max(2000),
 
+      embed: z.object({
+        title: z.string().max(256),
+
+        description: z.string().max(4096),
+
+        color: z.string().refine((value) => /^#([0-9a-fA-F]{3}){1,2}$/i.test(value)),
+
+        footer: z.string().max(2048),
+
+        fields: z.array(z.object({
+          name: z.string().max(256),
+
+          value: z.string().max(1024),
+
+          inline: z.boolean(),
+        }))
+      }).nullable(),
+
       roleMenu: z.string().refine(async (value) => {
         const roleMenu = await this.roleMenuRepository.getRoleMenuRowById(value);
         return roleMenu !== null;
@@ -94,8 +112,6 @@ export default class RoleMenuBodyValidator {
         }).optional(),
       })),
     });
-
-    type bodyType = z.infer<typeof body>;
 
     return body.safeParseAsync(req.body);
   }
