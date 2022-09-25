@@ -1,3 +1,8 @@
+import getConfig from 'next/config';
+
+// Only holds serverRuntimeConfig and publicRuntimeConfig
+const { publicRuntimeConfig, serverRuntimeConfig } = getConfig()
+
 type ApiResponse<T> = {
   code: number,
   data: T,
@@ -8,8 +13,8 @@ type ApiResponse<T> = {
   error: string,
 }
 
-const hostPublic = process.env.NEXT_PUBLIC_API_HOST;
-const hostInternal = process.env.INTERNAL_API_HOST;
+const hostPublic = publicRuntimeConfig.publicApiHost;
+const hostInternal = publicRuntimeConfig.internalApiHost;
 
 // if window is undefined we are in server
 const host = typeof window === 'undefined' ? hostInternal : hostPublic;

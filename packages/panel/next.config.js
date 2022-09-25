@@ -10,6 +10,11 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  publicRuntimeConfig: {
+    authUrl: process.env.NEXT_PUBLIC_AUTH_URL,
+    internalApiHost: process.env.INTERNAL_API_HOST,
+    publicApiHost: process.env.NEXT_PUBLIC_API_HOST,
+  }
 };
 
 module.exports = withNx(nextConfig);

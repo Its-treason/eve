@@ -2,12 +2,17 @@ import { ProminentButton } from '@eve/panel/feature/core';
 import { Title, Text, Space, Container } from '@mantine/core';
 import { ReactElement } from 'react';
 import DisplayError from './components/DisplayError';
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
 
 type LoginFirstProps = {
   error?: string,
 }
 
 export default function LoginFirst({ error }: LoginFirstProps): ReactElement {
+  console.log(publicRuntimeConfig);
+
   return (
     <Container size={'xs'}>
       <Title>Greetings!</Title>
@@ -15,7 +20,7 @@ export default function LoginFirst({ error }: LoginFirstProps): ReactElement {
       <Space h={'xl'} />
       {error && <DisplayError error={error} />}
       <ProminentButton
-        to={process.env.NEXT_PUBLIC_AUTH_URL}
+        to={publicRuntimeConfig.authUrl}
         icon={'/assets/discord-logo.png'}
         text={'Login with Discord'}
         subtext={'Please login to configure the bot settings for your server'}
