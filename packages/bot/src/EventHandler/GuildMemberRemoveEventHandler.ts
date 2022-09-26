@@ -34,7 +34,12 @@ export default class GuildMemberRemoveEventHandler implements EventHandlerInterf
     let channel = null;
     try {
       channel = await member.guild.channels.fetch(leaveAction.getChannel());
-    } catch (e) {
+    } catch (error) {
+      this.logger.warning('Invalid channelId in auto leave action', {
+        channelId: leaveAction.getChannel(),
+        serverId: member.guild.id,
+        error,
+      });
       return;
     }
 
@@ -73,5 +78,12 @@ export default class GuildMemberRemoveEventHandler implements EventHandlerInterf
         serverId: member.guild.id,
       });
     }
+
+    this.logger.info('Send leave message', {
+      message,
+      userId: member.id,
+      username: member.user.username,
+      serverId: member.guild.id,
+    });
   }
 }

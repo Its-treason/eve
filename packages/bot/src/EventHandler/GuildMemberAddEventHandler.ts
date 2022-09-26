@@ -37,12 +37,19 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
         await member.roles.add(role);
       } catch (error) {
         this.logger.error('An error occurred while sending a auto roles', {
-          error: (error as Error),
+          error,
           role,
           serverId: member.guild.id,
         });
       }
     }
+
+    this.logger.info('Added roles to new user', {
+      roles,
+      userId: member.id,
+      username: member.user.username,
+      serverId: member.guild.id,
+    });
   }
 
   private async sendJoinMessage(member: GuildMember): Promise<void> {
@@ -59,7 +66,12 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
     let channel = null;
     try {
       channel = await member.guild.channels.fetch(joinAction.getChannel());
-    } catch (e) {
+    } catch (error) {
+      this.logger.warning('Invalid channelId in auto join action', {
+        channelId: joinAction.getChannel(),
+        serverId: member.guild.id,
+        error,
+      });
       return;
     }
 
@@ -93,10 +105,17 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
       });
     } catch (error) {
       this.logger.error('An error occurred while sending a join message', {
-        error: (error as Error),
+        error,
         channelId: joinAction.getChannel(),
         serverId: member.guild.id,
       });
     }
+
+    this.logger.info('Send join message', {
+      message,
+      userId: member.id,
+      username: member.user.username,
+      serverId: member.guild.id,
+    });
   }
 }
