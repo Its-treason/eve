@@ -30,7 +30,7 @@ export default class BanCommand implements SlashCommandInterface {
         new NotGuildOwnerValidationHandler(targetUser, 'You cannot ban the server owner'),
       ],
       () => this.doBan(interaction, targetUser, actionUser, reason),
-    )
+    );
   }
 
   private async doBan(
