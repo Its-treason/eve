@@ -9,14 +9,14 @@ import BotCanManageRoleValidationHandler from '../Validation/Validators/BotCanMa
 import { Logger } from '@eve/core';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 
-type AddRoleResult = {
+type RemoveRoleResult = {
   succeeded: number,
   unchanged: number,
   failed: number,
 }
 
 @injectable()
-export default class AddRoleCommand implements SlashCommandInterface {
+export default class RemoveRoleCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
     private logger: Logger,
@@ -44,19 +44,20 @@ export default class AddRoleCommand implements SlashCommandInterface {
     includeBots: Boolean,
   ): Promise<void> {
     const guild = interaction.guild!;
-    let results: AddRoleResult = { succeeded: 0, failed: 0, unchanged: 0 };
+    let results: RemoveRoleResult = { succeeded: 0, failed: 0, unchanged: 0 };
 
     await interaction.reply(this.createMessage(role, results, interaction));
 
-    for await (results of this.addRole(role, guild, results, includeBots)) {
+    for await (results of this.removeRole(role, guild, includeBots)) {
       await interaction.editReply(this.createMessage(role, results, interaction));
     }
 
     await interaction.editReply(this.createMessage(role, results, interaction));
   }
 
-  private async *addRole(role: APIRole|Role, guild: Guild, results: AddRoleResult, includeBots: Boolean): AsyncGenerator<AddRoleResult> {
-    let lastId: undefined|string;
+  private async *removeRole(role: APIRole|Role, guild: Guild, includeBots: Boolean): AsyncGenerator<RemoveRoleResult> {
+    let lastId: undefined|string
+    const results: RemoveRoleResult = { succeeded: 0, failed: 0, unchanged: 0 };
 
     while (true) {
       const members = await guild.members.list({ limit: 20, after: lastId });
@@ -67,17 +68,17 @@ export default class AddRoleCommand implements SlashCommandInterface {
 
       for (const [_, member] of members) {
         try {
-          if (member.roles.cache.has(role.id)  || (member.user.bot === true && !includeBots)) {
+          if (!member.roles.cache.has(role.id) || (member.user.bot === true && !includeBots)) {
             results.unchanged++;
             continue;
           }
 
-          await member.roles.add(role.id);
+          await member.roles.remove(role.id);
           results.succeeded++;
         } catch (error) {
           results.failed++;
 
-          this.logger.warning('Error while adding role', {
+          this.logger.warning('Error while removing role', {
             error,
             roleId: role.id,
             roleName: role.name,
@@ -93,14 +94,14 @@ export default class AddRoleCommand implements SlashCommandInterface {
 
   private createMessage(
     role: APIRole|Role,
-    results: AddRoleResult,
+    results: RemoveRoleResult,
     interaction: ChatInputCommandInteraction,
   ): WebhookEditMessageOptions {
-    const responseEmbed = embedFactory(interaction.client, 'Adding roles');
+    const responseEmbed = embedFactory(interaction.client, 'Removing roles');
     responseEmbed.setDescription(
-      `Adding the role ${role} to all server member
-
-      Progress: **Finished**
+      `Removing the role ${role} of all server member
+      
+      Progress: **${0}** / **${interaction.guild!.memberCount}**
 
       Succeeded: **${results.succeeded}**
       Unchanged: **${results.unchanged}**
@@ -111,8 +112,8 @@ export default class AddRoleCommand implements SlashCommandInterface {
 
   getData(): ApplicationCommandData {
     return {
-      name: 'add_role',
-      description: 'Add a role to all server members',
+      name: 'remove_role',
+      description: 'Remove a role from all server members',
       type: ApplicationCommandType.ChatInput,
       options: [
         {
@@ -123,7 +124,7 @@ export default class AddRoleCommand implements SlashCommandInterface {
         },
         {
           name: 'include_bots',
-          description: 'Also add roles to Bots',
+          description: 'Also remove roles from Bots',
           type: ApplicationCommandOptionType.Boolean,
           required: false,
         },

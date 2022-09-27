@@ -33,6 +33,7 @@ import GuildMemberAddEventHandler from "./EventHandler/GuildMemberAddEventHandle
 import GuildMemberRemoveEventHandler from "./EventHandler/GuildMemberRemoveEventHandler";
 import InteractionCreateEventHandler from "./EventHandler/InteractionCreateEventHandler";
 import AddRoleCommand from './SlashCommands/AddRoleCommand';
+import RemoveRoleCommand from './SlashCommands/RemoveRoleCommand';
 
 container.register('EventHandler', { useClass: GuildCreateEventHandler });
 container.register('EventHandler', { useClass: GuildDeleteEventHandler });
@@ -63,6 +64,7 @@ container.register('SlashCommands', BonkCommand);
 container.register('SlashCommands', InviteCommand);
 container.register('SlashCommands', KickCommand);
 container.register('SlashCommands', PardonCommand);
+container.register('SlashCommands', RemoveRoleCommand);
 container.register('SlashCommands', WhoisCommand);
 
 container.register('PlaylistSubCommands', PlaylistDeleteCommand);
