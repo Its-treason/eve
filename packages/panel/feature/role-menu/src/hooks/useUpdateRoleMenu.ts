@@ -5,13 +5,13 @@ import { getCookie } from 'cookies-next';
 import { showNotification } from '@mantine/notifications';
 
 interface UseUpdateRoleMenuData {
-  updateRoleMenuLoading: boolean,
+  loading: boolean,
   updateRoleMenuError: string|null,
   updateRoleMenu: (roleMenuId: string, message: string, embed: ReducedEmbed|null, entries: RoleMenuEntry[]) => Promise<boolean>,
 }
 
 export default function useUpdateRoleMenu(serverId: string): UseUpdateRoleMenuData {
-  const [updateRoleMenuLoading, setUpdateRoleMenuLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [updateRoleMenuError, setUpdateRoleMenuError] = useState<string|null>(null);
 
   async function updateRoleMenu(
@@ -22,11 +22,11 @@ export default function useUpdateRoleMenu(serverId: string): UseUpdateRoleMenuDa
   ): Promise<boolean> {
     const apiKey = String(getCookie('apiKey'));
 
-    setUpdateRoleMenuLoading(true);
+    setLoading(true);
 
     const result = await doUpdateRoleMenu(serverId, roleMenuId, message, embed, entries, apiKey);
 
-    setUpdateRoleMenuLoading(false);
+    setLoading(false);
     if (typeof result === "string") {
       setUpdateRoleMenuError(result);
       return false;
@@ -42,7 +42,7 @@ export default function useUpdateRoleMenu(serverId: string): UseUpdateRoleMenuDa
 
   return {
     updateRoleMenuError,
-    updateRoleMenuLoading,
+    loading,
     updateRoleMenu,
   }
 }

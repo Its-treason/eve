@@ -7,6 +7,7 @@ import DisplayEmoji from './DisplayEmoji';
 
 const useStyles = createStyles((theme) => ({
   controlWrapper: {
+    marginTop: 3,
     display: 'grid',
     gridTemplate: '"tooltip" "input"',
     gridTemplateColumns: '100%',

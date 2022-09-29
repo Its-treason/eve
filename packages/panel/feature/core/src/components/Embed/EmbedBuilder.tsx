@@ -1,8 +1,59 @@
 import { ReducedEmbed } from '@eve/types/api';
 import { useEffect } from 'react';
-import { useForm } from '@mantine/form';
-import { ActionIcon, Button, Card, Checkbox, ColorInput, createStyles, Group, Stack, Textarea, TextInput, Title } from '@mantine/core';
+import { useForm, zodResolver } from '@mantine/form';
+import { ActionIcon, Button, Card, Checkbox, ColorInput, Group, Stack, Textarea, TextInput, Text } from '@mantine/core';
 import { Plus, Trash } from 'tabler-icons-react';
+import { z } from 'zod';
+import DisplayEmbedError from './DisplayEmbedError';
+
+const schema = z.object({
+  title: z.string().max(256),
+
+  description: z.string().max(4096),
+
+  color: z.string().refine((value) => /^#([0-9a-fA-F]{3}){1,2}$/i.test(value)),
+
+  footer: z.string().max(2048),
+
+  fields: z.array(z.object({
+    name: z.string().max(256),
+
+    value: z.string().max(1024),
+
+    inline: z.boolean(),
+  }))
+}).superRefine((embed, ctx) => {
+  let characterCount = 0;
+
+  characterCount += embed.description.length;
+  characterCount += embed.title.length;
+  characterCount += embed.footer.length;
+  for (const field of embed.fields) {
+    characterCount += field.name.length;
+    characterCount += field.value.length;
+  }
+
+  if (characterCount === 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.too_small,
+      minimum: 1,
+      type: 'string',
+      inclusive: true,
+      message: 'Embed must not be empty',
+      fatal: true,
+    });
+  }
+  if (characterCount > 5900) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.too_big,
+      maximum: 5900,
+      type: 'string',
+      inclusive: true,
+      message: 'Length of all Embed fields must not be greater then 5900 characters',
+      fatal: true,
+    });
+  }
+})
 
 type EmbedBuilderProps = {
   embed: ReducedEmbed,
@@ -13,18 +64,7 @@ export default function EmbedBuilder({ embed, onChange }: EmbedBuilderProps) {
   const form = useForm({
     initialValues: embed,
     validateInputOnChange: true,
-    validate: {
-      // See https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
-      title: (value) => value.length >= 256,
-      description: (value) => value.length >= 4096,
-      color: (value) => !(/^#([0-9a-fA-F]{3}){1,2}$/.test(value)),
-      footer: (value) => value.length >= 2048,
-      fields: {
-        inline: (value) => typeof value === 'boolean',
-        name: (value) => value.length >= 256,
-        value: (value) => value.length >= 1024,
-      },
-    }
+    validate: zodResolver(schema),
   });
 
   useEffect(() => {
@@ -70,6 +110,7 @@ export default function EmbedBuilder({ embed, onChange }: EmbedBuilderProps) {
   return (
     <Card sx={(theme) => ({ background: theme.colors.dark[7] })}>
       <Card.Section p={'md'}>
+        <DisplayEmbedError form={form} />
         <TextInput
           withAsterisk
           label={'Title'}

@@ -1,12 +1,12 @@
 import {useMemo, useState} from "react";
 import useRoleMenus from "./hooks/useRoleMenus";
 import { Accordion, Button, Text } from "@mantine/core";
-import DisplayRoleMenu from "./components/DisplayRoleMenu";
 import produce from "immer";
 import CreateRoleMenu from "./components/CreateRoleMenu";
 import { Plus } from 'tabler-icons-react';
 import { ReducedServer, RoleMenu } from '@eve/types/api';
 import { EmojiContext, EmptyState, useEmojis, useServerChannel, useServerRoles } from '@eve/panel/feature/core';
+import EditRoleMenu from './components/EditRoleMenu/EditRoleMenu';
 
 type RoleMenuProps = {
   server: ReducedServer,
@@ -61,22 +61,17 @@ function RoleMenu({ server, initialRoleMenus}: RoleMenuProps) {
           }}
         />
       }
-      <Accordion>
-        {roleMenus.map((menu, index) => {
+      <Accordion variant="separated" mt={'md'}>
+        {roleMenus.map((menu) => {
           return (
             <Accordion.Item value={menu.name} key={menu.id}>
               <Accordion.Control>{menu.name}</Accordion.Control>
-              <Accordion.Panel>
-                <DisplayRoleMenu
+              <Accordion.Panel sx={(theme) => ({ background: theme.colors.gray[9] })}>
+                <EditRoleMenu
                   roleMenu={menu}
                   channel={channel}
                   formattedRoles={formattedRoles}
                   updateMenus={updateRoleMenus}
-                  setRoleMenu={roleMenu => {
-                    setRoleMenus(produce(draft => {
-                      draft[index] = roleMenu;
-                    }))
-                  }}
                   serverId={server.id}
                 />
               </Accordion.Panel>

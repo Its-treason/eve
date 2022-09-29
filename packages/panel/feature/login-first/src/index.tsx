@@ -11,8 +11,6 @@ type LoginFirstProps = {
 }
 
 export default function LoginFirst({ error }: LoginFirstProps): ReactElement {
-  console.log(publicRuntimeConfig);
-
   return (
     <Container size={'xs'}>
       <Title>Greetings!</Title>

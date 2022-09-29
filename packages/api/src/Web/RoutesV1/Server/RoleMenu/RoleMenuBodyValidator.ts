@@ -70,6 +70,37 @@ export default class RoleMenuBodyValidator {
 
           inline: z.boolean(),
         }))
+      }).superRefine((embed, ctx) => {
+        let characterCount = 0;
+      
+        characterCount += embed.description.length;
+        characterCount += embed.title.length;
+        characterCount += embed.footer.length;
+        for (const field of embed.fields) {
+          characterCount += field.name.length;
+          characterCount += field.value.length;
+        }
+      
+        if (characterCount === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_small,
+            minimum: 1,
+            type: 'string',
+            inclusive: true,
+            message: 'Embed must not be empty',
+            fatal: true,
+          });
+        }
+        if (characterCount > 5900) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_big,
+            maximum: 5900,
+            type: 'string',
+            inclusive: true,
+            message: 'Length of all Embed fields must not be greater then 5900 characters',
+            fatal: true,
+          });
+        }
       }).nullable(),
 
       roleMenu: z.string().refine(async (value) => {
