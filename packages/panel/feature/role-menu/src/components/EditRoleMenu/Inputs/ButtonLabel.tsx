@@ -12,7 +12,7 @@ export default function ButtonLabel({ form, index }: ButtonLabelProps) {
     <TextInput
       required
       label={'Button label'}
-      sx={{ flex: 1 }}
+      sx={{ flex: 1, flexGrow: '1 !important' }}
       {...form.getInputProps(`entries.${index}.label`)}
     />
   );

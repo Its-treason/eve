@@ -1,10 +1,14 @@
 import { createGetInitialProps } from '@mantine/next';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
+import { resetServerContext } from 'react-beautiful-dnd'
 
-const getInitialProps = createGetInitialProps();
+const mantineGetInitialProps = createGetInitialProps();
 
 export default class _Document extends Document {
-  static getInitialProps = getInitialProps;
+  static getInitialProps = (ctx: any) => {
+    resetServerContext()
+    return mantineGetInitialProps(ctx);
+  };
 
   render() {
     return (

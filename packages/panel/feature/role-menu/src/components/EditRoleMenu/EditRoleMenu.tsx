@@ -76,7 +76,7 @@ export default function EditRoleMenu(
       <Message form={form} />
       <Embed form={form} />
       <RoleMenuRoleList form={form} formattedRoles={formattedRoles} />
-      <SaveRoleMenuButton form={form} updateRoleMenu={updateRoleMenu} />
+      <SaveRoleMenuButton form={form} updateRoleMenu={updateRoleMenu} loading={loading} />
       <DeleteRoleMenuButton setDeleteDialogOpen={setDeleteDialogOpen} />
       <Text color={'red'}>{updateRoleMenuError}</Text>
     </Stack>

@@ -8,12 +8,13 @@ import { DeviceFloppy } from 'tabler-icons-react'
 
 type SaveRoleMenuButtonProps = {
   form: UseFormReturnType<RoleMenu>,
+  loading: boolean,
   updateRoleMenu: (
     roleMenuId: string, message: string, embed: ReducedEmbed|null, entries: RoleMenuEntry[],
   ) => Promise<boolean>,
 }
 
-export default function SaveRoleMenuButton({ form, updateRoleMenu }: SaveRoleMenuButtonProps) {
+export default function SaveRoleMenuButton({ form, updateRoleMenu, loading }: SaveRoleMenuButtonProps) {
   const handleClick = useCallback(() => {
     if (!form.isValid()) {
       showNotification({
@@ -28,13 +29,11 @@ export default function SaveRoleMenuButton({ form, updateRoleMenu }: SaveRoleMen
     });
   }, [form]);
 
-  console.log(form.errors);
-
   return (
     <Button
       onClick={handleClick}
       leftIcon={<DeviceFloppy />}
-      disabled={!form.isValid() || form.errors['embed'] !== undefined}
+      disabled={!form.isValid() || form.errors['embed'] !== undefined || loading}
     >Save role menu</Button>
   );
 }
