@@ -53,6 +53,9 @@
       "@eve/panel/feature/user-home": [
         "packages/panel/feature/user-home/src/index.tsx"
       ],
+      "@eve/storage-migration": [
+        "packages/storage-migration/src/index.ts"
+      ],
       "@eve/types/api": [
         "packages/types/api/src/index.ts"
       ]
