@@ -47,7 +47,7 @@ export default function EditRoleMenu(
 ) {
   const form = useForm({
     initialValues: roleMenu,
-    validateInputOnChange: true,
+    validateInputOnBlur: true,
     validate: zodResolver(schema)
   });
 

@@ -63,7 +63,7 @@ type EmbedBuilderProps = {
 export default function EmbedBuilder({ embed, onChange }: EmbedBuilderProps) {
   const form = useForm({
     initialValues: embed,
-    validateInputOnChange: true,
+    validateInputOnBlur: true,
     validate: zodResolver(schema),
   });
 
