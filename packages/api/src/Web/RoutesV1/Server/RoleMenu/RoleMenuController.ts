@@ -32,15 +32,18 @@ export default class RoleMenuController extends AbstractController {
 
     const { name, channel } = validationResult.data;
 
-    await this.roleMenuRepository.saveEntry(
-      this.randomHelper.generateRandomString(),
-      res.locals.server.id,
-      channel.id,
-      '',
-      [],
-      '',
+    const roleMenu: RoleMenu = {
+      id: this.randomHelper.generateRandomString(),
+      serverId: res.locals.server.id,
+      channelId: channel.id,
+      messageId: '',
+      message: '',
+      entries: [],
       name,
-    );
+      embed: null,
+    }
+
+    await this.roleMenuRepository.saveEntry(roleMenu);
 
     this.successResponse(res, { acknowledged: true });
   }
@@ -77,7 +80,10 @@ export default class RoleMenuController extends AbstractController {
     };
 
     const messageId = await this.roleMenuService.createRoleMenuMessage(roleMenu);
-    await this.roleMenuRepository.updateEntry(roleMenu.id, roleMenu.entries, roleMenu.message, roleMenu.embed, messageId);
+
+    roleMenu.messageId = messageId;
+
+    await this.roleMenuRepository.saveEntry(roleMenu);
 
     this.successResponse(res, { acknowledged: true });
   }
