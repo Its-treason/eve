@@ -16,7 +16,7 @@ export function Home({ user }: HomeProps) {
 
   return (
     <Layout context={user} backTo={'/'} containerSize={'md'} navItems={navItems}>
-      <Head><title>{user.name} - EVE</title></Head>
+      <Head><title>{`${user.name} - EVE`}</title></Head>
       <UserHome user={user} />
     </Layout>
   );

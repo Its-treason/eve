@@ -19,7 +19,7 @@ export function EditPlaylist({ user, playlistName }: EditPlaylistProps) {
 
   return (
     <Layout context={user} backTo={`/user/${user.id}/home`} containerSize={'md'} navItems={navItems}>
-      <Head><title>Playlist {playlistName} - {user.name} - EVE</title></Head>
+      <Head><title>{`Playlist ${playlistName} - ${user.name} - EVE`}</title></Head>
       <EditPlaylistPage
         user={user}
         playlistName={playlistName}

@@ -27,7 +27,7 @@
     "helmet": "^5.0.2",
     "immer": "^9.0.7",
     "mariadb": "^3.0.1",
-    "next": "12.2.3",
+    "next": "^13.0.0",
     "opusscript": "^0.0.8",
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.1",

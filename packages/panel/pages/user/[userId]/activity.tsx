@@ -17,7 +17,7 @@ export function Activity({ user }: ActivityProps) {
 
   return (
     <Layout context={user} backTo={`/user/${user.id}/home`} containerSize={'md'} navItems={navItems}>
-      <Head><title>{user.name} - EVE</title></Head>
+      <Head><title>{`Voice Activity - ${user.name} - EVE`}</title></Head>
       <UserActivity user={user} />
     </Layout>
   );

@@ -17,7 +17,7 @@ export function Activity({ server }: ActivityProps) {
 
   return (
     <Layout context={server} backTo={`/server/${server.id}/home`} containerSize={'md'} navItems={navItems}>
-        <Head><title>Voice Activity - EVE</title></Head>
+        <Head><title>{`Voice Activity - ${server.name} - EVE`}</title></Head>
         <ServerActivity server={server} />
     </Layout>
   );

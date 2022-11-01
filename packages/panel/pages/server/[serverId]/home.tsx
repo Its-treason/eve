@@ -16,7 +16,7 @@ export function Home({ server }: HomeProps) {
 
   return (
     <Layout context={server} backTo={'/'} containerSize={'md'} navItems={navItems}>
-      <Head><title>{server.name} - EVE</title></Head>
+      <Head><title>{`${server.name} - EVE`}</title></Head>
       <ServerHome server={server} />
     </Layout>
   );

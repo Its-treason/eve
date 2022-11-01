@@ -19,7 +19,7 @@ export function Playlist({ user, initialPlaylists, showInvalidPlaylistError }: P
 
   return (
     <Layout context={user} backTo={`/user/${user.id}/home`} containerSize={'xs'} navItems={navItems}>
-      <Head><title>Playlists - {user.name} - EVE</title></Head>
+      <Head><title>{`Playlists - ${user.name} - EVE`}</title></Head>
       <PlaylistHome
         user={user}
         initialPlaylists={initialPlaylists}

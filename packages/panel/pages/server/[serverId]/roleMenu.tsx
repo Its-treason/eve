@@ -19,7 +19,7 @@ export function RoleMenu({ server, initialRoleMenus }: RoleMenuProps) {
 
   return (
     <Layout context={server} backTo={`/server/${server.id}/home`} containerSize={'md'} navItems={navItems}>
-        <Head><title>Role menu - {server.name} - EVE</title></Head>
+        <Head><title>{`Role menu - ${server.name} - EVE`}</title></Head>
         <RoleMenuComponent server={server} initialRoleMenus={initialRoleMenus} />
     </Layout>
   );

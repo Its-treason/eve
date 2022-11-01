@@ -17,7 +17,7 @@ export function Actions({ server }: ActionsProps) {
 
   return (
     <Layout context={server} backTo={`/server/${server.id}/home`} containerSize={'md'} navItems={navItems}>
-        <Head><title>Auto actions - {server.name} - EVE</title></Head>
+        <Head><title>{`Auto actions - ${server.name} - EVE`}</title></Head>
         <AutoActions server={server} />
     </Layout>
   );
