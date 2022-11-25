@@ -15,6 +15,7 @@
     "panel-feature-playlist-edit": "packages/panel/feature/playlist-edit",
     "panel-feature-role-menu": "packages/panel/feature/role-menu",
     "panel-feature-server-home": "packages/panel/feature/server-home",
+    "panel-feature-server-logs": "packages/panel/feature/server-logs",
     "panel-feature-user-home": "packages/panel/feature/user-home",
     "storage": "packages/storage",
     "storage-migration": "packages/storage-migration",

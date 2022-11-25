@@ -1,4 +1,4 @@
-import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, CommandInteraction, PermissionFlagsBits, User } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, CommandInteraction, PermissionFlagsBits, PermissionResolvable, User } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
@@ -8,11 +8,13 @@ import NotGuildOwnerValidationHandler from '../Validation/Validators/NotGuildOwn
 import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 import UserNotBannedValidationHandler from '../Validation/Validators/UserNotBannedValidationHandler';
+import { PublicLogCategories, PublicLogsRepository } from '@eve/core';
 
 @injectable()
 export default class BanCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
+    private publicLogger: PublicLogsRepository,
   ) {}
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -48,6 +50,13 @@ export default class BanCommand implements SlashCommandInterface {
     answer.setDescription(`${targetUser} was successfully banned!`);
     answer.addFields([{ name: 'Reason', value: reason }]);
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
+
+    await this.publicLogger.createLog(
+      `"${interaction.user.username}" used the "ban" command to ban "${targetUser.username}"`,
+      PublicLogCategories.ModerationCommandUsed,
+      [interaction.guild!.id],
+      [interaction.user.id, targetUser.id],
+    );
   }
 
   getData(): ApplicationCommandData {
@@ -68,6 +77,8 @@ export default class BanCommand implements SlashCommandInterface {
           type: ApplicationCommandOptionType.String,
         },
       ],
+      dmPermission: false,
+      defaultMemberPermissions: PermissionFlagsBits.BanMembers.toString() as PermissionResolvable,
     };
   }
 }

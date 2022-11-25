@@ -1,7 +1,7 @@
 import { ProminentButton } from '@eve/panel/feature/core';
 import { ReducedServer } from '@eve/types/api';
 import { SimpleGrid } from '@mantine/core';
-import { Menu2, Rocket, Subtask } from 'tabler-icons-react';
+import { Menu2, Notebook, Rocket, Subtask } from 'tabler-icons-react';
 
 type ActionListProps = {
   server: ReducedServer,
@@ -32,6 +32,12 @@ export default function ActionList({ server }: ActionListProps) {
         text={'Voice Activity'}
         subtext={'Your members voice activity'}
         to={`/server/${server.id}/activity`}
+      />
+      <ProminentButton
+        icon={<Notebook />}
+        text={'Logs'}
+        subtext={'EVE activity logs'}
+        to={`/server/${server.id}/logs`}
       />
     </SimpleGrid>
   )

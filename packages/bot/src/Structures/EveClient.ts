@@ -17,7 +17,7 @@ export default class EveClient extends Client {
     @injectAll('EventHandler') eventHandler: EventHandlerInterface[],
     logger: Logger,
   ) {
-    super({ 
+    super({
       intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildVoiceStates,

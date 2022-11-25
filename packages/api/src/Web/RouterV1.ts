@@ -13,6 +13,7 @@ import PlaylistController from './RoutesV1/User/Playlist/PlaylistController';
 import MusicSearchController from './RoutesV1/User/Playlist/Search/MusicSearchController';
 import InviteController from './RoutesV1/InviteController';
 import ServerActivityController from './RoutesV1/Server/VoiceActivity/ServerActivityController';
+import PublicLogsController from './RoutesV1/Server/PublicLogs/PublicLogsController';
 
 @singleton()
 export default class RouterV1 {
@@ -29,7 +30,8 @@ export default class RouterV1 {
     private playlistController: PlaylistController,
     private musicSearchController: MusicSearchController,
     private inviteController: InviteController,
-  ) { }
+    private logsController: PublicLogsController,
+  ) {}
 
   public createRouter(): Router {
     const router = Router();
@@ -123,6 +125,13 @@ export default class RouterV1 {
       this.authMiddlewares.authMiddleware(false),
       this.authMiddlewares.canAccessServerMiddleware.bind(this.authMiddlewares),
       this.catchError(this.serverActivityController.getServerActivityAsCsv.bind(this.serverActivityController)),
+    );
+
+    router.get(
+      '/server/:serverId/logs',
+      this.authMiddlewares.authMiddleware(false),
+      this.authMiddlewares.canAccessServerMiddleware.bind(this.authMiddlewares),
+      this.catchError(this.logsController.getAllLogs.bind(this.logsController)),
     );
 
     router.get(

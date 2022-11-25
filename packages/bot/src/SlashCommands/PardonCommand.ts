@@ -1,16 +1,18 @@
 import embedFactory from '../Factory/messageEmbedFactory';
-import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, PermissionFlagsBits, User } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, PermissionFlagsBits, PermissionResolvable, User } from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 import UserBannedValidationHandler from '../Validation/Validators/UserBannedValidationHandler';
 import CommandValidator from '../Validation/CommandValidator';
+import { PublicLogCategories, PublicLogsRepository } from '@eve/core';
 
 @injectable()
 export default class PardonCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
+    private publicLogger: PublicLogsRepository,
   ) {}
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -39,6 +41,13 @@ export default class PardonCommand implements SlashCommandInterface {
     answer.setDescription(`${targetUser} was successfully pardoned!`);
     answer.addFields([{ name: 'Original ban reason', value: banInfo?.reason || 'N/A' }]);
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
+
+    await this.publicLogger.createLog(
+      `"${interaction.user.username}" used the "ban" command to ban "${targetUser.username}"`,
+      PublicLogCategories.ModerationCommandUsed,
+      [interaction.guild!.id],
+      [interaction.user.id, targetUser.id],
+    );
   }
 
   getData(): ApplicationCommandData {
@@ -54,6 +63,8 @@ export default class PardonCommand implements SlashCommandInterface {
           required: true,
         },
       ],
+      dmPermission: false,
+      defaultMemberPermissions: PermissionFlagsBits.BanMembers.toString() as PermissionResolvable,
     };
   }
 }

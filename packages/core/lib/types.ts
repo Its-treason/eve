@@ -52,3 +52,19 @@ export interface RoleMenu {
   embed: ReducedEmbed|null,
   name: string,
 }
+
+export enum PublicLogCategories {
+  CommandUsed = 'command_used',
+  ModerationCommandUsed = 'moderation_command_used',
+  AutoActionExecuted = 'auto_action_executed',
+  SettingChanged = 'setting_changed',
+  ErrorOccurred = 'error_occurred',
+}
+
+export type PublicLogRecord = {
+  '@timestamp': string,
+  message: string,
+  categorie: PublicLogCategories,
+  relatedServer: string[],
+  relatedUser: string[],
+}

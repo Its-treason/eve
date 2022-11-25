@@ -1,12 +1,12 @@
 import embedFactory from '../Factory/messageEmbedFactory';
-import { APIRole, ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, Guild, PermissionFlagsBits, Role, WebhookEditMessageOptions } from 'discord.js';
+import { APIRole, ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, BaseMessageOptions, ChatInputCommandInteraction, Guild, PermissionFlagsBits, PermissionResolvable, Role, WebhookEditMessageOptions } from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
 import CommandValidator from '../Validation/CommandValidator';
 import BotPermissionValidationHandler from '../Validation/Validators/BotPermissionValidationHandler';
 import BotCanManageRoleValidationHandler from '../Validation/Validators/BotCanManageRoleValidationHandler';
-import { Logger } from '@eve/core';
+import { Logger, PublicLogCategories, PublicLogsRepository } from '@eve/core';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 
 type AddRoleResult = {
@@ -20,6 +20,7 @@ export default class AddRoleCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
     private logger: Logger,
+    private publicLogger: PublicLogsRepository,
   ) {}
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -53,6 +54,13 @@ export default class AddRoleCommand implements SlashCommandInterface {
     }
 
     await interaction.editReply(this.createMessage(role, results, interaction));
+
+    await this.publicLogger.createLog(
+      `"${interaction.user.username}" used the "add_role" command to add the role "${role.name}" to all member of "${guild.name}"`,
+      PublicLogCategories.ModerationCommandUsed,
+      [guild.id],
+      [interaction.user.id],
+    );
   }
 
   private async *addRole(role: APIRole|Role, guild: Guild, results: AddRoleResult, includeBots: Boolean): AsyncGenerator<AddRoleResult> {
@@ -95,7 +103,7 @@ export default class AddRoleCommand implements SlashCommandInterface {
     role: APIRole|Role,
     results: AddRoleResult,
     interaction: ChatInputCommandInteraction,
-  ): WebhookEditMessageOptions {
+  ): BaseMessageOptions {
     const responseEmbed = embedFactory(interaction.client, 'Adding roles');
     responseEmbed.setDescription(
       `Adding the role ${role} to all server member
@@ -128,6 +136,8 @@ export default class AddRoleCommand implements SlashCommandInterface {
           required: false,
         },
       ],
+      dmPermission: false,
+      defaultMemberPermissions: PermissionFlagsBits.ManageRoles.toString() as PermissionResolvable,
     };
   }
 }

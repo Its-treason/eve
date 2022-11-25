@@ -50,6 +50,9 @@
       "@eve/panel/feature/server-home": [
         "packages/panel/feature/server-home/src/index.tsx"
       ],
+      "@eve/panel/feature/server-logs": [
+        "packages/panel/feature/server-logs/src/index.tsx"
+      ],
       "@eve/panel/feature/user-home": [
         "packages/panel/feature/user-home/src/index.tsx"
       ],

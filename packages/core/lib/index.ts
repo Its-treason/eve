@@ -14,6 +14,7 @@ import ApiKeysRepository from './Repository/ApiKeysRepository';
 import PermissionRepository from './Repository/PermissionRepository';
 import RoleMenuRepository from './Repository/RoleMenuRepository';
 import ApiClient from './ApiClient';
+import PublicLogsRepository from './Repository/PublicLogsRepository';
 
 export * from './types';
 export type { AutoActionInterface };
@@ -34,4 +35,5 @@ export {
   PermissionRepository,
   PlaylistRepository,
   RoleMenuRepository,
+  PublicLogsRepository,
 };

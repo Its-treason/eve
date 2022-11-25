@@ -1,4 +1,4 @@
-import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, CommandInteraction, PermissionFlagsBits, User } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, PermissionFlagsBits, PermissionResolvable, User } from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 import embedFactory from '../Factory/messageEmbedFactory';
@@ -8,11 +8,13 @@ import NotGuildOwnerValidationHandler from '../Validation/Validators/NotGuildOwn
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 import CommandValidator from '../Validation/CommandValidator';
 import UserIsGuildMember from '../Validation/Validators/UserIsGuildMember';
+import { PublicLogCategories, PublicLogsRepository } from '@eve/core';
 
 @injectable()
 export default class KickCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
+    private publicLogger: PublicLogsRepository,
   ) {}
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -48,6 +50,13 @@ export default class KickCommand implements SlashCommandInterface {
     answer.setDescription(`${targetUser} was kicked from this server`);
     answer.addFields([{ name: 'Reason', value: reason }]);
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
+
+    await this.publicLogger.createLog(
+      `"${interaction.user.username}" used the "kick" command to kick "${targetUser.username}"`,
+      PublicLogCategories.ModerationCommandUsed,
+      [interaction.guild!.id],
+      [interaction.user.id, targetUser.id],
+    );
   }
 
   getData(): ApplicationCommandData {
@@ -68,6 +77,8 @@ export default class KickCommand implements SlashCommandInterface {
           type: ApplicationCommandOptionType.String,
         },
       ],
+      dmPermission: false,
+      defaultMemberPermissions: PermissionFlagsBits.KickMembers.toString() as PermissionResolvable,
     };
   }
 }

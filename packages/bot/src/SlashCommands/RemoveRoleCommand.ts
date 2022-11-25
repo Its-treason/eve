@@ -1,12 +1,12 @@
 import embedFactory from '../Factory/messageEmbedFactory';
-import { APIRole, ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, Guild, PermissionFlagsBits, Role, WebhookEditMessageOptions } from 'discord.js';
+import { APIRole, ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, BaseMessageOptions, ChatInputCommandInteraction, Guild, PermissionFlagsBits, PermissionResolvable, Role } from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
 import CommandValidator from '../Validation/CommandValidator';
 import BotPermissionValidationHandler from '../Validation/Validators/BotPermissionValidationHandler';
 import BotCanManageRoleValidationHandler from '../Validation/Validators/BotCanManageRoleValidationHandler';
-import { Logger } from '@eve/core';
+import { Logger, PublicLogCategories, PublicLogsRepository } from '@eve/core';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 
 type RemoveRoleResult = {
@@ -19,6 +19,7 @@ type RemoveRoleResult = {
 export default class RemoveRoleCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
+    private publicLogger: PublicLogsRepository,
     private logger: Logger,
   ) {}
 
@@ -53,6 +54,13 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
     }
 
     await interaction.editReply(this.createMessage(role, results, interaction));
+
+    await this.publicLogger.createLog(
+      `"${interaction.user.username}" used the "remove_role" command to remove the role "${role.name}" from all member of "${guild.name}"`,
+      PublicLogCategories.ModerationCommandUsed,
+      [guild.id],
+      [interaction.user.id],
+    );
   }
 
   private async *removeRole(role: APIRole|Role, guild: Guild, includeBots: Boolean): AsyncGenerator<RemoveRoleResult> {
@@ -96,7 +104,7 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
     role: APIRole|Role,
     results: RemoveRoleResult,
     interaction: ChatInputCommandInteraction,
-  ): WebhookEditMessageOptions {
+  ): BaseMessageOptions {
     const responseEmbed = embedFactory(interaction.client, 'Removing roles');
     responseEmbed.setDescription(
       `Removing the role ${role} of all server member
@@ -129,6 +137,8 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
           required: false,
         },
       ],
+      dmPermission: false,
+      defaultMemberPermissions: PermissionFlagsBits.ManageRoles.toString() as PermissionResolvable,
     };
   }
 }

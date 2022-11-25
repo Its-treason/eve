@@ -19,6 +19,7 @@ export { default as RouterTransition } from './components/RouterTransition';
 export { default as EmbedBuilder } from './components/Embed/EmbedBuilder';
 export { default as EmbedBuilderOrText } from './components/Embed/EmbedBuilderOrText';
 export { default as EmbedBuilderOrNull } from './components/Embed/EmbedBuilderOrNull';
+export { default as DisplayDate } from './components/DisplayDate';
 
 // context Exports
 export { default as EmojiContext } from './context/EmojiContext';

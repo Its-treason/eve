@@ -1,8 +1,15 @@
-import { ButtonInteraction } from 'discord.js';
+import { PublicLogCategories, PublicLogsRepository } from '@eve/core';
+import { ButtonInteraction, EmbedBuilder, GuildMember, Role } from 'discord.js';
+import { singleton } from 'tsyringe';
 import embedFactory from '../Factory/messageEmbedFactory';
 import ButtonInteractionInterface from './ButtonInteractionInterface';
 
+@singleton()
 export default class MenuInteraction implements ButtonInteractionInterface {
+  constructor(
+    private publicLogger: PublicLogsRepository,
+  ) {}
+
   getName(): string {
     return 'menu';
   }
@@ -23,28 +30,17 @@ export default class MenuInteraction implements ButtonInteractionInterface {
     }
 
     if (interactionUser.roles.cache.find(r => r.id === role.id)) {
-      try {
-        await interactionUser.roles.remove(role.id);
-      } catch (e) {
-        answer.addFields([{
-          name: 'Error',
-          value: `I couldn't remove your \`${role.name}\` role. Because i don't have enough permission.`,
-        }]);
-        await interaction.reply({
-          embeds: [answer],
-          ephemeral: true,
-        });
-        return;
-      }
-
-      answer.addFields([{ name: 'Role removed', value: `\`${role.name}\` removed` }]);
-      await interaction.reply({
-        embeds: [answer],
-        ephemeral: true,
-      });
-      return;
+      this.removeRole(interactionUser, interaction, role, answer);
     }
+    this.addRole(interactionUser, interaction, role, answer);
+  }
 
+  private async addRole(
+    interactionUser: GuildMember,
+    interaction: ButtonInteraction<"cached">,
+    role: Role,
+    answer: EmbedBuilder,
+  ): Promise<void> {
     try {
       await interactionUser.roles.add(role.id);
     } catch (e) {
@@ -64,5 +60,44 @@ export default class MenuInteraction implements ButtonInteractionInterface {
       embeds: [answer],
       ephemeral: true,
     });
+    await this.publicLogger.createLog(
+      `"${interactionUser.user.username}" used a role menu to get the "${role.name}" role`,
+      PublicLogCategories.AutoActionExecuted,
+      [interaction.guildId],
+      [interactionUser.id],
+    );
+  }
+
+  private async removeRole(
+    interactionUser: GuildMember,
+    interaction: ButtonInteraction<"cached">,
+    role: Role,
+    answer: EmbedBuilder,
+  ): Promise<void> {
+    try {
+      await interactionUser.roles.remove(role.id);
+    } catch (e) {
+      answer.addFields([{
+        name: 'Error',
+        value: `I couldn't remove your \`${role.name}\` role. Because i don't have enough permission.`,
+      }]);
+      await interaction.reply({
+        embeds: [answer],
+        ephemeral: true,
+      });
+      return;
+    }
+
+    answer.addFields([{ name: 'Role removed', value: `\`${role.name}\` removed` }]);
+    await interaction.reply({
+      embeds: [answer],
+      ephemeral: true,
+    });
+    await this.publicLogger.createLog(
+      `"${interactionUser.user.username}" used a role menu to remove the "${role.name}" role`,
+      PublicLogCategories.AutoActionExecuted,
+      [interaction.guildId],
+      [interactionUser.id],
+    );
   }
 }

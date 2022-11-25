@@ -12,6 +12,40 @@ export default class MigrationController1 implements MigrationControllerInterfac
 
   async doMigrate(): Promise<void> {
     await this.moveRoleMenuesToElasticSearch();
+    await this.createPublicLogsIndex();
+  }
+
+  private async createPublicLogsIndex(): Promise<void> {
+    await this.elasticClient.indices.putTemplate({
+      name: 'eve-public-logs',
+      settings: {
+        index: {
+          lifecycle: {
+            name: '30-days-default',
+          }
+        }
+      },
+      mappings: {
+        "dynamic": "false",
+        "properties": {
+          "@timestamp": {
+            "type": "date"
+          },
+          "categorie": {
+            "type": "keyword"
+          },
+          "message": {
+            "type": "text"
+          },
+          "relatedServer": {
+            "type": "keyword"
+          },
+          "relatedUser": {
+            "type": "keyword"
+          }
+        }
+      },
+    });
   }
 
   private async moveRoleMenuesToElasticSearch(): Promise<void> {
@@ -115,7 +149,7 @@ export default class MigrationController1 implements MigrationControllerInterfac
       let embed = null;
       try {
         embed = JSON.parse(result[0].embed)
-      } catch (e) {}
+      } catch (e) { }
 
       return {
         id: row.id,
