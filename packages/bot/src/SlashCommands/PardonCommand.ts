@@ -43,7 +43,7 @@ export default class PardonCommand implements SlashCommandInterface {
     await interaction.reply({ embeds: [answer], allowedMentions: { repliedUser: true } });
 
     await this.publicLogger.createLog(
-      `"${interaction.user.username}" used the "ban" command to ban "${targetUser.username}"`,
+      `"${interaction.user.username}" used the "pardon" command to revoke "${targetUser.username}" ban`,
       PublicLogCategories.ModerationCommandUsed,
       [interaction.guild!.id],
       [interaction.user.id, targetUser.id],
