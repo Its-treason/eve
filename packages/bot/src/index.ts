@@ -15,6 +15,12 @@ import StorageMigrator from '@eve/storage-migration';
 
   registerErrorAndShutdownHandler(logger, client);
 
-  await client.run();
+  try {
+    await client.run();
+  } catch (error) {
+    logger.emergency("Could not start client", { error });
+    return;
+  }
+
   logger.info('Started eve-bot');
 })();
