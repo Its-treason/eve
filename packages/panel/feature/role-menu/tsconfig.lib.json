@@ -26,5 +26,5 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx"
-  ]
+, "../core/src/hooks/useConfirmLeave.ts"  ]
 }

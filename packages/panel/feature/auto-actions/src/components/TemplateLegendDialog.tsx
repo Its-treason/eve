@@ -6,7 +6,7 @@ interface PlaceholderLegendDialogProps {
   close: () => void,
 }
 
-function TemplateLegendDialog({opened, close}: PlaceholderLegendDialogProps): ReactElement {
+function TemplateLegendModal({opened, close}: PlaceholderLegendDialogProps): ReactElement {
   return (
     <Modal
       opened={opened}
@@ -37,4 +37,4 @@ function TemplateLegendDialog({opened, close}: PlaceholderLegendDialogProps): Re
   )
 }
 
-export default TemplateLegendDialog;
+export default TemplateLegendModal;

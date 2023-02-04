@@ -1,8 +1,13 @@
 import Ajax from './Ajax';
 
-export async function loadActions(type: string, serverId: string, apiKey: string): Promise<Record<string, never>|string> {
+export async function loadAction(
+  type: string,
+  serverId: string,
+  apiKey: string,
+  abortController: AbortController,
+): Promise<Record<string, never>|string> {
   const body = JSON.stringify({ type });
-  const response = await Ajax.post<string>(`/v1/server/${serverId}/auto/get`, body, apiKey);
+  const response = await Ajax.post<string>(`/v1/server/${serverId}/auto/get`, body, apiKey, abortController);
 
   if (response.error !== null) {
     return response.error;

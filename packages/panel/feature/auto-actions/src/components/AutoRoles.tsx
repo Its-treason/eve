@@ -1,9 +1,9 @@
 import {useMemo} from "react";
 import {Button, Checkbox, Group, Text, Code, MultiSelect} from "@mantine/core";
-import useAutoActions from "../hooks/useAutoActions";
-import produce from "immer";
-import {showNotification} from "@mantine/notifications";
 import { useServerRoles } from '@eve/panel/feature/core';
+import { z } from 'zod';
+import useAutoActionsForm from '../hooks/useAutoActionsForm';
+import { DeviceFloppy } from 'tabler-icons-react';
 
 interface AutoRolesPayload {
   roles: string[],
@@ -14,8 +14,13 @@ interface AutoRolesProps {
   serverId: string,
 }
 
+const schema = z.object({
+  roles: z.array(z.string()).min(1),
+  enabled: z.boolean(),
+});
+
 function JoinMessage({serverId}: AutoRolesProps) {
-  const { payload, loading: actionLoading, error, save, setPayload } = useAutoActions<AutoRolesPayload>('auto-roles', serverId);
+  const { loading: actionLoading, error, save, form } = useAutoActionsForm<AutoRolesPayload, typeof schema>('auto-roles', serverId, schema);
   const { roles, rolesLoading } = useServerRoles(serverId);
 
   const roleData = useMemo(() => {
@@ -36,13 +41,8 @@ function JoinMessage({serverId}: AutoRolesProps) {
         data={roleData}
         label="Roles"
         disabled={loading}
-        value={payload.roles}
-        style={{width: '100%'}}
-        onChange={value => {
-          setPayload(produce(draft => {
-            draft.roles = value;
-          }))
-        }}
+        sx={{ width: '100%' }}
+        {...form.getInputProps('roles', { type: 'checkbox' })}
       />
       <Text color={'dimmed'}>
         Note roles with <Code>[M]</Code> have moderation permissions and roles with <Code>[A]</Code> have
@@ -51,29 +51,15 @@ function JoinMessage({serverId}: AutoRolesProps) {
       </Text>
       <Checkbox
         label="Enabled"
-        checked={payload.enabled || false}
         disabled={loading}
         style={{width: '100%'}}
-        onChange={evt => {
-          setPayload(produce(draft => {
-            draft.enabled = evt.target.checked;
-          }))
-        }}
+        {...form.getInputProps('enabled', { type: 'checkbox' })}
       />
-      <Text color={'dimmed'}>
-        Note that the action will also be disabled if no roles are selected.
-      </Text>
       <Button
         fullWidth
-        disabled={loading}
-        onClick={() => {
-          save().then(() => {
-            showNotification({
-              message: 'Auto roles saved',
-              title: 'Saved',
-            })
-          })
-        }}
+        disabled={!form.isValid()}
+        leftIcon={<DeviceFloppy />}
+        onClick={save}
       >Save auto roles</Button>
       <Text color={'red'}>{error}</Text>
     </Group>

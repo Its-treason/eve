@@ -13,8 +13,8 @@ export default class ActionFactory {
       case 'leave-message':
         return LeaveMessageAction.fromPayload(payload);
     }
-  
-    throw new Error(`Cannot create action with name "${action}". Unkown Action.`);
+
+    throw new Error(`Cannot create action with name "${action}". Unknown Action.`);
   }
 
   createEmpty(action: string): AutoActionInterface|never {
@@ -26,7 +26,7 @@ export default class ActionFactory {
       case 'leave-message':
         return LeaveMessageAction.createEmpty();
     }
-  
+
     throw new Error(`Undefined action "${action}"`);
   }
 }

@@ -1,24 +1,29 @@
 import {Button, Checkbox, Group, Textarea, Text, Code, Anchor, Select} from "@mantine/core";
-import useAutoActions from "../hooks/useAutoActions";
-import produce from "immer";
-import { showNotification } from '@mantine/notifications';
 import { useServerChannel } from '@eve/panel/feature/core';
+import useAutoActionsForm from '../hooks/useAutoActionsForm';
+import { z } from 'zod';
 
-interface LeaveMessagePayload {
+type LeaveMessagePayload = {
   message: string,
   enabled: boolean,
   channel: string,
 }
 
-interface LeaveMessageProps {
+type LeaveMessageProps = {
   serverId: string,
   openDocs: () => void,
 }
 
+const schema = z.object({
+  message: z.string().min(1),
+  enabled: z.boolean(),
+  channel: z.string().min(1),
+});
+
 function LeaveMessage({serverId, openDocs}: LeaveMessageProps) {
-  const { 
-    payload, loading: actionLoading, error, save, setPayload
-  } = useAutoActions<LeaveMessagePayload>('leave-message', serverId);
+  const {
+    error, form, loading: actionLoading, save
+  } = useAutoActionsForm<LeaveMessagePayload, typeof schema>('leave-message', serverId, schema);
   const { channel, channelLoading } = useServerChannel(serverId, 'text');
 
   const loading = actionLoading || channelLoading;
@@ -36,13 +41,8 @@ function LeaveMessage({serverId, openDocs}: LeaveMessageProps) {
         minRows={2}
         maxRows={6}
         disabled={loading}
-        value={payload.message}
         style={{width: '100%'}}
-        onChange={evt => {
-          setPayload(produce(draft => {
-            draft.message = evt.target.value;
-          }))
-        }}
+        {...form.getInputProps('message')}
       />
       <Select
         label={'Channel'}
@@ -53,38 +53,18 @@ function LeaveMessage({serverId, openDocs}: LeaveMessageProps) {
             value: channel.id,
           }
         })}
-        value={payload.channel}
-        onChange={value => {
-          setPayload(produce(draft => {
-            draft.channel = String(value);
-          }))
-        }}
+        {...form.getInputProps('channel')}
       />
       <Checkbox
         label="Enabled"
-        checked={payload.enabled || false}
         disabled={loading}
         style={{width: '100%'}}
-        onChange={evt => {
-          setPayload(produce(draft => {
-            draft.enabled = evt.target.checked;
-          }))
-        }}
+        {...form.getInputProps('enabled', { type: 'checkbox' })}
       />
-      <Text color={'dimmed'}>
-        Note that the action will also be disabled if the selected channel is deleted or the message is empty.
-      </Text>
       <Button
         fullWidth
-        disabled={loading}
-        onClick={() => {
-          save().then(() => {
-            showNotification({
-              message: 'Leave message was saved',
-              title: 'Saved',
-            })
-          })
-        }}
+        disabled={!form.isValid()}
+        onClick={save}
       >Save Leave Message</Button>
       <Text color={'red'}>{error}</Text>
     </Group>

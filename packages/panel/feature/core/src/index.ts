@@ -25,6 +25,7 @@ export { default as DisplayDate } from './components/DisplayDate';
 export { default as EmojiContext } from './context/EmojiContext';
 
 // hook exports
+export { default as useConfirmLeave } from './hooks/useConfirmLeave';
 export { default as useEmojis } from './hooks/useEmojis';
 export { default as useServerChannel } from './hooks/useServerChannel';
 export { default as useServerRoles } from './hooks/useServerRoles';

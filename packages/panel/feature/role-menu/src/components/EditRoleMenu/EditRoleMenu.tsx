@@ -12,7 +12,7 @@ import SaveRoleMenuButton from './Inputs/SaveRoleMenuButton';
 import SelectedChannel from './Inputs/SelectedChannel';
 import RoleMenuRoleList from './RoleMenuRoleList';
 import { z } from 'zod'
-import useConfirmLeave from './useConfirmLeave';
+import { useConfirmLeave } from '@eve/panel/feature/core';
 
 const schema = z.object({
   message: z.string().max(2000),

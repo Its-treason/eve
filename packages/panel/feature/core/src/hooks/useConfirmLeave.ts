@@ -9,8 +9,6 @@ export default function useConfirmLeave(form: UseFormReturnType<any> ) {
       return;
     }
 
-
-
     const warningText =
       'You have unsaved changes - are you sure you wish to leave this page?';
     const handleWindowClose = (e: BeforeUnloadEvent) => {

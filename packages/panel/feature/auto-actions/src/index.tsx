@@ -1,10 +1,12 @@
-import {useState} from "react";
-import {Accordion, Text, Title} from "@mantine/core";
+import {useCallback, useState} from "react";
+import {Tabs, Text, Title} from "@mantine/core";
 import JoinMessage from "./components/JoinMessage";
 import LeaveMessage from "./components/LeaveMessage";
 import AutoRoles from "./components/AutoRoles";
-import TemplateLegendDialog from "./components/TemplateLegendDialog";
+import TemplateLegendModal from "./components/TemplateLegendDialog";
 import { ReducedServer } from '@eve/types/api';
+import EmptyState from '../../core/src/components/EmptyState';
+import { useHash } from '@mantine/hooks';
 
 type AutoActionsProps = {
   server: ReducedServer,
@@ -12,40 +14,47 @@ type AutoActionsProps = {
 
 function AutoActions({ server }: AutoActionsProps) {
   const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
+  const [hash, setHash] = useHash();
 
-  function openDocs() {
+  const openDocs = useCallback(() => {
     setTemplateDialogOpen(true);
-  }
-  function closeDocs() {
+  }, []);
+  const closeDocs = useCallback(() => {
     setTemplateDialogOpen(false);
-  }
+  }, []);
 
   return (
     <>
-      <Title>Auto Actions!</Title>
+      <Title>Auto Actions</Title>
       <Text>EVE can react to various events (e.g. a new member joining the server) and perform an action.</Text>
       <Text color={'dimmed'}>Actions will not be saved automatically, be sure to save them before exiting this page.</Text>
-      <Accordion multiple>
-        <Accordion.Item value={'Join message'}>
-          <Accordion.Control>Join message</Accordion.Control>
-          <Accordion.Panel>
-            <JoinMessage serverId={server.id} openDocs={openDocs} />
-          </Accordion.Panel>
-        </Accordion.Item>
-        <Accordion.Item value={'Leave message'}>
-          <Accordion.Control>Leave message</Accordion.Control>
-          <Accordion.Panel>
-            <LeaveMessage serverId={server.id} openDocs={openDocs} />
-          </Accordion.Panel>
-        </Accordion.Item>
-        <Accordion.Item value={'Auto roles'}>
-          <Accordion.Control>Auto roles</Accordion.Control>
-          <Accordion.Panel>
-            <AutoRoles serverId={server.id} />
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
-      <TemplateLegendDialog opened={templateDialogOpen} close={closeDocs} />
+
+      <Tabs
+        orientation={'vertical'}
+        mt={'xl'}
+        value={hash.replace('#', '') || 'default'}
+        onTabChange={(value) => setHash(value ?? 'default')}
+      >
+        <Tabs.List>
+          <Tabs.Tab value={'join-message'}>Join Message</Tabs.Tab>
+          <Tabs.Tab value={'leave-message'}>Leave Message</Tabs.Tab>
+          <Tabs.Tab value={'auto-roles'}>Auto Roles</Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value='default'>
+          <EmptyState text={'No tab selected'} subText={'Select a tab on the left to edit an action'} />
+        </Tabs.Panel>
+
+        <Tabs.Panel value={'join-message'} pl={'xl'}>
+          <JoinMessage serverId={server.id} openDocs={openDocs} />
+        </Tabs.Panel>
+        <Tabs.Panel value={'leave-message'} pl={'xl'}>
+          <LeaveMessage serverId={server.id} openDocs={openDocs} />
+        </Tabs.Panel>
+        <Tabs.Panel value={'auto-roles'} pl={'xl'}><AutoRoles serverId={server.id} /></Tabs.Panel>
+      </Tabs>
+
+      <TemplateLegendModal opened={templateDialogOpen} close={closeDocs} />
     </>
   )
 }
