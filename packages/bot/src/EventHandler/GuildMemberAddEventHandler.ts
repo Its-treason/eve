@@ -2,13 +2,13 @@ import { GuildMember, TextChannel } from 'discord.js';
 import MustacheReplace from '../Util/MustacheReplace';
 import { injectable } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
-import { AutoActionsRepository, AutoRolesAction, JoinMessageAction, Logger } from '@eve/core';
+import { AutoRolesSetting, JoinMessageSetting, Logger, ServerSettingsRepository } from '@eve/core';
 
 @injectable()
 export default class GuildMemberAddEventHandler implements EventHandlerInterface {
   constructor(
     private logger: Logger,
-    private actionRepository: AutoActionsRepository,
+    private serverSettingsRepository: ServerSettingsRepository,
     private mustacheReplace: MustacheReplace,
   ) {}
 
@@ -22,16 +22,15 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
   }
 
   private async applyRoles(member: GuildMember): Promise<void> {
-    const autoRolesAction = await this.actionRepository.getActions(member.guild.id, 'auto-roles');
+    const autoRolesAction = await this.serverSettingsRepository.getSetting(member.guild.id, 'auto-roles');
     if (
-      !autoRolesAction ||
-      !(autoRolesAction instanceof AutoRolesAction) ||
-      !autoRolesAction.isEnabled()
+      !(autoRolesAction instanceof AutoRolesSetting) ||
+      !autoRolesAction.getPayload().enabled
     ) {
       return;
     }
 
-    const roles = autoRolesAction.getRoles();
+    const roles = autoRolesAction.getPayload().roles;
     for (const role of roles) {
       try {
         await member.roles.add(role);
@@ -53,22 +52,22 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
   }
 
   private async sendJoinMessage(member: GuildMember): Promise<void> {
-    const joinAction = await this.actionRepository.getActions(member.guild.id, 'join-message');
+    const joinAction = await this.serverSettingsRepository.getSetting(member.guild.id, 'join-message');
     if (
       !joinAction ||
-      !(joinAction instanceof JoinMessageAction) ||
-      !joinAction.isEnabled() ||
-      joinAction.getMessage().length === 0
+      !(joinAction instanceof JoinMessageSetting) ||
+      !joinAction.getPayload().enabled ||
+      joinAction.getPayload().message.length === 0
     ) {
       return;
     }
 
     let channel = null;
     try {
-      channel = await member.guild.channels.fetch(joinAction.getChannel());
+      channel = await member.guild.channels.fetch(joinAction.getPayload().channel);
     } catch (error) {
       this.logger.warning('Invalid channelId in auto join action', {
-        channelId: joinAction.getChannel(),
+        channelId: joinAction.getPayload().channel,
         serverId: member.guild.id,
         error,
       });
@@ -77,7 +76,7 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
 
     if (!(channel instanceof TextChannel)) {
       this.logger.warning('Invalid channelId in auto join action', {
-        channelId: joinAction.getChannel(),
+        channelId: joinAction.getPayload().channel,
         serverId: member.guild.id,
       });
       return;
@@ -93,7 +92,7 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
       'server.memberCount': `${member.guild.memberCount}`,
     };
 
-    const message = this.mustacheReplace.replace(joinAction.getMessage(), replacer);
+    const message = this.mustacheReplace.replace(joinAction.getPayload().message, replacer);
 
     try {
       await channel.send({
@@ -106,7 +105,7 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
     } catch (error) {
       this.logger.error('An error occurred while sending a join message', {
         error,
-        channelId: joinAction.getChannel(),
+        channelId: joinAction.getPayload().channel,
         serverId: member.guild.id,
       });
     }

@@ -20,10 +20,16 @@ const schema = z.object({
   channel: z.string().min(1),
 });
 
+const initialValues = {
+  message: '',
+  channel: '',
+  enabled: false,
+}
+
 function JoinMessage({serverId, openDocs}: JoinMessageProps) {
   const {
     loading: actionLoading, error, save, form
-  } = useAutoActionsForm<JoinMessagePayload, typeof schema>('join-message', serverId, schema);
+  } = useAutoActionsForm<JoinMessagePayload, typeof schema>('join-message', serverId, initialValues, schema);
   const { channel, channelLoading } = useServerChannel(serverId, 'text');
 
   const loading = actionLoading || channelLoading;

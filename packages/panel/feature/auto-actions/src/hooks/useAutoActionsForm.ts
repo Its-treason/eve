@@ -1,4 +1,4 @@
-import { loadAction, saveActions, useConfirmLeave } from '@eve/panel/feature/core';
+import { loadSetting, saveSetting, useConfirmLeave } from '@eve/panel/feature/core';
 import { useForm, UseFormReturnType, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { getCookie } from 'cookies-next';
@@ -17,12 +17,14 @@ type AbstractPayload = Record<never, never>;
 export default function useAutoActionsForm<K extends AbstractPayload, T extends z.ZodTypeAny>(
   actionType: string,
   serverId: string,
+  initialValues: K,
   schema: T,
 ): UseAutoActionsData<K> {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const form = useForm<K>({
+    initialValues,
     validateInputOnBlur: true,
     validate: zodResolver(schema),
   });
@@ -33,7 +35,7 @@ export default function useAutoActionsForm<K extends AbstractPayload, T extends 
 
     (async () => {
       setLoading(true);
-      const result = await loadAction(actionType, serverId, apiKey, abortController);
+      const result = await loadSetting(actionType, serverId, apiKey, abortController);
       setLoading(false);
       if (typeof result === 'string') {
         setError(result);
@@ -54,8 +56,7 @@ export default function useAutoActionsForm<K extends AbstractPayload, T extends 
     const apiKey = String(getCookie('apiKey'));
 
     setLoading(true);
-    const payloadAsString = (JSON.stringify(form.values));
-    const result = await saveActions(actionType, serverId, payloadAsString, apiKey);
+    const result = await saveSetting(actionType, serverId, form.values, apiKey);
     setLoading(false);
 
     setError(null);

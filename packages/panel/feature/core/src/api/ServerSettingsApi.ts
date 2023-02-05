@@ -1,26 +1,25 @@
 import Ajax from './Ajax';
 
-export async function loadAction(
+export async function loadSetting(
   type: string,
   serverId: string,
   apiKey: string,
   abortController: AbortController,
-): Promise<Record<string, never>|string> {
+): Promise<Record<string, unknown>|string> {
   const body = JSON.stringify({ type });
-  const response = await Ajax.post<string>(`/v1/server/${serverId}/auto/get`, body, apiKey, abortController);
+  const response = await Ajax.post<Record<string, unknown>>(`/v1/server/${serverId}/auto/get`, body, apiKey, abortController);
 
   if (response.error !== null) {
     return response.error;
   }
 
-  // This endpoint return the auto action as an json encoded, this is stupid
-  return JSON.parse(response.data);
+  return response.data;
 }
 
-export async function saveActions(
+export async function saveSetting(
   type: string,
   serverId: string,
-  payload: string,
+  payload: Record<string, unknown>,
   apiKey: string,
 ): Promise<true|string> {
   const body = JSON.stringify({ payload, type });

@@ -2,13 +2,13 @@ import { GuildMember, TextChannel } from 'discord.js';
 import MustacheReplace from '../Util/MustacheReplace';
 import { injectable } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
-import { AutoActionsRepository, LeaveMessageAction, Logger } from '@eve/core';
+import { LeaveMessageSetting, Logger, ServerSettingsRepository } from '@eve/core';
 
 @injectable()
 export default class GuildMemberRemoveEventHandler implements EventHandlerInterface {
   constructor(
     private logger: Logger,
-    private actionRepository: AutoActionsRepository,
+    private actionRepository: ServerSettingsRepository,
     private mustacheParser: MustacheReplace,
   ) {}
 
@@ -21,22 +21,21 @@ export default class GuildMemberRemoveEventHandler implements EventHandlerInterf
   }
 
   private async sendLeaveMessage(member: GuildMember): Promise<void> {
-    const leaveAction = await this.actionRepository.getActions(member.guild.id, 'leave-message');
+    const leaveAction = await this.actionRepository.getSetting(member.guild.id, 'leave-message');
     if (
-      !leaveAction ||
-      !(leaveAction instanceof LeaveMessageAction) ||
-      !leaveAction.isEnabled() ||
-      leaveAction.getMessage().length === 0
+      !(leaveAction instanceof LeaveMessageSetting) ||
+      !leaveAction.getPayload() ||
+      leaveAction.getPayload().message.length === 0
     ) {
       return;
     }
 
     let channel = null;
     try {
-      channel = await member.guild.channels.fetch(leaveAction.getChannel());
+      channel = await member.guild.channels.fetch(leaveAction.getPayload().channel);
     } catch (error) {
       this.logger.warning('Invalid channelId in auto leave action', {
-        channelId: leaveAction.getChannel(),
+        channelId: leaveAction.getPayload().channel,
         serverId: member.guild.id,
         error,
       });
@@ -45,7 +44,7 @@ export default class GuildMemberRemoveEventHandler implements EventHandlerInterf
 
     if (!(channel instanceof TextChannel)) {
       this.logger.warning('Invalid channelId in auto leave action', {
-        channelId: leaveAction.getChannel(),
+        channelId: leaveAction.getPayload().channel,
         serverId: member.guild.id,
       });
       return;
@@ -61,7 +60,7 @@ export default class GuildMemberRemoveEventHandler implements EventHandlerInterf
       'server.memberCount': `${member.guild.memberCount}`,
     };
 
-    const message = this.mustacheParser.replace(leaveAction.getMessage(), replacer);
+    const message = this.mustacheParser.replace(leaveAction.getPayload().message, replacer);
 
     try {
       await channel.send({
@@ -74,7 +73,7 @@ export default class GuildMemberRemoveEventHandler implements EventHandlerInterf
     } catch (error) {
       this.logger.error('An error occurred while sending a leave message', {
         error: (error as Error),
-        channelId: leaveAction.getChannel(),
+        channelId: leaveAction.getPayload().channel,
         serverId: member.guild.id,
       });
     }

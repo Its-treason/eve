@@ -19,8 +19,15 @@ const schema = z.object({
   enabled: z.boolean(),
 });
 
+const initialValues = {
+  roles: [],
+  enabled: false,
+}
+
 function JoinMessage({serverId}: AutoRolesProps) {
-  const { loading: actionLoading, error, save, form } = useAutoActionsForm<AutoRolesPayload, typeof schema>('auto-roles', serverId, schema);
+  const { 
+    loading: actionLoading, error, save, form
+  } = useAutoActionsForm<AutoRolesPayload, typeof schema>('auto-roles', serverId, initialValues, schema);
   const { roles, rolesLoading } = useServerRoles(serverId);
 
   const roleData = useMemo(() => {
@@ -42,7 +49,7 @@ function JoinMessage({serverId}: AutoRolesProps) {
         label="Roles"
         disabled={loading}
         sx={{ width: '100%' }}
-        {...form.getInputProps('roles', { type: 'checkbox' })}
+        {...form.getInputProps('roles')}
       />
       <Text color={'dimmed'}>
         Note roles with <Code>[M]</Code> have moderation permissions and roles with <Code>[A]</Code> have

@@ -1,6 +1,6 @@
 // Api Exports
 export * from './api/ActivityApi';
-export * from './api/AutoActionsApi';
+export * from './api/ServerSettingsApi';
 export * from './api/GeneralApi';
 export * from './api/LoginApi';
 export * from './api/PlaylistApi';

@@ -15,7 +15,7 @@ export default class AutoActionsBodyValidator {
   validateSaveAutoActionBody(req: Request) {
     const body = z.object({
       type: z.string(),
-      payload: z.string(),
+      payload: z.object({}).passthrough(),
     });
 
     return body.safeParse(req.body);

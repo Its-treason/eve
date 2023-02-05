@@ -152,11 +152,11 @@ export type UserActivityApiResponseData = ActivityRow[];
 
 export interface SaveAutoActionsRequestData {
   type: string,
-  payload: string,
+  payload: Record<never, never>,
 }
 export type SaveAutoActionsResponseData = boolean;
 
 export interface GetAutoActionsRequestData {
   type: string,
 }
-export type GetAutoActionsResponseData = string;
+export type GetAutoActionsResponseData = Record<never, never>;

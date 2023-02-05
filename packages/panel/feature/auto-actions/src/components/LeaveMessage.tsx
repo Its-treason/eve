@@ -16,14 +16,20 @@ type LeaveMessageProps = {
 
 const schema = z.object({
   message: z.string().min(1),
-  enabled: z.boolean(),
   channel: z.string().min(1),
+  enabled: z.boolean(),
 });
+
+const initialValues = {
+  message: '',
+  channel: '',
+  enabled: false,
+}
 
 function LeaveMessage({serverId, openDocs}: LeaveMessageProps) {
   const {
     error, form, loading: actionLoading, save
-  } = useAutoActionsForm<LeaveMessagePayload, typeof schema>('leave-message', serverId, schema);
+  } = useAutoActionsForm<LeaveMessagePayload, typeof schema>('leave-message', serverId, initialValues, schema);
   const { channel, channelLoading } = useServerChannel(serverId, 'text');
 
   const loading = actionLoading || channelLoading;
