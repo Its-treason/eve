@@ -1,4 +1,4 @@
-import { PublicLogCategories, PublicLogsRepository } from '@eve/core';
+import { PublicLogCategories, PublicLogger } from '@eve/core';
 import { ButtonInteraction, EmbedBuilder, GuildMember, Role } from 'discord.js';
 import { singleton } from 'tsyringe';
 import embedFactory from '../Factory/messageEmbedFactory';
@@ -7,7 +7,7 @@ import ButtonInteractionInterface from './ButtonInteractionInterface';
 @singleton()
 export default class MenuInteraction implements ButtonInteractionInterface {
   constructor(
-    private publicLogger: PublicLogsRepository,
+    private publicLogger: PublicLogger,
   ) {}
 
   getName(): string {
@@ -63,6 +63,7 @@ export default class MenuInteraction implements ButtonInteractionInterface {
     await this.publicLogger.createLog(
       `"${interactionUser.user.username}" used a role menu to get the "${role.name}" role`,
       PublicLogCategories.AutoActionExecuted,
+      interaction.guildId,
       [interaction.guildId],
       [interactionUser.id],
     );
@@ -96,6 +97,7 @@ export default class MenuInteraction implements ButtonInteractionInterface {
     await this.publicLogger.createLog(
       `"${interactionUser.user.username}" used a role menu to remove the "${role.name}" role`,
       PublicLogCategories.AutoActionExecuted,
+      interaction.guildId,
       [interaction.guildId],
       [interactionUser.id],
     );

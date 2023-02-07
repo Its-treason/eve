@@ -8,13 +8,13 @@ import NotGuildOwnerValidationHandler from '../Validation/Validators/NotGuildOwn
 import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 import UserNotBannedValidationHandler from '../Validation/Validators/UserNotBannedValidationHandler';
-import { PublicLogCategories, PublicLogsRepository } from '@eve/core';
+import { PublicLogCategories, PublicLogger } from '@eve/core';
 
 @injectable()
 export default class BanCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
-    private publicLogger: PublicLogsRepository,
+    private publicLogger: PublicLogger,
   ) {}
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -54,6 +54,7 @@ export default class BanCommand implements SlashCommandInterface {
     await this.publicLogger.createLog(
       `"${interaction.user.username}" used the "ban" command to ban "${targetUser.username}"`,
       PublicLogCategories.ModerationCommandUsed,
+      interaction.guild!.id,
       [interaction.guild!.id],
       [interaction.user.id, targetUser.id],
     );

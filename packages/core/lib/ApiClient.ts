@@ -106,7 +106,8 @@ export default class ApiClient {
   public async sendMessage(channelId: string, body: RESTPostAPIChannelMessageJSONBody): Promise<APIMessage|null> {
     try {
       return await this.restClient.post(Routes.channelMessages(channelId), { body }) as APIMessage;
-    } catch {
+    } catch (e) {
+      console.log(e);
       return null;
     }
   }

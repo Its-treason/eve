@@ -6,13 +6,13 @@ import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmCha
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 import UserBannedValidationHandler from '../Validation/Validators/UserBannedValidationHandler';
 import CommandValidator from '../Validation/CommandValidator';
-import { PublicLogCategories, PublicLogsRepository } from '@eve/core';
+import { PublicLogCategories, PublicLogger } from '@eve/core';
 
 @injectable()
 export default class PardonCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
-    private publicLogger: PublicLogsRepository,
+    private publicLogger: PublicLogger,
   ) {}
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -45,6 +45,7 @@ export default class PardonCommand implements SlashCommandInterface {
     await this.publicLogger.createLog(
       `"${interaction.user.username}" used the "pardon" command to revoke "${targetUser.username}" ban`,
       PublicLogCategories.ModerationCommandUsed,
+      interaction.guild!.id,
       [interaction.guild!.id],
       [interaction.user.id, targetUser.id],
     );

@@ -6,8 +6,8 @@ export async function loadSetting(
   apiKey: string,
   abortController: AbortController,
 ): Promise<Record<string, unknown>|string> {
-  const body = JSON.stringify({ type });
-  const response = await Ajax.post<Record<string, unknown>>(`/v1/server/${serverId}/auto/get`, body, apiKey, abortController);
+  const body = { type };
+  const response = await Ajax.get<Record<string, unknown>>(`/v1/server/${serverId}/setting`, body, apiKey, abortController);
 
   if (response.error !== null) {
     return response.error;
@@ -23,7 +23,7 @@ export async function saveSetting(
   apiKey: string,
 ): Promise<true|string> {
   const body = JSON.stringify({ payload, type });
-  const response = await Ajax.post(`/v1/server/${serverId}/auto/save`, body, apiKey);
+  const response = await Ajax.put(`/v1/server/${serverId}/setting`, body, apiKey);
 
   if (response.error !== null) {
     return response.error;

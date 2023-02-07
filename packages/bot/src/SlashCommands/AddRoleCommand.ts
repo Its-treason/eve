@@ -6,7 +6,7 @@ import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmCha
 import CommandValidator from '../Validation/CommandValidator';
 import BotPermissionValidationHandler from '../Validation/Validators/BotPermissionValidationHandler';
 import BotCanManageRoleValidationHandler from '../Validation/Validators/BotCanManageRoleValidationHandler';
-import { Logger, PublicLogCategories, PublicLogsRepository } from '@eve/core';
+import { Logger, PublicLogCategories, PublicLogger } from '@eve/core';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 
 type AddRoleResult = {
@@ -20,7 +20,7 @@ export default class AddRoleCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
     private logger: Logger,
-    private publicLogger: PublicLogsRepository,
+    private publicLogger: PublicLogger,
   ) {}
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -58,6 +58,7 @@ export default class AddRoleCommand implements SlashCommandInterface {
     await this.publicLogger.createLog(
       `"${interaction.user.username}" used the "add_role" command to add the role "${role.name}" to all member of "${guild.name}"`,
       PublicLogCategories.ModerationCommandUsed,
+      guild.id,
       [guild.id],
       [interaction.user.id],
     );

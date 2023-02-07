@@ -4,7 +4,7 @@ import { Logger } from '@eve/core';
 import LoginController from './RoutesV1/LoginController';
 import AuthMiddlewares from './Middleware/AuthMiddlewares';
 import ServerController from './RoutesV1/Server/ServerController';
-import AutoActionsController from './RoutesV1/Server/AutoActions/AutoActionsController';
+import ServerSettingsController from './RoutesV1/Server/ServerSettings/ServerSettingsController';
 import { ResponseWithLocals } from '../types';
 import RoleMenuController from './RoutesV1/Server/RoleMenu/RoleMenuController';
 import UserController from './RoutesV1/User/UserController';
@@ -22,7 +22,7 @@ export default class RouterV1 {
     private authMiddlewares: AuthMiddlewares,
     private loginController: LoginController,
     private serverController: ServerController,
-    private autoActionsController: AutoActionsController,
+    private serverSettingsController: ServerSettingsController,
     private roleMenuController: RoleMenuController,
     private serverActivityController: ServerActivityController,
     private userController: UserController,
@@ -76,17 +76,17 @@ export default class RouterV1 {
       this.catchError(this.serverController.basicInfo.bind(this.serverController)),
     );
 
-    router.post(
-      '/server/:serverId/auto/save',
+    router.put(
+      '/server/:serverId/setting',
       this.authMiddlewares.authMiddleware(false),
       this.authMiddlewares.canAccessServerMiddleware.bind(this.authMiddlewares),
-      this.catchError(this.autoActionsController.saveAutoAction.bind(this.autoActionsController)),
+      this.catchError(this.serverSettingsController.saveSetting.bind(this.serverSettingsController)),
     );
-    router.post(
-      '/server/:serverId/auto/get',
+    router.get(
+      '/server/:serverId/setting',
       this.authMiddlewares.authMiddleware(false),
       this.authMiddlewares.canAccessServerMiddleware.bind(this.authMiddlewares),
-      this.catchError(this.autoActionsController.getAutoActions.bind(this.autoActionsController)),
+      this.catchError(this.serverSettingsController.getSetting.bind(this.serverSettingsController)),
     );
 
     router.get(

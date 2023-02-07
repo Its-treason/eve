@@ -21,7 +21,7 @@ export default class PublicLogsService {
       formattedLogs.push({
         categorie: rawLog.categorie,
         message: rawLog.message,
-        timestamp: rawLog['@timestamp'],
+        timestamp: rawLog.timestamp,
         relatedServer,
         relatedUser,
       })

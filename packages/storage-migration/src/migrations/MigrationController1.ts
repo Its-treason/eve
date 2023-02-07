@@ -28,7 +28,7 @@ export default class MigrationController1 implements MigrationControllerInterfac
       mappings: {
         "dynamic": "false",
         "properties": {
-          "@timestamp": {
+          "timestamp": {
             "type": "date"
           },
           "categorie": {
@@ -44,6 +44,14 @@ export default class MigrationController1 implements MigrationControllerInterfac
             "type": "keyword"
           }
         }
+      },
+      'index_patterns': [
+        'eve-public-logs'
+      ],
+      // @ts-ignore - Data streams are not implemented for some reason?
+      "data_stream": {
+        "hidden": false,
+        "allow_custom_routing": false
       },
     });
   }

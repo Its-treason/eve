@@ -22,16 +22,16 @@ export default class PublicLogsRepository {
         categorie,
         relatedServer,
         relatedUser,
-        '@timestamp': dayjs().format()
+        timestamp: dayjs().format()
       }
-    })
+    });
   }
 
   public async getLogsForServer(serverId: string): Promise<PublicLogRecord[]> {
       const response = await this.client.search({
         index: 'eve-public-logs',
         sort: [
-          { '@timestamp': 'desc' },
+          { timestamp: 'desc' },
         ],
         query: {
           match: {
@@ -47,7 +47,7 @@ export default class PublicLogsRepository {
     const response = await this.client.search({
       index: 'eve-public-logs',
       sort: [
-        { '@timestamp': 'desc' },
+        { timestamp: 'desc' },
       ],
       query: {
         match: {

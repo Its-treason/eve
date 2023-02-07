@@ -12,7 +12,7 @@ export default function DisplayDate({ date }: DisplayDateProps): ReactElement {
     if (!window) {
       return;
     }
-    setFormattedDate(dayjs(date).format('HH:DD:ss YYYY-MM-DD'));
+    setFormattedDate(dayjs(date).format('HH:mm:ss YYYY-MM-DD'));
   }, [date])
 
   return (

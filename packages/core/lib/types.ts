@@ -62,7 +62,7 @@ export enum PublicLogCategories {
 }
 
 export type PublicLogRecord = {
-  '@timestamp': string,
+  timestamp: string,
   message: string,
   categorie: PublicLogCategories,
   relatedServer: string[],

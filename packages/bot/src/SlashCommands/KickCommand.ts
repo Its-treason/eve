@@ -8,13 +8,13 @@ import NotGuildOwnerValidationHandler from '../Validation/Validators/NotGuildOwn
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 import CommandValidator from '../Validation/CommandValidator';
 import UserIsGuildMember from '../Validation/Validators/UserIsGuildMember';
-import { PublicLogCategories, PublicLogsRepository } from '@eve/core';
+import { PublicLogCategories, PublicLogger } from '@eve/core';
 
 @injectable()
 export default class KickCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
-    private publicLogger: PublicLogsRepository,
+    private publicLogger: PublicLogger,
   ) {}
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -54,6 +54,7 @@ export default class KickCommand implements SlashCommandInterface {
     await this.publicLogger.createLog(
       `"${interaction.user.username}" used the "kick" command to kick "${targetUser.username}"`,
       PublicLogCategories.ModerationCommandUsed,
+      interaction.guild!.id,
       [interaction.guild!.id],
       [interaction.user.id, targetUser.id],
     );

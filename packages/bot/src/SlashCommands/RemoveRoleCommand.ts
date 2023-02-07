@@ -6,7 +6,7 @@ import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmCha
 import CommandValidator from '../Validation/CommandValidator';
 import BotPermissionValidationHandler from '../Validation/Validators/BotPermissionValidationHandler';
 import BotCanManageRoleValidationHandler from '../Validation/Validators/BotCanManageRoleValidationHandler';
-import { Logger, PublicLogCategories, PublicLogsRepository } from '@eve/core';
+import { Logger, PublicLogCategories, PublicLogger } from '@eve/core';
 import PermissionValidationHandler from '../Validation/Validators/PermissionValidationHandler';
 
 type RemoveRoleResult = {
@@ -19,7 +19,7 @@ type RemoveRoleResult = {
 export default class RemoveRoleCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
-    private publicLogger: PublicLogsRepository,
+    private publicLogger: PublicLogger,
     private logger: Logger,
   ) {}
 
@@ -58,6 +58,7 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
     await this.publicLogger.createLog(
       `"${interaction.user.username}" used the "remove_role" command to remove the role "${role.name}" from all member of "${guild.name}"`,
       PublicLogCategories.ModerationCommandUsed,
+      guild.id,
       [guild.id],
       [interaction.user.id],
     );

@@ -2,6 +2,7 @@ import LeaveMessageSetting from './LeaveMessageSetting';
 import ServerSettingInterface from './AbstractServerSetting';
 import AutoRolesSetting from './AutoRolesSetting';
 import JoinMessageSetting from './JoinMessageSetting';
+import PublicLogsSubscriptionSetting from './PublicLogsSubscriptionSetting';
 
 export default class ActionFactory {
   createAction(action: string, payload: Record<string, unknown>): ServerSettingInterface|never {
@@ -12,6 +13,8 @@ export default class ActionFactory {
         return JoinMessageSetting.fromPayload(payload);
       case 'leave-message':
         return LeaveMessageSetting.fromPayload(payload);
+      case PublicLogsSubscriptionSetting.TOPIC:
+        return PublicLogsSubscriptionSetting.fromPayload(payload);
     }
 
     throw new Error(`Cannot create action with name "${action}". Unknown Action.`);
@@ -25,6 +28,8 @@ export default class ActionFactory {
         return JoinMessageSetting.createEmpty();
       case 'leave-message':
         return LeaveMessageSetting.createEmpty();
+      case PublicLogsSubscriptionSetting.TOPIC:
+        return PublicLogsSubscriptionSetting.createEmpty();
     }
 
     throw new Error(`Undefined action "${action}"`);

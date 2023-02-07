@@ -14,6 +14,7 @@ import ApiKeysRepository from './Repository/ApiKeysRepository';
 import PermissionRepository from './Repository/PermissionRepository';
 import RoleMenuRepository from './Repository/RoleMenuRepository';
 import ApiClient from './ApiClient';
+import PublicLogger from './PublicLogger';
 import PublicLogsRepository from './Repository/PublicLogsRepository';
 
 export * from './types';
@@ -22,6 +23,7 @@ export {
   ApiClient,
   Logger,
   MySQLClient,
+  PublicLogger,
 
   AbstractServerSetting,
   ServerSettingsFactory,

@@ -75,15 +75,34 @@ export default class Ajax {
     }
   }
 
+  public static async put<T = unknown>(
+    url: string,
+    body: BodyInit,
+    apiKey?: string,
+    abortController?: AbortController,
+  ): Promise<ApiResponse<T>> {
+    return this.doBodyRequest(url, 'PUT', body, apiKey, abortController)
+  }
+
   public static async post<T = unknown>(
     url: string,
     body: BodyInit,
     apiKey?: string,
     abortController?: AbortController,
   ): Promise<ApiResponse<T>> {
+    return this.doBodyRequest(url, 'POST', body, apiKey, abortController)
+  }
+
+  private static async doBodyRequest<T = unknown>(
+    url: string,
+    method: string,
+    body: BodyInit,
+    apiKey?: string,
+    abortController?: AbortController,
+  ): Promise<ApiResponse<T>> {
     const options: RequestInit = {
       body,
-      method: 'POST',
+      method,
       headers: {
         'Content-Type': 'application/json',
       },
