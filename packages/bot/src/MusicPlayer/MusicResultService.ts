@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe';
 import { MusicResult } from '../types';
-import * as yasha from 'yasha';
+import yasha from 'yasha';
 import { MultiDownloader } from '../Util/MultiDownloader';
 import { Logger } from '@eve/core';
 

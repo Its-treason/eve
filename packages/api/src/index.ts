@@ -1,8 +1,7 @@
-import 'source-map-support/register';
 import 'reflect-metadata';
 import { Logger } from '@eve/core';
 import './dependencyDefinition';
-import * as express from 'express';
+import express from 'express';
 import { createServer } from 'http';
 import helmet from 'helmet';
 import { container } from 'tsyringe';

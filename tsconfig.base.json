@@ -9,6 +9,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "target": "ES2016",
     "module": "esnext",
     "lib": [

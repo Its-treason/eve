@@ -3,10 +3,10 @@ import { Select } from '@mantine/core'
 import { UseFormReturnType } from '@mantine/form'
 
 const colors = [
-  { value: 1, label: 'Primary' },
-  { value: 2, label: 'Secondary' },
-  { value: 3, label: 'Success' },
-  { value: 4, label: 'Danger' },
+  { value: '1', label: 'Primary' },
+  { value: '2', label: 'Secondary' },
+  { value: '3', label: 'Success' },
+  { value: '4', label: 'Danger' },
 ];
 
 type ButtonColorProps = {

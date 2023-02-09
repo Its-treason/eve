@@ -1,4 +1,4 @@
-import * as Url from 'url-parse';
+import Url from 'url-parse';
 
 const ytRegex = /(.*\.|^)youtube.com/;
 

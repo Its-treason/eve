@@ -1,4 +1,3 @@
-import { ReducedEmbed } from '@eve/types/api';
 import { APIPartialEmoji, ButtonStyle } from 'discord-api-types/v9';
 
 export type PlaylistItem = {
@@ -67,4 +66,18 @@ export type PublicLogRecord = {
   categorie: PublicLogCategories,
   relatedServer: string[],
   relatedUser: string[],
+}
+
+export type ReducedEmbed = {
+  title: string,
+  description: string,
+  color: string,
+  footer: string,
+  fields: ReducedEmbedField[],
+}
+
+export type ReducedEmbedField = {
+  name: string,
+  value: string,
+  inline: boolean,
 }

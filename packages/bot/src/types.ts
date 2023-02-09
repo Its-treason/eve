@@ -1,5 +1,5 @@
 import { Channel, CommandInteraction, Guild, GuildMember, Interaction, Message, Role, User } from 'discord.js';
-import * as yasha from 'yasha';
+import yasha from 'yasha';
 import { APIApplicationCommandOption } from 'discord-api-types/v9';
 
 export interface EveInteraction {

@@ -1,5 +1,5 @@
 import AbstractQueryHandler from './AbstractQueryHandler';
-import * as ytpl from 'ytpl';
+import ytpl from 'ytpl';
 import { PlaylistItem } from '../../Web/sharedApiTypes';
 
 export default class YtPlaylistSearchHandler implements AbstractQueryHandler {

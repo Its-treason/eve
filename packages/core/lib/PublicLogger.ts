@@ -1,4 +1,4 @@
-import dayjs = require('dayjs');
+import dayjs from 'dayjs';
 import { APIEmbed } from 'discord-api-types/v9';
 import { singleton } from 'tsyringe';
 import ApiClient from './ApiClient';

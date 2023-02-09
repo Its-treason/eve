@@ -1,7 +1,7 @@
 import { Client } from '@elastic/elasticsearch';
 import { singleton } from 'tsyringe';
 import { PublicLogCategories, PublicLogRecord } from '../types';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @singleton()
 export default class PublicLogsRepository {

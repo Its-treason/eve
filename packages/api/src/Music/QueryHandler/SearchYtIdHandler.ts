@@ -1,5 +1,5 @@
 import AbstractQueryHandler from './AbstractQueryHandler';
-import * as ytsr from 'ytsr';
+import ytsr from 'ytsr';
 import { PlaylistItem } from '../../Web/sharedApiTypes';
 
 export default class SearchYtIdHandler implements AbstractQueryHandler {

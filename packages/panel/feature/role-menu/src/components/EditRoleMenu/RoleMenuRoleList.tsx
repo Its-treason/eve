@@ -43,7 +43,7 @@ export default function RoleMenuRoleList({ formattedRoles, form }: RoleMenuRoleL
       <AddRole form={form} />
       <DragDropContext
         onDragEnd={({ destination, source }) => {
-          if (destination === undefined) {
+          if (!destination) {
             return;
           }
           form.reorderListItem('entries', { from: source.index, to: destination.index })

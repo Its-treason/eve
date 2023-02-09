@@ -2,7 +2,7 @@ import { TextBasedChannel, VoiceBasedChannel } from 'discord.js';
 import { MusicResult } from '../types';
 import shuffleArray from '../Util/shuffleArray';
 import messageEmbedFactory from '../Factory/messageEmbedFactory';
-import * as yasha from 'yasha';
+import yasha from 'yasha';
 
 export class MusicPlayer {
   public destroyed = false;

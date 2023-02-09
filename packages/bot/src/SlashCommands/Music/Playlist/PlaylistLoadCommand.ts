@@ -5,7 +5,7 @@ import embedFactory from '../../../Factory/messageEmbedFactory';
 import MusicPlayerRepository from '../../../MusicPlayer/MusicPlayerRepository';
 import { injectable } from 'tsyringe';
 import { MusicResult } from '../../../types';
-import * as yasha from 'yasha';
+import yasha from 'yasha';
 import { MultiDownloader } from '../../../Util/MultiDownloader';
 import { PlaylistItem, PlaylistRepository } from '@eve/core';
 

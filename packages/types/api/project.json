@@ -3,20 +3,6 @@
   "sourceRoot": "packages/types/api/src",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/packages/types/api",
-        "main": "packages/types/api/src/index.ts",
-        "tsConfig": "packages/types/api/tsconfig.lib.json",
-        "assets": [
-          "packages/types/api/*.md"
-        ]
-      }
-    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": [

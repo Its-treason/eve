@@ -1,6 +1,6 @@
 import { RequestData, REST, RouteLike } from '@discordjs/rest';
 import { APIChannel, APIEmoji, APIGuild, APIGuildMember, APIMessage, APIRole, APIUser, Routes } from 'discord-api-types/v9';
-import { RedisClientType } from 'redis';
+import type { RedisClientType } from 'redis';
 import { RESTPatchAPIChannelMessageJSONBody, RESTPostAPIChannelMessageJSONBody } from 'discord-api-types/rest/v9/channel';
 import { singleton } from 'tsyringe';
 

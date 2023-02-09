@@ -3,7 +3,7 @@ import { PlaylistItem } from '../../Web/sharedApiTypes';
 import getSpotifyApi from '../../Structures/getSpotifyApi';
 import { MultiDownloader } from '../../Util/MultiDownloader';
 import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
-import * as ytsr from 'ytsr';
+import ytsr from 'ytsr';
 
 export default class SpotifyPlaylistSearchHandler implements AbstractQueryHandler {
   async handle(query: string, requesterId: string): Promise<PlaylistItem[]> {
