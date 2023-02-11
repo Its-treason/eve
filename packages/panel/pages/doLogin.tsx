@@ -1,8 +1,7 @@
-import { Layout, Loading } from '@eve/panel/feature/core';
+import { Layout, Loading, login } from '@eve/panel/feature/core';
 import { setCookie } from 'cookies-next';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next/types';
-import { login } from '../feature/core/src/api/LoginApi';
 
 export function DoLogin() {
   return (

@@ -1,9 +1,8 @@
-import { getBasicServerInfo, Layout, verifyApiKey } from '@eve/panel/feature/core';
+import { getAllLogs, getBasicServerInfo, Layout, verifyApiKey } from '@eve/panel/feature/core';
+import LogsComponent from '@eve/panel/feature/server-logs';
 import { BreadCrumpItem, FormattedPublicLogRecord, ReducedServer } from '@eve/types/api';
-import LogsComponent from 'packages/panel/feature/server-logs/src'
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { getAllLogs } from 'packages/panel/feature/core/src/api/LogsApi';
 
 type LogsProps = {
   server: ReducedServer,

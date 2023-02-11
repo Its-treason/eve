@@ -3,6 +3,7 @@ export * from './api/ActivityApi';
 export * from './api/ServerSettingsApi';
 export * from './api/GeneralApi';
 export * from './api/LoginApi';
+export * from './api/LogsApi';
 export * from './api/PlaylistApi';
 export * from './api/RoleMenuApi';
 export * from './api/ServerApi';

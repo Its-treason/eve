@@ -1,5 +1,5 @@
 import { ProminentButton } from '@eve/panel/feature/core';
-import { Title, Text, Space, Container } from '@mantine/core';
+import { Title, Text, Space, Container, Stack } from '@mantine/core';
 import { ReactElement } from 'react';
 import DisplayError from './components/DisplayError';
 import getConfig from 'next/config'

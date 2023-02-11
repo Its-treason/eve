@@ -1,7 +1,7 @@
+import { Layout } from '@eve/panel/feature/core';
 import { Button, Stack, Paper, Text, Title } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { Home } from 'tabler-icons-react';
-import Layout from '../feature/core/src/components/Layout';
 
 export default function NotFound() {
   const router = useRouter();

@@ -16,7 +16,7 @@ export function Index({ user, inviteLink }: IndexProps) {
       <HomeComponent user={user} inviteLink={inviteLink} />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const verifyResponse = await verifyApiKey(context);
@@ -37,6 +37,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return { props: { user, inviteLink: inviteLinkResponse.invite } };
-}
+};
 
 export default Index;
