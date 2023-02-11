@@ -1,6 +1,6 @@
-import {ReactElement} from "react";
-import {Button, Text, Modal, Group} from "@mantine/core";
-import useDeleteRoleMenu from "../hooks/useDeleteRoleMenu";
+import { ReactElement } from 'react';
+import { Button, Text, Modal, Group } from '@mantine/core';
+import useDeleteRoleMenu from '../hooks/useDeleteRoleMenu';
 
 interface DeleteRoleMenuProps {
   opened: boolean,
@@ -39,7 +39,7 @@ function DeleteRoleMenu({ opened, close, serverId, roleMenuId }: DeleteRoleMenuP
         >Cancel</Button>
       </Group>
     </Modal>
-  )
+  );
 }
 
 export default DeleteRoleMenu;

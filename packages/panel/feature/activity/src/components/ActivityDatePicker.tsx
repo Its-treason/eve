@@ -1,5 +1,5 @@
-import {DateRangePicker} from "@mantine/dates";
-import {Button, createStyles, Divider, Group} from "@mantine/core";
+import { DateRangePicker } from '@mantine/dates';
+import { Button, createStyles, Divider, Group } from '@mantine/core';
 import { FileExport } from 'tabler-icons-react';
 import dayjs from 'dayjs';
 
@@ -10,9 +10,9 @@ const useStyles = createStyles(() => ({
   },
 
   group: {
-    margin: "1rem 0",
+    margin: '1rem 0',
   },
-}))
+}));
 
 type ActivityDatePickerProps = {
   from: Date,
@@ -21,7 +21,7 @@ type ActivityDatePickerProps = {
   exportCsvData: () => void,
 }
 
-function ActivityDatePicker({from, to, setDate, exportCsvData}: ActivityDatePickerProps) {
+function ActivityDatePicker({ from, to, setDate, exportCsvData }: ActivityDatePickerProps) {
   const { classes } = useStyles();
 
   return (
@@ -68,7 +68,7 @@ function ActivityDatePicker({from, to, setDate, exportCsvData}: ActivityDatePick
         Export as Csv
       </Button>
     </Group>
-  )
+  );
 }
 
 export default ActivityDatePicker;

@@ -63,7 +63,7 @@ type EmojiPickerProps = {
   clearable: boolean,
 }
 
-export default function EmojiPicker({emoji, onChange, clearable}: EmojiPickerProps): ReactElement {
+export default function EmojiPicker({ emoji, onChange, clearable }: EmojiPickerProps): ReactElement {
   const [popoverOpened, setPopoverOpened] = useState(false);
   const emojis = useContext(EmojiContext);
   const { classes } = useStyles();
@@ -134,5 +134,5 @@ export default function EmojiPicker({emoji, onChange, clearable}: EmojiPickerPro
           </Tabs>
         </Popover.Dropdown>
     </Popover>
-  )
+  );
 }

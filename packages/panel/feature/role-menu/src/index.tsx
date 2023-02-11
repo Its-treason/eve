@@ -1,8 +1,7 @@
-import {useMemo, useState} from "react";
-import useRoleMenus from "./hooks/useRoleMenus";
-import { Accordion, Button, Text } from "@mantine/core";
-import produce from "immer";
-import CreateRoleMenu from "./components/CreateRoleMenu";
+import { useMemo, useState } from 'react';
+import useRoleMenus from './hooks/useRoleMenus';
+import { Accordion, Button, Text } from '@mantine/core';
+import CreateRoleMenu from './components/CreateRoleMenu';
 import { Plus } from 'tabler-icons-react';
 import { ReducedServer, RoleMenu } from '@eve/types/api';
 import { EmojiContext, EmptyState, useEmojis, useServerChannel, useServerRoles } from '@eve/panel/feature/core';
@@ -13,9 +12,9 @@ type RoleMenuProps = {
   initialRoleMenus: RoleMenu[],
 }
 
-function RoleMenu({ server, initialRoleMenus}: RoleMenuProps) {
+function RoleMenu({ server, initialRoleMenus }: RoleMenuProps) {
   const [createRoleMenuDialogOpen, setCreateRoleMenuDialogOpen] = useState(false);
-  const { roleMenuLoading, roleMenuError, roleMenus, updateRoleMenus, setRoleMenus } = useRoleMenus(server.id, initialRoleMenus);
+  const { roleMenuLoading, roleMenuError, roleMenus, updateRoleMenus } = useRoleMenus(server.id, initialRoleMenus);
 
   const { channel, channelError, channelLoading } = useServerChannel(server.id);
   const { roles, rolesLoading } = useServerRoles(server.id);
@@ -76,11 +75,11 @@ function RoleMenu({ server, initialRoleMenus}: RoleMenuProps) {
                 />
               </Accordion.Panel>
             </Accordion.Item>
-          )
+          );
         })}
       </Accordion>
     </EmojiContext.Provider>
-  )
+  );
 }
 
 export default RoleMenu;

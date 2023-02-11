@@ -18,7 +18,7 @@ import StorageMigrator from '@eve/storage-migration';
   try {
     await client.run();
   } catch (error) {
-    logger.emergency("Could not start client", { error });
+    logger.emergency('Could not start client', { error });
     return;
   }
 

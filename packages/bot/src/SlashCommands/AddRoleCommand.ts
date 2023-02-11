@@ -1,5 +1,7 @@
 import embedFactory from '../Factory/messageEmbedFactory';
-import { APIRole, ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, BaseMessageOptions, ChatInputCommandInteraction, Guild, PermissionFlagsBits, PermissionResolvable, Role, WebhookEditMessageOptions } from 'discord.js';
+import {
+  APIRole, ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, BaseMessageOptions, ChatInputCommandInteraction, Guild, PermissionFlagsBits, PermissionResolvable, Role,
+} from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
@@ -42,7 +44,7 @@ export default class AddRoleCommand implements SlashCommandInterface {
   private async addRoles(
     interaction: ChatInputCommandInteraction,
     role: APIRole|Role,
-    includeBots: Boolean,
+    includeBots: boolean,
   ): Promise<void> {
     const guild = interaction.guild!;
     let results: AddRoleResult = { succeeded: 0, failed: 0, unchanged: 0 };
@@ -64,7 +66,7 @@ export default class AddRoleCommand implements SlashCommandInterface {
     );
   }
 
-  private async *addRole(role: APIRole|Role, guild: Guild, results: AddRoleResult, includeBots: Boolean): AsyncGenerator<AddRoleResult> {
+  private async *addRole(role: APIRole|Role, guild: Guild, results: AddRoleResult, includeBots: boolean): AsyncGenerator<AddRoleResult> {
     let lastId: undefined|string;
 
     while (true) {
@@ -74,9 +76,9 @@ export default class AddRoleCommand implements SlashCommandInterface {
       }
       lastId = members.last()?.id;
 
-      for (const [_, member] of members) {
+      for (const [, member] of members) {
         try {
-          if (member.roles.cache.has(role.id)  || (member.user.bot === true && !includeBots)) {
+          if (member.roles.cache.has(role.id) || (member.user.bot === true && !includeBots)) {
             results.unchanged++;
             continue;
           }
@@ -92,7 +94,7 @@ export default class AddRoleCommand implements SlashCommandInterface {
             roleName: role.name,
             userId: member.id,
             userName: member.displayName,
-          })
+          });
         }
       }
 

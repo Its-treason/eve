@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { AppShell, Avatar, Container, createStyles, Group, Header, MantineNumberSize, Title } from '@mantine/core';
-import NavigationBreadcrumbs from "./NavigationBreadcrumbs";
+import NavigationBreadcrumbs from './NavigationBreadcrumbs';
 import { BreadCrumpItem, ReducedServer, ReducedUser } from '@eve/types/api';
 import { LogoutButton } from './LogoutButton';
 import SubHeading from './SubHeading';

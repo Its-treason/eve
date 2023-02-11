@@ -37,7 +37,7 @@ export default class MenuInteraction implements ButtonInteractionInterface {
 
   private async addRole(
     interactionUser: GuildMember,
-    interaction: ButtonInteraction<"cached">,
+    interaction: ButtonInteraction<'cached'>,
     role: Role,
     answer: EmbedBuilder,
   ): Promise<void> {
@@ -71,7 +71,7 @@ export default class MenuInteraction implements ButtonInteractionInterface {
 
   private async removeRole(
     interactionUser: GuildMember,
-    interaction: ButtonInteraction<"cached">,
+    interaction: ButtonInteraction<'cached'>,
     role: Role,
     answer: EmbedBuilder,
   ): Promise<void> {

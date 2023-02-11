@@ -1,4 +1,4 @@
-import { ApplicationCommandSubCommandData, ChatInputCommandInteraction, CommandInteraction } from 'discord.js';
+import { ApplicationCommandSubCommandData, ChatInputCommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../../../Factory/messageEmbedFactory';
 import SubSlashCommandInterface from '../../SubSlashCommandInterface';
 import { injectable } from 'tsyringe';

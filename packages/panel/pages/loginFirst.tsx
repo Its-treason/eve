@@ -15,7 +15,7 @@ export function LoginFirst({ error }: LoginFirstProps) {
       <LoginFirstComponent error={error} />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let error = null;
@@ -40,8 +40,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     redirect: {
       statusCode: 302,
       destination: '/',
-    }
-  }
-}
+    },
+  };
+};
 
 export default LoginFirst;

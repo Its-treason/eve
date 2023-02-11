@@ -1,4 +1,4 @@
-import { APIActionRowComponent, APIButtonComponentWithCustomId, APIEmbed, APIMessage, APIMessageActionRowComponent, ButtonStyle, ComponentType } from 'discord-api-types/v9';
+import { APIActionRowComponent, APIButtonComponentWithCustomId, APIEmbed, APIMessage, APIMessageActionRowComponent, ComponentType } from 'discord-api-types/v9';
 import { ApiClient, RoleMenu } from '@eve/core';
 import { injectable } from 'tsyringe';
 
@@ -100,7 +100,7 @@ export default class RoleMenuService {
         color: Number.parseInt(roleMenu.embed.color.replace('#', ''), 16),
         footer: {
           text: roleMenu.embed.footer,
-        }
+        },
       }];
     }
 

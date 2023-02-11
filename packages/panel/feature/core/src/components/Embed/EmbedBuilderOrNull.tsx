@@ -22,7 +22,7 @@ export default function EmbedBuilderOrNull({ value, onChange }: EmbedBuilderOrNu
       title: '',
       fields: [],
     }, false);
-  }, [value])
+  }, [value]);
 
   return (
     <Stack>
@@ -38,5 +38,5 @@ export default function EmbedBuilderOrNull({ value, onChange }: EmbedBuilderOrNu
         <EmbedBuilder embed={value} onChange={onChange} />
       )}
     </Stack>
-  )
+  );
 }

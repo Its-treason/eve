@@ -31,9 +31,9 @@ export default class PardonCommand implements SlashCommandInterface {
 
   private async doPardon(
     interaction: ChatInputCommandInteraction,
-    targetUser: User
+    targetUser: User,
   ): Promise<void> {
-    let banInfo = await interaction.guild?.bans.fetch({ user: targetUser });
+    const banInfo = await interaction.guild?.bans.fetch({ user: targetUser });
 
     await interaction.guild?.bans.remove(targetUser);
 

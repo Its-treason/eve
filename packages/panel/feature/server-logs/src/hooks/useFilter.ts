@@ -1,5 +1,5 @@
 import { FormattedPublicLogRecord } from '@eve/types/api';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 type LogFilterData = {
   filteredLogs: FormattedPublicLogRecord[],
@@ -27,8 +27,8 @@ export default function useFilter(logs: FormattedPublicLogRecord[]): LogFilterDa
           return true;
         }
       }
-      return false
-    })
+      return false;
+    });
   }, [logs, search, filteredUser]);
 
   return {

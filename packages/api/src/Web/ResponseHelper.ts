@@ -4,7 +4,7 @@ export class ResponseHelper {
   public static userErrorResponse(
     res: Response,
     msg: string,
-    data: any = null,
+    data: unknown = null,
   ): void {
     res.status(400);
     res.json({
@@ -29,7 +29,7 @@ export class ResponseHelper {
   public static serverErrorResponse(
     res: Response,
     msg: string,
-    data: any = null,
+    data: unknown = null,
   ): void {
     res.status(500);
     res.json({
@@ -39,7 +39,7 @@ export class ResponseHelper {
     });
   }
 
-  public static successResponse(res: Response, data: any = null): void {
+  public static successResponse(res: Response, data: unknown = null): void {
     res.status(200);
     res.json({
       success: true,

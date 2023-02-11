@@ -1,6 +1,6 @@
-import { ProminentButton } from '@eve/panel/feature/core'
-import { ReducedUser } from '@eve/types/api'
-import { Space, Title } from '@mantine/core'
+import { ProminentButton } from '@eve/panel/feature/core';
+import { ReducedUser } from '@eve/types/api';
+import { Title } from '@mantine/core';
 
 type HeaderProps = {
   user: ReducedUser,
@@ -17,5 +17,5 @@ export default function Header({ user }: HeaderProps) {
         icon={user.icon}
       />
     </>
-  )
+  );
 }

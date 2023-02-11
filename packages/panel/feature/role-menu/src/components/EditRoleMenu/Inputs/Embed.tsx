@@ -1,7 +1,7 @@
-import { RoleMenu } from '@eve/core'
+import { RoleMenu } from '@eve/core';
 import { EmbedBuilderOrNull } from '@eve/panel/feature/core';
 import { ReducedEmbed } from '@eve/types/api';
-import { UseFormReturnType } from '@mantine/form'
+import { UseFormReturnType } from '@mantine/form';
 import { useCallback } from 'react';
 
 type EmbedProps = {

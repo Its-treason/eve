@@ -46,7 +46,7 @@ export default function RoleMenuRoleList({ formattedRoles, form }: RoleMenuRoleL
           if (!destination) {
             return;
           }
-          form.reorderListItem('entries', { from: source.index, to: destination.index })
+          form.reorderListItem('entries', { from: source.index, to: destination.index });
         }}
       >
         <Droppable droppableId={`dnd-list-${form.values.id}`} direction="vertical">

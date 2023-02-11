@@ -48,5 +48,5 @@ export default function SubHeading({ backTo, context }: SubHeadingProps) {
         ) : <div />}
       </Group>
     </Container>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { container, instanceCachingFactory } from 'tsyringe';
+import { container } from 'tsyringe';
 import PlaylistDeleteCommand from './SlashCommands/Music/Playlist/PlaylistDeleteCommand';
 import PlaylistListCommand from './SlashCommands/Music/Playlist/PlaylistListCommand';
 import PlaylistLoadCommand from './SlashCommands/Music/Playlist/PlaylistLoadCommand';
@@ -24,14 +24,14 @@ import KickCommand from './SlashCommands/KickCommand';
 import PardonCommand from './SlashCommands/PardonCommand';
 import WhoisCommand from './SlashCommands/WhoisCommand';
 import MenuInteraction from './ButtonInteractions/MenuInteraction';
-import GuildCreateEventHandler from "./EventHandler/GuildCreateEventHandler";
-import GuildDeleteEventHandler from "./EventHandler/GuildDeleteEventHandler";
-import RateLimitEventHandler from "./EventHandler/RateLimitEventHandler";
-import VoiceStateUpdateHandler from "./EventHandler/VoiceStateUpdateHandler";
-import WarnEventHandler from "./EventHandler/WarnEventHandler";
-import GuildMemberAddEventHandler from "./EventHandler/GuildMemberAddEventHandler";
-import GuildMemberRemoveEventHandler from "./EventHandler/GuildMemberRemoveEventHandler";
-import InteractionCreateEventHandler from "./EventHandler/InteractionCreateEventHandler";
+import GuildCreateEventHandler from './EventHandler/GuildCreateEventHandler';
+import GuildDeleteEventHandler from './EventHandler/GuildDeleteEventHandler';
+import RateLimitEventHandler from './EventHandler/RateLimitEventHandler';
+import VoiceStateUpdateHandler from './EventHandler/VoiceStateUpdateHandler';
+import WarnEventHandler from './EventHandler/WarnEventHandler';
+import GuildMemberAddEventHandler from './EventHandler/GuildMemberAddEventHandler';
+import GuildMemberRemoveEventHandler from './EventHandler/GuildMemberRemoveEventHandler';
+import InteractionCreateEventHandler from './EventHandler/InteractionCreateEventHandler';
 import AddRoleCommand from './SlashCommands/AddRoleCommand';
 import RemoveRoleCommand from './SlashCommands/RemoveRoleCommand';
 

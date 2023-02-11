@@ -27,7 +27,7 @@ export default function PlaylistItemTable({ playlistItems, remove, addSongs }: P
                   title: 'Song removed',
                   message: `Removed "${item.title}" from your Playlist`,
                   color: 'red',
-                  icon: <TrashX />
+                  icon: <TrashX />,
                 });
                 remove(index);
               }}
@@ -37,7 +37,7 @@ export default function PlaylistItemTable({ playlistItems, remove, addSongs }: P
           </td>
         </tr>
       );
-    })
+    });
   }, [playlistItems]);
 
   if (items.length === 0) {

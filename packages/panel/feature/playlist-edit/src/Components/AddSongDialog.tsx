@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { TextInput, Button, Modal, Divider, Group } from '@mantine/core';
-import { showNotification, useNotifications } from '@mantine/notifications';
+import { TextInput, Button, Modal, Group } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import SearchResultList from './SearchResultList';
 import { CheckablePlaylistItem, PlaylistItem } from '@eve/types/api';
 import { Loading, musicSearch } from '@eve/panel/feature/core';

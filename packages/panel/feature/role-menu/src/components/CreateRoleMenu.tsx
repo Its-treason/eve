@@ -1,6 +1,6 @@
-import {ReactElement, useState} from "react";
-import useCreateRoleMenu from "../hooks/useCreateRoleMenu";
-import {Button, Text, Select, TextInput, Modal, Group} from "@mantine/core";
+import { ReactElement, useState } from 'react';
+import useCreateRoleMenu from '../hooks/useCreateRoleMenu';
+import { Button, Text, Select, TextInput, Modal, Group } from '@mantine/core';
 import { useServerChannel } from '@eve/panel/feature/core';
 
 interface CreateRoleMenuProps {
@@ -17,7 +17,7 @@ function CreateRoleMenu({ opened, close, serverId }: CreateRoleMenuProps): React
   const { createRoleMenuError, createRoleMenu, createRoleMenuLoading } = useCreateRoleMenu(serverId);
 
   const formattedChannel = channel.map(channel => {
-    return { label: channel.name, value: channel.id }
+    return { label: channel.name, value: channel.id };
   });
 
   function cancelCreate() {
@@ -35,7 +35,7 @@ function CreateRoleMenu({ opened, close, serverId }: CreateRoleMenuProps): React
           width={'100%'}
           onChange={evt => setName(evt.currentTarget.value)}
           value={name}
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
         />
         <Select
           data={formattedChannel}
@@ -45,7 +45,7 @@ function CreateRoleMenu({ opened, close, serverId }: CreateRoleMenuProps): React
           onChange={value => {
             setChannelId(value || '');
           }}
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
         />
         <Text color={'red'}>{createRoleMenuError}</Text>
         <Button
@@ -67,7 +67,7 @@ function CreateRoleMenu({ opened, close, serverId }: CreateRoleMenuProps): React
         >Cancel</Button>
       </Group>
     </Modal>
-  )
+  );
 }
 
 export default CreateRoleMenu;

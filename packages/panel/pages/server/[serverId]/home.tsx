@@ -20,7 +20,7 @@ export function Home({ server }: HomeProps) {
       <ServerHome server={server} />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const verifyResponse = await verifyApiKey(context);
@@ -41,6 +41,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return { props: { server } };
-}
+};
 
 export default Home;

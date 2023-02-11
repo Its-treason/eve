@@ -1,5 +1,5 @@
 import { ReactElement, useRef } from 'react';
-import { Image, Paper, Stack, Text } from '@mantine/core';
+import { Image, Stack, Text } from '@mantine/core';
 import { useRouter } from 'next/router';
 import useStyles from './prominentButton.styles';
 import { useWindowEvent } from '@mantine/hooks';

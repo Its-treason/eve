@@ -14,11 +14,11 @@ export default function PlaylistTable(
   const router = useRouter();
 
   const editPlaylist = useCallback((playlist: string) => {
-    router.push(`/user/${userId}/playlist/${playlist}`)
+    router.push(`/user/${userId}/playlist/${playlist}`);
   }, [userId, router]);
   const deletePlaylist = useCallback((playlist: string) => {
-    setDeleteDialogOpen(playlist)
-  }, [])
+    setDeleteDialogOpen(playlist);
+  }, []);
 
   const tableRows = useMemo(() => {
     return playlists.map((playlist) => {
@@ -33,8 +33,8 @@ export default function PlaylistTable(
           </td>
         </tr>
       );
-    })
-  }, [playlists])
+    });
+  }, [playlists]);
 
   return (
     <Table>

@@ -1,7 +1,7 @@
-import { EmptyState, ProminentButton } from '@eve/panel/feature/core'
-import { ReducedServer } from '@eve/types/api'
+import { EmptyState, ProminentButton } from '@eve/panel/feature/core';
+import { ReducedServer } from '@eve/types/api';
 import { SimpleGrid } from '@mantine/core';
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react';
 
 type ServerListProps = {
   servers: ReducedServer[],
@@ -22,7 +22,7 @@ export default function ServerList({ servers, inviteLink }: ServerListProps) {
           icon={server.icon}
           subtext={'Configure server settings'}
         />
-    ))
+    ));
   }, [servers]);
 
   if (list.length === 0) {

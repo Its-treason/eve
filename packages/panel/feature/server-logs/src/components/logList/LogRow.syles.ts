@@ -7,9 +7,9 @@ export default createStyles((theme) => ({
     gridTemplateColumns: 'auto 200px',
 
     padding: theme.spacing.sm,
-    gap: `${theme.spacing.xs / 2}px 0`
+    gap: `${theme.spacing.xs / 2}px 0`,
   },
   date: {
     gridColumnStart: 'span 2',
-  }
+  },
 }));

@@ -1,5 +1,5 @@
 import { Alert } from '@mantine/core';
-import { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react';
 import { AlertTriangle } from 'tabler-icons-react';
 
 type DisplayErrorProps = {
@@ -29,5 +29,5 @@ export default function DisplayError({ error }: DisplayErrorProps) {
     >
       {error}
     </Alert>
-  )
+  );
 }

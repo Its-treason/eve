@@ -48,7 +48,7 @@ export default function useCreateLogSubscription(serverId: string): CreateLogSub
 
     return () => {
       abortController.abort();
-    }
+    };
   }, [serverId]);
 
   const save = useCallback(async () => {

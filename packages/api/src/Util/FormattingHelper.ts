@@ -22,7 +22,7 @@ export default class FormattingHelper {
     const valueArray = [yDisplay, dDisplay, hDisplay, mDisplay, sDisplay].filter(item => !!item);
 
     return valueArray.splice(0, maxSegments).join(', ');
-  };
+  }
 
   dateToDatetime(date?: Date): string {
     return (date || new Date()).toISOString().slice(0, 19).replace('T', ' ');

@@ -40,5 +40,5 @@ export default function ActionList({ server }: ActionListProps) {
         to={`/server/${server.id}/logs`}
       />
     </SimpleGrid>
-  )
+  );
 }

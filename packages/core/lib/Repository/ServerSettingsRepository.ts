@@ -1,5 +1,4 @@
 import { injectable } from 'tsyringe';
-import ServerSettingInterface from '../ServerSettings/AbstractServerSetting';
 import ActionFactory from '../ServerSettings/ServerSettingFactory';
 import MySQLClient from '../MySQLClient';
 import AbstractServerSetting from '../ServerSettings/AbstractServerSetting';

@@ -1,4 +1,4 @@
-import { loadSetting, saveSetting, useConfirmLeave } from '@eve/panel/feature/core';
+import { loadSetting, saveSetting } from '@eve/panel/feature/core';
 import { useForm, UseFormReturnType, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { getCookie } from 'cookies-next';
@@ -49,7 +49,7 @@ export default function useAutoActionsForm<K extends AbstractPayload, T extends 
 
     return () => {
       abortController.abort();
-    }
+    };
   }, [serverId, actionType]);
 
   const save = useCallback(async () => {

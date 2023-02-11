@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from 'react';
 import { createRoleMenu as createRoleMenuCall } from '@eve/panel/feature/core';
 import { getCookie } from 'cookies-next';
 
@@ -19,7 +19,7 @@ export default function useCreateRoleMenu(serverId: string): UseCreateRoleMenuDa
     const result = await createRoleMenuCall(serverId, name, channelId, apiKey);
 
     setCreateRoleMenuLoading(false);
-    if (typeof result === "string") {
+    if (typeof result === 'string') {
       setCreateRoleMenuError(result);
       return false;
     }
@@ -32,5 +32,5 @@ export default function useCreateRoleMenu(serverId: string): UseCreateRoleMenuDa
     createRoleMenuError,
     createRoleMenuLoading,
     createRoleMenu,
-  }
+  };
 }

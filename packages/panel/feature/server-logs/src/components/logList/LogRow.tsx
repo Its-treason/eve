@@ -1,6 +1,6 @@
 import { DisplayDate } from '@eve/panel/feature/core';
 import { FormattedPublicLogRecord } from '@eve/types/api';
-import { Card, Paper, Text } from '@mantine/core';
+import { Paper, Text } from '@mantine/core';
 import { ReactElement } from 'react';
 import LogCategory from './LogCategorie';
 import RelatedUser from './RelatedUser';

@@ -1,12 +1,12 @@
-import {ReactElement} from "react";
-import {Modal, Text, Title, Code, Space} from "@mantine/core";
+import { ReactElement } from 'react';
+import { Modal, Text, Title, Code, Space } from '@mantine/core';
 
 interface PlaceholderLegendDialogProps {
   opened: boolean,
   close: () => void,
 }
 
-function TemplateLegendModal({opened, close}: PlaceholderLegendDialogProps): ReactElement {
+function TemplateLegendModal({ opened, close }: PlaceholderLegendDialogProps): ReactElement {
   return (
     <Modal
       opened={opened}
@@ -34,7 +34,7 @@ function TemplateLegendModal({opened, close}: PlaceholderLegendDialogProps): Rea
       <Text><Code>server.id</Code> Unique id of the Server</Text>
       <Text><Code>server.memberCount</Code> Member Count, might not be always accurate</Text>
     </Modal>
-  )
+  );
 }
 
 export default TemplateLegendModal;

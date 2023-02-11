@@ -27,7 +27,7 @@ export function Playlist({ user, initialPlaylists, showInvalidPlaylistError }: P
       />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const verifyResponse = await verifyApiKey(context);
@@ -55,6 +55,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const showInvalidPlaylistError = context.query.invalidName !== undefined;
 
   return { props: { user, initialPlaylists, showInvalidPlaylistError } };
-}
+};
 
 export default Playlist;

@@ -25,7 +25,7 @@ export default class PublicLogger {
     await this.logsRepository.createLog(message, categorie, relatedServer, relatedUser);
 
     const subscription = await this.serverSettingsRepository.getSetting(
-      currentServer, PublicLogsSubscriptionSetting.TOPIC
+      currentServer, PublicLogsSubscriptionSetting.TOPIC,
     ) as PublicLogsSubscriptionSetting;
 
     const payload = subscription.getPayload();
@@ -41,12 +41,12 @@ export default class PublicLogger {
       title: 'Log',
       description: message,
       fields: [
-        { name: 'Related User', value: relatedUser.map((userId) => `<@${userId}>`).join(', ') }
+        { name: 'Related User', value: relatedUser.map((userId) => `<@${userId}>`).join(', ') },
       ],
       color: parseInt('b4dbe0', 16),
       timestamp: dayjs().toISOString(),
     };
 
-    await this.apiClient.sendMessage(payload.channel, { embeds: [embed] })
+    await this.apiClient.sendMessage(payload.channel, { embeds: [embed] });
   }
 }

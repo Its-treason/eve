@@ -1,4 +1,4 @@
-import { ReducedUser } from '@eve/types/api'
+import { ReducedUser } from '@eve/types/api';
 import { Stack } from '@mantine/core';
 import GoToUser from './components/GoToUser';
 import Header from './components/Header';
@@ -18,5 +18,5 @@ export default function Home({ user, inviteLink }: HomeProps) {
       <InviteDivider inviteLink={inviteLink} />
       <ServerList servers={user.server} inviteLink={inviteLink} />
     </Stack>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { ActionIcon, Divider, Image, Tooltip } from '@mantine/core';
+import { ActionIcon, Divider, Tooltip } from '@mantine/core';
 import { useCallback } from 'react';
 import { UserPlus } from 'tabler-icons-react';
 

@@ -1,12 +1,12 @@
-import {useCallback, useState} from "react";
-import {Tabs, Text, Title} from "@mantine/core";
-import JoinMessage from "./components/JoinMessage";
-import LeaveMessage from "./components/LeaveMessage";
-import AutoRoles from "./components/AutoRoles";
-import TemplateLegendModal from "./components/TemplateLegendDialog";
+import { useCallback, useState } from 'react';
+import { Tabs, Text, Title } from '@mantine/core';
+import JoinMessage from './components/JoinMessage';
+import LeaveMessage from './components/LeaveMessage';
+import AutoRoles from './components/AutoRoles';
+import TemplateLegendModal from './components/TemplateLegendDialog';
 import { ReducedServer } from '@eve/types/api';
-import EmptyState from '../../core/src/components/EmptyState';
 import { useHash } from '@mantine/hooks';
+import { EmptyState } from '@eve/panel/feature/core';
 
 type AutoActionsProps = {
   server: ReducedServer,
@@ -56,7 +56,7 @@ function AutoActions({ server }: AutoActionsProps) {
 
       <TemplateLegendModal opened={templateDialogOpen} close={closeDocs} />
     </>
-  )
+  );
 }
 
 export default AutoActions;

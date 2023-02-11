@@ -211,7 +211,7 @@ export class MusicPlayer {
     // This is a nasty hack to get the current channel id from the internal connection state
     // Because the connection is created asynchronous it is not present at the start so we fallback on the
     // voiceChannelId. If the voiceChannel check brakes after moving the bot this here might be the reason
-    return this.connection ? this.connection.packets!.state!.channel_id : this.voiceChannelId;
+    return this.connection ? this.connection.packets?.state?.channel_id : this.voiceChannelId;
   }
 
   public getQueue(): MusicResult[] {

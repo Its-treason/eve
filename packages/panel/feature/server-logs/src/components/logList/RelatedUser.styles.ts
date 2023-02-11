@@ -14,5 +14,5 @@ export default createStyles((theme) => ({
 
   userList: {
     gridColumnStart: 'span 2',
-  }
+  },
 }));

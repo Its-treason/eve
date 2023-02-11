@@ -13,7 +13,7 @@ export default class MigrationSettingsRepository {
       return 0;
     }
 
-    return Number(settingsResult[0].value)
+    return Number(settingsResult[0].value);
   }
 
   public async updateDbMigrationVersion(version: number): Promise<void> {

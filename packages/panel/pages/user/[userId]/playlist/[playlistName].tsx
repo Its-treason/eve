@@ -26,7 +26,7 @@ export function EditPlaylist({ user, playlistName }: EditPlaylistProps) {
       />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const verifyResponse = await verifyApiKey(context);
@@ -57,6 +57,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return { props: { user, playlistName } };
-}
+};
 
 export default EditPlaylist;

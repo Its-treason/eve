@@ -10,7 +10,7 @@ export function DoLogin() {
       <Loading />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const code = context.query.code;
@@ -20,8 +20,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       redirect: {
         statusCode: 302,
         destination: `/loginFirst?${urlParams.toString()}`,
-      }
-    }
+      },
+    };
   }
 
   const response = await login(code);
@@ -41,8 +41,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     redirect: {
       statusCode: 302,
       destination: '/',
-    }
-  }
-}
+    },
+  };
+};
 
 export default DoLogin;

@@ -1,5 +1,5 @@
 import { ReducedServer } from '@eve/types/api';
-import { Stack, Text } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import ActionList from './components/ActionList';
 
 type ServerHomeProps = {
@@ -11,5 +11,5 @@ export default function ServerHome({ server }: ServerHomeProps) {
     <Stack>
       <ActionList server={server} />
     </Stack>
-  )
+  );
 }

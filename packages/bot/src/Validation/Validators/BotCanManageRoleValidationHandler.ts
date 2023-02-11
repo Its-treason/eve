@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, CacheType, PermissionFlagsBits, User, PermissionResolvable, APIRole, Role } from 'discord.js';
+import { ChatInputCommandInteraction, CacheType, APIRole, Role } from 'discord.js';
 import AbstractValidationHandler from '../AbstractValidationHandler';
 
 export default class BotCanManageRoleValidationHandler extends AbstractValidationHandler {
@@ -15,15 +15,15 @@ export default class BotCanManageRoleValidationHandler extends AbstractValidatio
     }
 
     if (this.role.managed) {
-      const content = this.errorMsg || `Can\'t use role "${this.role.name}" because it is managed by an other application!`;
+      const content = this.errorMsg || `Can't use role "${this.role.name}" because it is managed by an other application!`;
       await this.reply(command, 'Error', content);
       return;
     }
 
     const member = await command.guild.members.fetch(command.client.user);
     if (member.roles.highest.position <= this.role.position) {
-      const content = this.errorMsg || `Can\'t use role "${this.role.name}" because it has a higher order than my own!`;
-      await this.reply(command, 'Error', content)
+      const content = this.errorMsg || `Can't use role "${this.role.name}" because it has a higher order than my own!`;
+      await this.reply(command, 'Error', content);
       return;
     }
 

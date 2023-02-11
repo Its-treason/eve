@@ -1,7 +1,7 @@
 import { ReducedEmbed } from '@eve/types/api';
 import { useEffect } from 'react';
 import { useForm, zodResolver } from '@mantine/form';
-import { ActionIcon, Button, Card, Checkbox, ColorInput, Group, Stack, Textarea, TextInput, Text } from '@mantine/core';
+import { ActionIcon, Button, Card, Checkbox, ColorInput, Group, Stack, Textarea, TextInput } from '@mantine/core';
 import { Plus, Trash } from 'tabler-icons-react';
 import { z } from 'zod';
 import DisplayEmbedError from './DisplayEmbedError';
@@ -21,7 +21,7 @@ const schema = z.object({
     value: z.string().max(1024),
 
     inline: z.boolean(),
-  }))
+  })),
 }).superRefine((embed, ctx) => {
   let characterCount = 0;
 
@@ -53,7 +53,7 @@ const schema = z.object({
       fatal: true,
     });
   }
-})
+});
 
 type EmbedBuilderProps = {
   embed: ReducedEmbed,
@@ -68,7 +68,7 @@ export default function EmbedBuilder({ embed, onChange }: EmbedBuilderProps) {
   });
 
   useEffect(() => {
-    onChange(form.values, form.isValid())
+    onChange(form.values, form.isValid());
   }, [form.values]);
 
   const fields = form.values.fields.map((_field, index) => {

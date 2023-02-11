@@ -1,4 +1,3 @@
-// @ts-ignore
 import SpotifyApi from 'spotify-web-api-node';
 
 let api: SpotifyApi;

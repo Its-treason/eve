@@ -1,5 +1,5 @@
-import {useMemo} from "react";
-import {Button, Checkbox, Group, Text, Code, MultiSelect} from "@mantine/core";
+import { useMemo } from 'react';
+import { Button, Checkbox, Group, Text, Code, MultiSelect } from '@mantine/core';
 import { useServerRoles } from '@eve/panel/feature/core';
 import { z } from 'zod';
 import useAutoActionsForm from '../hooks/useAutoActionsForm';
@@ -22,11 +22,11 @@ const schema = z.object({
 const initialValues = {
   roles: [],
   enabled: false,
-}
+};
 
-function JoinMessage({serverId}: AutoRolesProps) {
+function JoinMessage({ serverId }: AutoRolesProps) {
   const { 
-    loading: actionLoading, error, save, form
+    loading: actionLoading, error, save, form,
   } = useAutoActionsForm<AutoRolesPayload, typeof schema>('auto-roles', serverId, initialValues, schema);
   const { roles, rolesLoading } = useServerRoles(serverId);
 
@@ -35,7 +35,7 @@ function JoinMessage({serverId}: AutoRolesProps) {
       return {
         value: role.id,
         label: `${role.name} ${role.isModerator ? '[M]' : ''} ${role.isAdmin ? '[A]' : ''}`,
-      }
+      };
     });
   }, [roles]);
 
@@ -59,7 +59,7 @@ function JoinMessage({serverId}: AutoRolesProps) {
       <Checkbox
         label="Enabled"
         disabled={loading}
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         {...form.getInputProps('enabled', { type: 'checkbox' })}
       />
       <Button
@@ -70,7 +70,7 @@ function JoinMessage({serverId}: AutoRolesProps) {
       >Save auto roles</Button>
       <Text color={'red'}>{error}</Text>
     </Group>
-  )
+  );
 }
 
 export default JoinMessage;

@@ -25,11 +25,12 @@ export default class RoleMenuRepository {
       query: {
         match: {
           serverId,
-        }
-      }
+        },
+      },
     });
 
-    return response.hits.hits.map((hit) => hit._source!);
+    return response.hits.hits.map((hit) => hit['_source'])
+      .filter((hit): hit is RoleMenu => (hit !== undefined && hit !== null));
   }
 
   async getRoleMenuRowById(id: string): Promise<RoleMenu | null> {
@@ -38,14 +39,14 @@ export default class RoleMenuRepository {
       query: {
         match: {
           '_id': id,
-        }
-      }
+        },
+      },
     });
 
     if (response.hits.hits.length === 0) {
       return null;
     }
-    return response.hits.hits[0]._source!;
+    return response.hits.hits[0]._source ?? null;
   }
 
   async removeEntry(

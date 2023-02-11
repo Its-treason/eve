@@ -1,4 +1,4 @@
-import { FormattedPublicLogRecord, ReducedServer } from '@eve/types/api'
+import { FormattedPublicLogRecord, ReducedServer } from '@eve/types/api';
 import { Button, Divider, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import Filter from './components/filter/Filter';

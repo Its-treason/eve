@@ -23,7 +23,7 @@ export function RoleMenu({ server, initialRoleMenus }: RoleMenuProps) {
         <RoleMenuComponent server={server} initialRoleMenus={initialRoleMenus} />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const verifyResponse = await verifyApiKey(context);
@@ -49,6 +49,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return { props: { server, initialRoleMenus } };
-}
+};
 
 export default RoleMenu;

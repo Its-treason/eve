@@ -41,7 +41,7 @@ export default class RoleMenuController extends AbstractController {
       entries: [],
       name,
       embed: null,
-    }
+    };
 
     await this.roleMenuRepository.saveEntry(roleMenu);
 

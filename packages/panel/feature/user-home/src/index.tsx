@@ -1,5 +1,5 @@
 import { ReducedUser } from '@eve/types/api';
-import { Stack, Text } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import ActionList from './components/ActionList';
 
 type UserHomeProps = {
@@ -11,5 +11,5 @@ export default function UserHome({ user }: UserHomeProps) {
     <Stack>
       <ActionList user={user} />
     </Stack>
-  )
+  );
 }

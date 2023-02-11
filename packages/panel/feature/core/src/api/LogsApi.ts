@@ -1,5 +1,5 @@
 import { FormattedPublicLogRecord } from '@eve/types/api';
-import Ajax from "./Ajax";
+import Ajax from './Ajax';
 
 export async function getAllLogs(
   serverId: string,

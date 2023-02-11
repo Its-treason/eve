@@ -1,6 +1,6 @@
 import { getCookie } from 'cookies-next';
-import { useState } from "react";
-import {deleteRoleMenu as deleteRoleMenuCall} from '@eve/panel/feature/core';
+import { useState } from 'react';
+import { deleteRoleMenu as deleteRoleMenuCall } from '@eve/panel/feature/core';
 
 interface UseDeleteRoleMenuData {
   deleteRoleMenuLoading: boolean,
@@ -19,7 +19,7 @@ export default function useDeleteRoleMenu(serverId: string): UseDeleteRoleMenuDa
     const result = await deleteRoleMenuCall(serverId, roleMenuId, apiKey);
 
     setDeleteRoleMenuLoading(false);
-    if (typeof result === "string") {
+    if (typeof result === 'string') {
       setDeleteRoleMenuError(result);
       return false;
     }
@@ -32,5 +32,5 @@ export default function useDeleteRoleMenu(serverId: string): UseDeleteRoleMenuDa
     deleteRoleMenuError,
     deleteRoleMenuLoading,
     deleteRoleMenu,
-  }
+  };
 }

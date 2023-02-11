@@ -28,12 +28,12 @@ export default function ActivityTable({ items, type }: ActivityTableProps): Reac
           <td>{row.leftAt && new Date(row.leftAt).toLocaleString()}</td>
           <td>{row.length}</td>
         </tr>
-      )
-    })
+      );
+    });
   }, [items]);
 
   return (
-    <Table striped highlightOnHover captionSide={"bottom"}>
+    <Table striped highlightOnHover captionSide={'bottom'}>
       <caption>
         {rows.length === 0 ?
           'Nothing to show for this time range' :
@@ -54,5 +54,5 @@ export default function ActivityTable({ items, type }: ActivityTableProps): Reac
       </thead>
       <tbody>{rows}</tbody>
     </Table>
-  )
+  );
 }

@@ -16,7 +16,7 @@ export default class UserIsGuildMember extends AbstractValidationHandler {
 
     if (!this.user) {
       this.next?.handle(command);
-      return
+      return;
     }
 
     try {

@@ -12,7 +12,7 @@ export function Actions({ server }: ActionsProps) {
   const navItems: BreadCrumpItem[] = [
     { label: 'Home', to: '/' },
     { label: server.name, to: `/server/${server.id}/home` },
-    { label: `Auto Actions` },
+    { label: 'Auto Actions' },
   ];
 
   return (
@@ -21,7 +21,7 @@ export function Actions({ server }: ActionsProps) {
         <AutoActions server={server} />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const verifyResponse = await verifyApiKey(context);
@@ -42,6 +42,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return { props: { server } };
-}
+};
 
 export default Actions;

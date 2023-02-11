@@ -1,7 +1,7 @@
 import { getAllRoleMenus } from '@eve/panel/feature/core';
 import { RoleMenu } from '@eve/types/api';
 import { getCookie } from 'cookies-next';
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 interface UseRoleMenusData {
   roleMenus: RoleMenu[],
@@ -24,7 +24,7 @@ export default function useRoleMenus(serverId: string, initialRoleMenus: RoleMen
     const result = await getAllRoleMenus(serverId, apiKey);
 
     setRoleMenuLoading(false);
-    if (typeof result === "string") {
+    if (typeof result === 'string') {
       setRoleMenuError(result);
       return;
     }
@@ -35,7 +35,7 @@ export default function useRoleMenus(serverId: string, initialRoleMenus: RoleMen
 
   useEffect(() => {
     fetchRoleMenus();
-  }, [serverId])
+  }, [serverId]);
 
   return {
     roleMenus,
@@ -43,5 +43,5 @@ export default function useRoleMenus(serverId: string, initialRoleMenus: RoleMen
     roleMenuLoading,
     setRoleMenus,
     updateRoleMenus: () => fetchRoleMenus(),
-  }
+  };
 }

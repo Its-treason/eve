@@ -1,5 +1,5 @@
 import { ReducedUser } from '@eve/types/api';
-import { Button, Group, Text, Image, Code } from '@mantine/core';
+import { Group, Text, Image, Code } from '@mantine/core';
 import { ReactElement, useMemo } from 'react';
 import useStyles from './RelatedUser.styles';
 
@@ -18,12 +18,12 @@ export default function RelatedUser({ user }: RelatedUserProps): ReactElement {
           <Text>{user.name} <Code>{user.id}</Code></Text>
         </div>
       );
-    })
+    });
   }, [user]);
 
   return (
     <Group className={classes.userList} spacing={'xs'}>
       {userElements}
     </Group>
-  )
+  );
 }

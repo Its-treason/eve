@@ -16,7 +16,7 @@ export default class GuildOwnerValidationHandler extends AbstractValidationHandl
 
     if (!this.user) {
       this.next?.handle(command);
-      return
+      return;
     }
 
     if (command.guild.ownerId !== this.user.id) {

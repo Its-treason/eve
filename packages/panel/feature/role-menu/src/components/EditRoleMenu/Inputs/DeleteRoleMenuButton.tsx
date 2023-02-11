@@ -1,6 +1,6 @@
-import { Button } from '@mantine/core'
-import { useCallback } from 'react'
-import { TrashX } from 'tabler-icons-react'
+import { Button } from '@mantine/core';
+import { useCallback } from 'react';
+import { TrashX } from 'tabler-icons-react';
 
 type DeleteRoleMenuButtonProps = {
   setDeleteDialogOpen: (state: boolean) => void,

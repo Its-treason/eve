@@ -28,5 +28,5 @@ export default function ActionList({ user }: ActionListProps) {
         to={`/user/${user.id}/activity`}
       />
     </SimpleGrid>
-  )
+  );
 }

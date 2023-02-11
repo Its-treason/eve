@@ -1,5 +1,5 @@
-import {useEffect, useState} from "react";
-import { getChannel } from "../api/ServerApi";
+import { useEffect, useState } from 'react';
+import { getChannel } from '../api/ServerApi';
 import { getCookie } from 'cookies-next';
 import { ReducedChannel } from '@eve/types/api';
 

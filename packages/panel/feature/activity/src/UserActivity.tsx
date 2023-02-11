@@ -1,5 +1,5 @@
 import { Loading } from '@eve/panel/feature/core';
-import { ReducedUser } from '@eve/types/api'
+import { ReducedUser } from '@eve/types/api';
 import { useState } from 'react';
 import VoiceActivity from './components/VoiceActivity';
 import useUserActivity from './hooks/useUserActivity';

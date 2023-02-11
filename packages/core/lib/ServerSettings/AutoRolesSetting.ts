@@ -4,7 +4,7 @@ import AbstractServerSetting from './AbstractServerSetting';
 const scheme = z.object({
   roles: z.array(z.string()),
   enabled: z.boolean(),
-})
+});
 
 export default class AutoRolesSetting extends AbstractServerSetting<z.infer<typeof scheme>> {
   public static createEmpty(): AutoRolesSetting {

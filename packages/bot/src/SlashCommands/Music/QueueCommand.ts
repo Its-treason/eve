@@ -1,4 +1,4 @@
-import { ApplicationCommandData, ChatInputCommandInteraction, CommandInteraction } from 'discord.js';
+import { ApplicationCommandData, ChatInputCommandInteraction } from 'discord.js';
 import embedFactory from '../../Factory/messageEmbedFactory';
 import { MusicResult } from '../../types';
 import { injectable } from 'tsyringe';

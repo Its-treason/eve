@@ -15,7 +15,7 @@ type VoiceActivityProps = {
 }
 
 export default function VoiceActivity(
-  {items, fromDate, toDate, setDate, doExport, error, type}: VoiceActivityProps,
+  { items, fromDate, toDate, setDate, doExport, error, type }: VoiceActivityProps,
 ): ReactElement {
   return (
     <>
@@ -33,5 +33,5 @@ export default function VoiceActivity(
         <ActivityTable items={items} type={type} />
       </Container>
     </>
-  )
+  );
 }

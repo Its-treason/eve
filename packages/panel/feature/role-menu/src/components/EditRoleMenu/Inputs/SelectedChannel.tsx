@@ -1,8 +1,8 @@
-import { RoleMenu } from '@eve/core'
-import { ReducedChannel } from '@eve/types/api'
-import { Code, TextInput } from '@mantine/core'
-import { UseFormReturnType } from '@mantine/form'
-import { useMemo } from 'react'
+import { RoleMenu } from '@eve/core';
+import { ReducedChannel } from '@eve/types/api';
+import { Code, TextInput } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
+import { useMemo } from 'react';
 
 type SelectedChannelProps = {
   form: UseFormReturnType<RoleMenu>,
@@ -23,5 +23,5 @@ export default function SelectedChannel({ form, channel }: SelectedChannelProps)
       defaultValue={selectedChannel !== undefined ? selectedChannel.name : 'N/A'}
       icon={<Code>#</Code>}
     />
-  )
+  );
 }

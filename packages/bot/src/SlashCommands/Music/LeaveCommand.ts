@@ -7,7 +7,7 @@ import { MusicPlayer } from '../../MusicPlayer/MusicPlayer';
 
 @injectable()
 export default class LeaveCommand extends AbstractMusicCommand {
-  async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
+  async doExecute(interaction: CommandInteraction, _player: MusicPlayer): Promise<void> {
     if (!interaction.inCachedGuild()) {
       const answer = embedFactory(interaction.client, 'Error');
       answer.setDescription('Command can not be executed inside DMs!');

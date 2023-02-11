@@ -1,4 +1,4 @@
-import {Button, Checkbox, Group, Textarea, Text, Code, Anchor, Select} from "@mantine/core";
+import { Button, Checkbox, Group, Textarea, Text, Code, Anchor, Select } from '@mantine/core';
 import { useServerChannel } from '@eve/panel/feature/core';
 import useAutoActionsForm from '../hooks/useAutoActionsForm';
 import { z } from 'zod';
@@ -24,11 +24,11 @@ const initialValues = {
   message: '',
   channel: '',
   enabled: false,
-}
+};
 
-function LeaveMessage({serverId, openDocs}: LeaveMessageProps) {
+function LeaveMessage({ serverId, openDocs }: LeaveMessageProps) {
   const {
-    error, form, loading: actionLoading, save
+    error, form, loading: actionLoading, save,
   } = useAutoActionsForm<LeaveMessagePayload, typeof schema>('leave-message', serverId, initialValues, schema);
   const { channel, channelLoading } = useServerChannel(serverId, 'text');
 
@@ -47,24 +47,24 @@ function LeaveMessage({serverId, openDocs}: LeaveMessageProps) {
         minRows={2}
         maxRows={6}
         disabled={loading}
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         {...form.getInputProps('message')}
       />
       <Select
         label={'Channel'}
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         data={channel.map((channel) => {
           return {
             label: `#${channel.name}`,
             value: channel.id,
-          }
+          };
         })}
         {...form.getInputProps('channel')}
       />
       <Checkbox
         label="Enabled"
         disabled={loading}
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         {...form.getInputProps('enabled', { type: 'checkbox' })}
       />
       <Button
@@ -74,7 +74,7 @@ function LeaveMessage({serverId, openDocs}: LeaveMessageProps) {
       >Save Leave Message</Button>
       <Text color={'red'}>{error}</Text>
     </Group>
-  )
+  );
 }
 
 export default LeaveMessage;

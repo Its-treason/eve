@@ -13,5 +13,5 @@ export default function Search({ search, setSearch }: SearchProps): ReactElement
       onChange={(evt) => setSearch(evt.currentTarget.value)}
       label={'Search for message'}
     />
-  )
+  );
 }

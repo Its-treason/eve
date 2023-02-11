@@ -1,5 +1,5 @@
 import { ReducedEmbed } from '@eve/types/api';
-import { Group, Stack, Switch, Text, Textarea, TextInput } from '@mantine/core';
+import { Group, Stack, Switch, Text, Textarea } from '@mantine/core';
 import { useCallback } from 'react';
 import EmbedBuilder from './EmbedBuilder';
 
@@ -22,7 +22,7 @@ export default function EmbedBuilderOrText({ value, onChange }: EmbedBuilderOrTe
       title: '',
       fields: [],
     }, true);
-  }, [])
+  }, []);
 
   return (
     <Stack>
@@ -40,5 +40,5 @@ export default function EmbedBuilderOrText({ value, onChange }: EmbedBuilderOrTe
         <EmbedBuilder embed={value} onChange={onChange} />
       )}
     </Stack>
-  )
+  );
 }

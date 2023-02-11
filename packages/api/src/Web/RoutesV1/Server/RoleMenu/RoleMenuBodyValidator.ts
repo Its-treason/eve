@@ -2,7 +2,7 @@ import { ChannelType, APIChannel } from 'discord-api-types/v9';
 import { ApiClient, RoleMenuRepository } from '@eve/core';
 import { Request } from 'express';
 import { injectable } from 'tsyringe';
-import { z, infer } from 'zod';
+import { z } from 'zod';
 import { ResponseWithLocals } from '../../../../types';
 
 @injectable()
@@ -69,7 +69,7 @@ export default class RoleMenuBodyValidator {
           value: z.string().max(1024),
 
           inline: z.boolean(),
-        }))
+        })),
       }).superRefine((embed, ctx) => {
         let characterCount = 0;
       

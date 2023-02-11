@@ -4,4 +4,4 @@ import UserActivity from './UserActivity';
 export {
   ServerActivity,
   UserActivity,
-}
+};

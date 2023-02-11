@@ -16,7 +16,7 @@ export default class NotGuildOwnerValidationHandler extends AbstractValidationHa
 
     if (!this.user) {
       this.next?.handle(command);
-      return
+      return;
     }
 
     if (command.guild.ownerId === this.user.id) {

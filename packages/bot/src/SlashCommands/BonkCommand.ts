@@ -1,8 +1,7 @@
-import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, CommandInteraction, User } from 'discord.js';
+import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction } from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 import { createCanvas, loadImage, CanvasRenderingContext2D } from 'canvas';
-import { Logger } from '@eve/core';
 
 @injectable()
 export default class BonkCommand implements SlashCommandInterface {
@@ -87,15 +86,15 @@ export default class BonkCommand implements SlashCommandInterface {
   }
 
   private splitLongText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
-    var words = text.split(" ");
-    var lines = [];
-    var currentLine = words[0];
+    const words = text.split(' ');
+    const lines = [];
+    let currentLine = words[0];
 
-    for (var i = 1; i < words.length; i++) {
-        var word = words[i];
-        var width = ctx.measureText(currentLine + " " + word).width;
+    for (let i = 1; i < words.length; i++) {
+        const word = words[i];
+        const width = ctx.measureText(currentLine + ' ' + word).width;
         if (width < maxWidth) {
-            currentLine += " " + word;
+            currentLine += ' ' + word;
         } else {
             lines.push(currentLine);
             currentLine = word;

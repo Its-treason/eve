@@ -30,7 +30,8 @@ export default function SearchResultList({ newItems, setNewItems }: SearchResult
               key={index}
               noWrap
               onClick={(evt: MouseEvent<HTMLDivElement>) => {
-                // @ts-ignore - Don'\t change
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore - Wrong type might be used for the event here
                 if (evt.target.nodeName !== 'A') {
                   setNewItems(produce(newItems, (draft) => {
                     draft[index].checked = !draft[index].checked;

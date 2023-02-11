@@ -21,7 +21,7 @@ export function Activity({ user }: ActivityProps) {
       <UserActivity user={user} />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const verifyResponse = await verifyApiKey(context);
@@ -41,6 +41,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return { props: { user } };
-}
+};
 
 export default Activity;

@@ -24,7 +24,7 @@ export default function usePlaylistItems(playlistName: string, userId: string): 
       const result = await getPlaylistItems(userId, playlistName, apiKey);
       if (typeof result === 'string') {
         setFetchedPlaylistItems([]);
-        router.push(`/user/${userId}/playlist?invalidName=true`)
+        router.push(`/user/${userId}/playlist?invalidName=true`);
         return;
       }
       setLoading(false);
@@ -33,7 +33,7 @@ export default function usePlaylistItems(playlistName: string, userId: string): 
 
     return () => {
       abortController.abort();
-    }
+    };
   }, [userId, playlistName]);
 
   return { fetchedPlaylistItems, loading };

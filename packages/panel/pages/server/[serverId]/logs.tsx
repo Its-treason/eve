@@ -22,7 +22,7 @@ export function Logs({ server, initialLogs }: LogsProps) {
         <LogsComponent server={server} initialLogs={initialLogs} />
     </Layout>
   );
-};
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const verifyResponse = await verifyApiKey(context);
@@ -49,6 +49,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return { props: { server, initialLogs } };
-}
+};
 
 export default Logs;

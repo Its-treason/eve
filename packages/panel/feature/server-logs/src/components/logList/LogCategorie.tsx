@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { PublicLogCategories } from '@eve/core';
 import { Badge } from '@mantine/core';
 import { ReactElement } from 'react';
@@ -7,8 +8,8 @@ const categoryMapping: Record<PublicLogCategories, string> = {
   command_used: 'command used',
   error_occurred: 'Internal error occurred',
   moderation_command_used: 'Moderation command used',
-  setting_changed: 'Panel setting changed'
-}
+  setting_changed: 'Panel setting changed',
+};
 
 type LogCategoryProps = {
   categorie: PublicLogCategories,

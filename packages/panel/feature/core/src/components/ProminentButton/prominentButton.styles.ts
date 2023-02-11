@@ -24,7 +24,7 @@ const styles = createStyles((theme, _params, getRef) => {
 
         '&::before': {
           opacity: 1,
-        }
+        },
       },
 
       '&::before': {
@@ -52,8 +52,8 @@ const styles = createStyles((theme, _params, getRef) => {
 
       [`&:hover .${getRef('text')}`]: {
         textDecoration: 'underline',
-        userSelect: 'none'
-      }
+        userSelect: 'none',
+      },
     },
 
     buttonContent: {
@@ -75,9 +75,9 @@ const styles = createStyles((theme, _params, getRef) => {
     },
 
     subText: {
-      userSelect: 'none'
+      userSelect: 'none',
     },
-  }
+  };
 });
 
 export default styles;

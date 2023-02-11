@@ -1,7 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Group, Modal, TextInput } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { useHotkeys } from '@mantine/hooks';
 import { savePlaylist } from '@eve/panel/feature/core';
 import { getCookie } from 'cookies-next';
 

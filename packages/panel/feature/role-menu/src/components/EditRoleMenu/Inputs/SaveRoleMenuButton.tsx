@@ -1,10 +1,10 @@
-import { RoleMenu, RoleMenuEntry } from '@eve/core'
-import { ReducedEmbed } from '@eve/types/api'
-import { Button } from '@mantine/core'
-import { UseFormReturnType } from '@mantine/form'
-import { showNotification } from '@mantine/notifications'
-import { useCallback } from 'react'
-import { DeviceFloppy } from 'tabler-icons-react'
+import { RoleMenu, RoleMenuEntry } from '@eve/core';
+import { ReducedEmbed } from '@eve/types/api';
+import { Button } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
+import { useCallback } from 'react';
+import { DeviceFloppy } from 'tabler-icons-react';
 
 type SaveRoleMenuButtonProps = {
   form: UseFormReturnType<RoleMenu>,

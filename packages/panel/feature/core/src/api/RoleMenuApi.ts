@@ -1,5 +1,5 @@
 import { ReducedEmbed, RoleMenu, RoleMenuEntry } from '@eve/types/api';
-import Ajax from "./Ajax";
+import Ajax from './Ajax';
 
 export async function createRoleMenu(
   serverId: string, name: string, channel: string, apiKey: string,

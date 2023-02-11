@@ -24,7 +24,7 @@ export default class PublicLogsService {
         timestamp: rawLog.timestamp,
         relatedServer,
         relatedUser,
-      })
+      });
     }
 
     this.serverMemoryCache.clear();
@@ -37,7 +37,7 @@ export default class PublicLogsService {
     const relatedServer: ReducedServer[] = [];
     for (const serverId of rawLog.relatedServer) {
       if (this.serverMemoryCache.has(serverId)) {
-        relatedServer.push(this.serverMemoryCache.get(serverId)!);
+        relatedServer.push(this.serverMemoryCache.get(serverId) as ReducedServer);
         continue;
       }
 
@@ -47,7 +47,7 @@ export default class PublicLogsService {
           name: 'N/A',
           icon: 'https://cdn.discordapp.com/embed/avatars/5.jpg',
           id: '0',
-        }
+        };
         this.serverMemoryCache.set(serverId, server);
 
         relatedServer.push(server);
@@ -70,7 +70,7 @@ export default class PublicLogsService {
     const relatedUser: ReducedUser[] = [];
     for (const userId of rawLog.relatedUser) {
       if (this.userMemoryCache.has(userId)) {
-        relatedUser.push(this.userMemoryCache.get(userId)!);
+        relatedUser.push(this.userMemoryCache.get(userId) as ReducedUser);
         continue;
       }
 
@@ -82,7 +82,7 @@ export default class PublicLogsService {
           id: '0',
           admin: false,
           server: [],
-        }
+        };
         this.serverMemoryCache.set(userId, user);
 
         relatedUser.push(user);

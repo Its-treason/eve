@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, CacheType, PermissionFlagsBits, User, PermissionResolvable } from 'discord.js';
+import { ChatInputCommandInteraction, CacheType, PermissionResolvable } from 'discord.js';
 import AbstractValidationHandler from '../AbstractValidationHandler';
 
 export default class BotPermissionValidationHandler extends AbstractValidationHandler {
@@ -16,8 +16,8 @@ export default class BotPermissionValidationHandler extends AbstractValidationHa
 
     const member = await command.guild.members.fetch(command.client.user);
     if (!member.permissions.has(this.permissions)) {
-      const content = this.errorMsg || `I\'m missing the following permission to execute this command: "${this.permissions}"`;
-      await this.reply(command, 'Error', content)
+      const content = this.errorMsg || `I'm missing the following permission to execute this command: "${this.permissions}"`;
+      await this.reply(command, 'Error', content);
       return;
     }
 

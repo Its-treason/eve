@@ -5,9 +5,6 @@
     "next/core-web-vitals",
     "../../.eslintrc.json"
   ],
-  "ignorePatterns": [
-    "!**/*"
-  ],
   "overrides": [
     {
       "files": [

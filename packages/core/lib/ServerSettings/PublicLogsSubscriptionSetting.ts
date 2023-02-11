@@ -5,7 +5,7 @@ const scheme = z.object({
   wantedCategories: z.array(z.string()),
   channel: z.string(),
   enabled: z.boolean(),
-})
+});
 
 export default class PublicLogsSubscriptionSetting extends AbstractServerSetting<z.infer<typeof scheme>> {
   public static readonly TOPIC = 'public-logs-subscription';

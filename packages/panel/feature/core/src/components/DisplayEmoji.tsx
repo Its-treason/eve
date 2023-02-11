@@ -6,9 +6,9 @@ type DisplayEmojiProps = {
   emoji?: ReducedEmoji,
 }
 
-export default function DisplayEmoji({ emoji }: DisplayEmojiProps): ReactElement {
+export default function DisplayEmoji({ emoji }: DisplayEmojiProps): ReactElement | null {
   if (!emoji) {
-    return <></>;
+    return null;
   }
 
   if (emoji.id === null) {
@@ -18,23 +18,23 @@ export default function DisplayEmoji({ emoji }: DisplayEmojiProps): ReactElement
 
   if (emoji.animated) {
     return (
-      <Tooltip label={`:${emoji.name}:`} sx={{border: '1px solid #4d4f66'}}>
+      <Tooltip label={`:${emoji.name}:`} sx={{ border: '1px solid #4d4f66' }}>
         <Image
           height={24}
           width={24}
           src={`https://cdn.discordapp.com/emojis/${emoji.id}.gif?size=32&quality=lossless`}
         />
       </Tooltip>
-    )
+    );
   }
 
   return (
-    <Tooltip label={`:${emoji.name}:`} sx={{border: '1px solid #4d4f66'}}>
+    <Tooltip label={`:${emoji.name}:`} sx={{ border: '1px solid #4d4f66' }}>
       <Image
         height={24}
         width={24}
         src={`https://cdn.discordapp.com/emojis/${emoji.id}.webp?size=32&quality=lossless`}
       />
     </Tooltip>
-  )
+  );
 }

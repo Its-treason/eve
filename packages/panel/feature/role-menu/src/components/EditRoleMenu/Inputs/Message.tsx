@@ -1,6 +1,6 @@
-import { RoleMenu } from '@eve/core'
-import { Textarea } from '@mantine/core'
-import { UseFormReturnType } from '@mantine/form'
+import { RoleMenu } from '@eve/core';
+import { Textarea } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
 
 type MessageProps = {
   form: UseFormReturnType<RoleMenu>,

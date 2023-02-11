@@ -1,6 +1,6 @@
 import { ReactElement, useState } from 'react';
 import useListPlaylist from './hooks/useListPlaylist';
-import { ActionIcon, Button, Divider, Title, Tooltip } from '@mantine/core';
+import { Button, Divider, Title } from '@mantine/core';
 import CreatePlaylistDialog from './components/CreatePlaylistDialog';
 import DeletePlaylistDialog from './components/DeletePlaylistDialog';
 import PlaylistTable from './components/PlaylistTable';
@@ -67,7 +67,7 @@ export default function PlaylistHome(
             subText={'Start by creating a new playlist'}
             action={{
               callback: () => setCreateDialogOpen(true),
-              text: 'Create new Playlist'
+              text: 'Create new Playlist',
             }}
           />
         ) : (

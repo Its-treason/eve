@@ -14,8 +14,8 @@ export default abstract class AbstractController {
   protected userErrorResponse(
     res: Response,
     msg: string,
-    errorDetails: any = null,
-    data: any = null,
+    errorDetails: unknown = null,
+    data: unknown = null,
   ): void {
     res.status(400);
     res.json({
@@ -41,7 +41,7 @@ export default abstract class AbstractController {
   protected serverErrorResponse(
     res: Response,
     msg: string,
-    data: any = null,
+    data: unknown = null,
   ): void {
     res.status(500);
     res.json({
@@ -51,7 +51,7 @@ export default abstract class AbstractController {
     });
   }
 
-  protected successResponse(res: Response, data: any = null): void {
+  protected successResponse(res: Response, data: unknown = null): void {
     res.status(200);
     res.json({
       success: true,

@@ -1,5 +1,5 @@
-import { ReactElement, useCallback } from "react";
-import { Button } from "@mantine/core";
+import { ReactElement, useCallback } from 'react';
+import { Button } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { deleteCookie } from 'cookies-next';
 import { Logout } from 'tabler-icons-react';
@@ -12,7 +12,7 @@ export function LogoutButton(): ReactElement {
     logout().then(() => {
       deleteCookie('apiKey');
       router.push('/loginFirst');
-    })
+    });
   }, []);
 
   return (

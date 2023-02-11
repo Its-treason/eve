@@ -31,5 +31,5 @@ export default function UserFilter({ filteredUser, setFilteredUser, logs }: User
       searchable
       clearable
     />
-  )
+  );
 }

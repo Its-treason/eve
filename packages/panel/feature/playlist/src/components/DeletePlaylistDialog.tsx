@@ -3,7 +3,7 @@ import { Button, Group, Modal, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { deletePlaylist as doDeletePlaylist } from '@eve/panel/feature/core';
 import { getCookie } from 'cookies-next';
-import { Trash, TrashX } from 'tabler-icons-react';
+import { Trash } from 'tabler-icons-react';
 
 interface CreatePlaylistDialogProps {
   open: boolean,

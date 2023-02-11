@@ -10,7 +10,7 @@ export default class NotInDmChannelValidationHandler extends AbstractValidationH
 
   public async handle(command: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (!command.inGuild()) {
-      const content = this.errorMsg || 'This command can\'t be executed inside DM\'s'
+      const content = this.errorMsg || 'This command can\'t be executed inside DM\'s';
       await this.reply(command, 'Error', content);
       return;
     }

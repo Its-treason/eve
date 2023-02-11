@@ -1,5 +1,7 @@
 import embedFactory from '../Factory/messageEmbedFactory';
-import { APIRole, ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, BaseMessageOptions, ChatInputCommandInteraction, Guild, PermissionFlagsBits, PermissionResolvable, Role } from 'discord.js';
+import { 
+  APIRole, ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, BaseMessageOptions, ChatInputCommandInteraction, Guild, PermissionFlagsBits, PermissionResolvable, Role,
+} from 'discord.js';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';
 import NotInDmChannelValidationHandler from '../Validation/Validators/NotInDmChannelValidationHandler';
@@ -42,9 +44,9 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
   private async addRoles(
     interaction: ChatInputCommandInteraction,
     role: APIRole|Role,
-    includeBots: Boolean,
+    includeBots: boolean,
   ): Promise<void> {
-    const guild = interaction.guild!;
+    const guild = interaction.guild as Guild;
     let results: RemoveRoleResult = { succeeded: 0, failed: 0, unchanged: 0 };
 
     await interaction.reply(this.createMessage(role, results, interaction));
@@ -64,8 +66,8 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
     );
   }
 
-  private async *removeRole(role: APIRole|Role, guild: Guild, includeBots: Boolean): AsyncGenerator<RemoveRoleResult> {
-    let lastId: undefined|string
+  private async *removeRole(role: APIRole|Role, guild: Guild, includeBots: boolean): AsyncGenerator<RemoveRoleResult> {
+    let lastId: undefined|string;
     const results: RemoveRoleResult = { succeeded: 0, failed: 0, unchanged: 0 };
 
     while (true) {
@@ -75,7 +77,7 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
       }
       lastId = members.last()?.id;
 
-      for (const [_, member] of members) {
+      for (const [, member] of members) {
         try {
           if (!member.roles.cache.has(role.id) || (member.user.bot === true && !includeBots)) {
             results.unchanged++;
@@ -93,7 +95,7 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
             roleName: role.name,
             userId: member.id,
             userName: member.displayName,
-          })
+          });
         }
       }
 
@@ -109,8 +111,8 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
     const responseEmbed = embedFactory(interaction.client, 'Removing roles');
     responseEmbed.setDescription(
       `Removing the role ${role} of all server member
-      
-      Progress: **${0}** / **${interaction.guild!.memberCount}**
+
+      Progress: **${0}** / **${interaction.guild?.memberCount}**
 
       Succeeded: **${results.succeeded}**
       Unchanged: **${results.unchanged}**

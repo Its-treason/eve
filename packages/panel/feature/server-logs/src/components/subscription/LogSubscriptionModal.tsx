@@ -1,7 +1,8 @@
 import { useServerChannel } from '@eve/panel/feature/core';
-import { Button, Checkbox, Modal, MultiSelect, Select, Stack, Text, TextInput } from '@mantine/core'
+import { Button, Checkbox, Modal, MultiSelect, Select, Stack, Text } from '@mantine/core';
+import { useMemo } from 'react';
 import { DeviceFloppy } from 'tabler-icons-react';
-import useCreateLogSubscription from '../../hooks/useCreateLogSubscription'
+import useCreateLogSubscription from '../../hooks/useCreateLogSubscription';
 
 type LogSubscriptionModalProps = {
   serverId: string,
@@ -19,9 +20,18 @@ const availableCategories = [
 
 export default function LogSubscriptionModal({ serverId, opened, close }: LogSubscriptionModalProps) {
   const {
-    error, form, save
+    error, form, save,
   } = useCreateLogSubscription(serverId);
   const { channel } = useServerChannel(serverId, 'text');
+
+  const channelSelectData = useMemo(() => {
+    return channel.map((channel) => {
+      return {
+        label: `#${channel.name}`,
+        value: channel.id,
+      };
+    });
+  }, [channel]);
 
   return (
     <Modal opened={opened} onClose={close} title={'Create logs subscription'}>
@@ -36,12 +46,7 @@ export default function LogSubscriptionModal({ serverId, opened, close }: LogSub
         <Select
           label={'Channel'}
           style={{ width: '100%' }}
-          data={channel.map((channel) => {
-            return {
-              label: `#${channel.name}`,
-              value: channel.id,
-            }
-          })}
+          data={channelSelectData}
           {...form.getInputProps('channel')}
         />
         <Checkbox

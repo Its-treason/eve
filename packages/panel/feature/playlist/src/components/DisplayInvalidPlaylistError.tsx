@@ -1,6 +1,6 @@
 import { Alert } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react';
 import { AlertTriangle } from 'tabler-icons-react';
 
 export default function DisplayInvalidPlaylistError() {
@@ -29,5 +29,5 @@ export default function DisplayInvalidPlaylistError() {
     >
       Looks like you tried to edit a playlist that doesn't exist. Because of that you got redirected here.
     </Alert>
-  )
+  );
 }

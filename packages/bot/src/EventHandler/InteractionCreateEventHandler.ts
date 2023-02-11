@@ -1,9 +1,9 @@
-import {ButtonInteraction, ChatInputCommandInteraction, CommandInteraction, Interaction} from 'discord.js';
-import {injectable, injectAll} from 'tsyringe';
+import { ButtonInteraction, ChatInputCommandInteraction, Interaction } from 'discord.js';
+import { injectable, injectAll } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
-import messageEmbedFactory from "../Factory/messageEmbedFactory";
-import SlashCommandInterface from "../SlashCommands/SlashCommandInterface";
-import ButtonInteractionInterface from "../ButtonInteractions/ButtonInteractionInterface";
+import messageEmbedFactory from '../Factory/messageEmbedFactory';
+import SlashCommandInterface from '../SlashCommands/SlashCommandInterface';
+import ButtonInteractionInterface from '../ButtonInteractions/ButtonInteractionInterface';
 import { Logger } from '@eve/core';
 
 @injectable()
@@ -30,7 +30,7 @@ export default class InteractionCreateEventHandler implements EventHandlerInterf
     this.logger.notice(
         'Got interaction with unknown type!',
         { type: interaction.type, userId: interaction.user.id },
-    )
+    );
   }
 
   private async handleCommandInteraction(interaction: ChatInputCommandInteraction): Promise<void> {

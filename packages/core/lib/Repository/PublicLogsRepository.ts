@@ -22,8 +22,8 @@ export default class PublicLogsRepository {
         categorie,
         relatedServer,
         relatedUser,
-        timestamp: dayjs().format()
-      }
+        timestamp: dayjs().format(),
+      },
     });
   }
 
@@ -36,8 +36,8 @@ export default class PublicLogsRepository {
         query: {
           match: {
             relatedServer: serverId,
-          }
-        }
+          },
+        },
       });
 
       return response.hits.hits.map((hit) => (hit._source as PublicLogRecord));
@@ -52,8 +52,8 @@ export default class PublicLogsRepository {
       query: {
         match: {
           relatedUser: userId,
-        }
-      }
+        },
+      },
     });
 
     return response.hits.hits.map((hit) => (hit._source as PublicLogRecord));

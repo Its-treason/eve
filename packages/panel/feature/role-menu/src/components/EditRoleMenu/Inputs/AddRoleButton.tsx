@@ -1,9 +1,9 @@
-import { RoleMenu } from '@eve/core'
-import { Button } from '@mantine/core'
-import { UseFormReturnType } from '@mantine/form'
-import { ButtonStyle } from 'discord-api-types/v9'
-import { useCallback } from 'react'
-import { Plus } from 'tabler-icons-react'
+import { RoleMenu } from '@eve/core';
+import { Button } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
+import { ButtonStyle } from 'discord-api-types/v9';
+import { useCallback } from 'react';
+import { Plus } from 'tabler-icons-react';
 
 type AddRoleButtonProps = {
   form: UseFormReturnType<RoleMenu>,
@@ -11,7 +11,7 @@ type AddRoleButtonProps = {
 
 export default function AddRoleButton({ form }: AddRoleButtonProps) {
   const handleClick = useCallback(() => {
-    form.insertListItem('entries', { role: '', label: '', color: ButtonStyle.Primary })
+    form.insertListItem('entries', { role: '', label: '', color: ButtonStyle.Primary });
   }, [form]);
 
   return (

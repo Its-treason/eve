@@ -1,6 +1,6 @@
-import { RoleMenu } from '@eve/core'
-import { Select } from '@mantine/core'
-import { UseFormReturnType } from '@mantine/form'
+import { RoleMenu } from '@eve/core';
+import { Select } from '@mantine/core';
+import { UseFormReturnType } from '@mantine/form';
 
 const colors = [
   { value: '1', label: 'Primary' },
@@ -19,7 +19,7 @@ export default function ButtonColor({ form, index }: ButtonColorProps) {
     <Select
       data={colors}
       label={'Button Color'}
-      style={{width: '110px'}}
+      style={{ width: '110px' }}
       {...form.getInputProps(`entries.${index}.color`)}
     />
   );

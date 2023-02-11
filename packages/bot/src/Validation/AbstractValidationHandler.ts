@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, User } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 import messageEmbedFactory from '../Factory/messageEmbedFactory';
 
 export default abstract class AbstractValidationHandler {

@@ -189,7 +189,7 @@ declare module 'yasha' {
     setTremolo(depth: number, rate: number): number
 
     // TODO: Better type
-    setEqualizer(eqs: any): any
+    setEqualizer(eqs: unknown): unknown
 
     seek(time: number): void
 

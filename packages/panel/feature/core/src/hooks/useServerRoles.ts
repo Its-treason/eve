@@ -1,6 +1,6 @@
 import { ReducedRole } from '@eve/types/api';
 import { getCookie } from 'cookies-next';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from 'react';
 import { getRoles } from '../api/ServerApi';
 
 interface UseServerRolesData {
@@ -19,7 +19,7 @@ function useServerRoles(serverId: string): UseServerRolesData {
     setRolesLoading(true);
 
     const apiKey = String(getCookie('apiKey'));
-    let newRoles = await getRoles(serverId, apiKey);
+    const newRoles = await getRoles(serverId, apiKey);
 
     if (typeof newRoles === 'string') {
       setRolesError(newRoles);

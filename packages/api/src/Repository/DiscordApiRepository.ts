@@ -15,7 +15,7 @@ interface DiscordTokenResponse {
 export default class DiscordApiRepository {
   constructor(
     private logger: Logger,
-    private redisClient: RedisClientType<any>,
+    private redisClient: RedisClientType,
   ) {}
 
   async getUserInfo(tokenType: string, accessToken: string): Promise<APIUser|never> {

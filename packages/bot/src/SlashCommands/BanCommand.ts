@@ -1,4 +1,6 @@
-import { ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, CommandInteraction, PermissionFlagsBits, PermissionResolvable, User } from 'discord.js';
+import {
+  ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, PermissionFlagsBits, PermissionResolvable, User,
+} from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
 import SlashCommandInterface from './SlashCommandInterface';
 import { injectable } from 'tsyringe';

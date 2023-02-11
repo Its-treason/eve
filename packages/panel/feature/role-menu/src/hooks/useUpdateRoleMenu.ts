@@ -1,5 +1,5 @@
 import { ReducedEmbed, RoleMenuEntry } from '@eve/types/api';
-import {useState} from "react";
+import { useState } from 'react';
 import { updateRoleMenu as doUpdateRoleMenu } from '@eve/panel/feature/core';
 import { getCookie } from 'cookies-next';
 import { showNotification } from '@mantine/notifications';
@@ -27,15 +27,15 @@ export default function useUpdateRoleMenu(serverId: string): UseUpdateRoleMenuDa
     const result = await doUpdateRoleMenu(serverId, roleMenuId, message, embed, entries, apiKey);
 
     setLoading(false);
-    if (typeof result === "string") {
+    if (typeof result === 'string') {
       setUpdateRoleMenuError(result);
       return false;
     }
 
     showNotification({
       title: 'Saved',
-      message: 'Role menu was saved successfully'
-    })
+      message: 'Role menu was saved successfully',
+    });
     setUpdateRoleMenuError(null);
     return true;
   }
@@ -44,5 +44,5 @@ export default function useUpdateRoleMenu(serverId: string): UseUpdateRoleMenuDa
     updateRoleMenuError,
     loading,
     updateRoleMenu,
-  }
+  };
 }

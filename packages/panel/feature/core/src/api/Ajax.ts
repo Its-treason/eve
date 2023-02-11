@@ -1,7 +1,7 @@
 import getConfig from 'next/config';
 
 // Only holds serverRuntimeConfig and publicRuntimeConfig
-const { publicRuntimeConfig, serverRuntimeConfig } = getConfig()
+const { publicRuntimeConfig } = getConfig();
 
 type ApiResponse<T> = {
   code: number,
@@ -81,7 +81,7 @@ export default class Ajax {
     apiKey?: string,
     abortController?: AbortController,
   ): Promise<ApiResponse<T>> {
-    return this.doBodyRequest(url, 'PUT', body, apiKey, abortController)
+    return this.doBodyRequest(url, 'PUT', body, apiKey, abortController);
   }
 
   public static async post<T = unknown>(
@@ -90,7 +90,7 @@ export default class Ajax {
     apiKey?: string,
     abortController?: AbortController,
   ): Promise<ApiResponse<T>> {
-    return this.doBodyRequest(url, 'POST', body, apiKey, abortController)
+    return this.doBodyRequest(url, 'POST', body, apiKey, abortController);
   }
 
   private static async doBodyRequest<T = unknown>(

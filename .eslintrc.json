@@ -6,30 +6,30 @@
   ],
   "parserOptions": {
       "ecmaVersion": 2020,
-      "sourceType": "module",
-      "project": [
-        "./packages/*/tsconfig.json"
-      ]
+      "sourceType": "module"
   },
   "parser": "@typescript-eslint/parser",
   "rules": {
       "no-undef": "off",
       "eqeqeq": "error",
-      "quotes": ["error", "single"],
+      "quotes": ["warn", "single"],
       "camelcase": ["error", {"properties": "always", "ignoreGlobals": true}],
       "max-len": ["error", {"code": 200, "tabWidth": 4}],
       "no-useless-constructor": "off",
       "comma-dangle": ["error", "always-multiline"],
-      "semi": ["error", "always", {"omitLastInOneLineBlock": false}],
+      "semi": ["error", "always"],
       "func-call-spacing": ["error", "never"],
       "eol-last": ["error", "always"],
       "object-curly-spacing": ["error", "always"],
       "space-before-blocks": ["error"],
       "no-multi-spaces": ["error", {"exceptions": {"VariableDeclarator": false, "Property": false}}],
       "block-spacing": "error",
-      "keyword-spacing": ["error", {"after": true, "before": true}]
+      "keyword-spacing": ["error", {"after": true, "before": true}],
+      "react-hooks/exhaustive-deps": "off",
+      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      "@typescript-eslint/no-non-null-assertion": "off"
   },
-  "ignorePatterns": ["webpack.config.js"],
+  "ignorePatterns": ["webpack.config.js", "*.next*", "webpack*.js"],
   "plugins": [
       "@typescript-eslint",
       "@nrwl/nx"

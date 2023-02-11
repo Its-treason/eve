@@ -2,7 +2,7 @@ import { APIGuild, APIUser } from 'discord-api-types/v9';
 import { Response } from 'express';
 import { PlaylistItem } from './Web/sharedApiTypes';
 
-export type ResponseWithLocals = Response<any, {
+export type ResponseWithLocals = Response<unknown, {
   isAdmin: boolean,
   apiKey: string,
   user: APIUser,

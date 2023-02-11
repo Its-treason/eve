@@ -9,7 +9,7 @@ export default function useEmojis(serverId: string): EmojiContextType {
   useEffect(() => {
     const apiKey = String(getCookie('apiKey'));
 
-    let abortController = new AbortController();
+    const abortController = new AbortController();
 
     (async () => {
       const emojiResult = await getEmojis(serverId, apiKey, abortController);
@@ -21,7 +21,7 @@ export default function useEmojis(serverId: string): EmojiContextType {
 
     return () => {
       abortController.abort();
-    }
+    };
   }, [serverId]);
 
   return emojis;

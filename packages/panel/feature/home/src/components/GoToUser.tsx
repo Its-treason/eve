@@ -5,12 +5,12 @@ import { useMemo, useState } from 'react';
 const idRegex = /\d{18,19}/;
 
 export default function GoToUser() {
-  const router = useRouter()
+  const router = useRouter();
   const [id, setId] = useState('');
 
   const idValid = useMemo(() => {
-    return (idRegex.test(id) || id === '')
-  }, [id])
+    return (idRegex.test(id) || id === '');
+  }, [id]);
 
   return (
     <Group>
@@ -29,5 +29,5 @@ export default function GoToUser() {
         Edit
       </Button>
     </Group>
-  )
+  );
 }

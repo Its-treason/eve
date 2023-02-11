@@ -1,7 +1,7 @@
-import { RoleMenu } from '@eve/core'
+import { RoleMenu } from '@eve/core';
 import { EmojiPicker } from '@eve/panel/feature/core';
 import { ReducedEmoji } from '@eve/types/api';
-import { UseFormReturnType } from '@mantine/form'
+import { UseFormReturnType } from '@mantine/form';
 import { useCallback } from 'react';
 
 type ButtonEmojiProps = {

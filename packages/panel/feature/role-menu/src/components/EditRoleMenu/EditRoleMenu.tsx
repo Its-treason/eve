@@ -11,7 +11,7 @@ import Message from './Inputs/Message';
 import SaveRoleMenuButton from './Inputs/SaveRoleMenuButton';
 import SelectedChannel from './Inputs/SelectedChannel';
 import RoleMenuRoleList from './RoleMenuRoleList';
-import { z } from 'zod'
+import { z } from 'zod';
 import { useConfirmLeave } from '@eve/panel/feature/core';
 
 const schema = z.object({
@@ -43,12 +43,12 @@ type EditRoleMenuProps = {
 }
 
 export default function EditRoleMenu(
-  { roleMenu, channel, formattedRoles, serverId, updateMenus }: EditRoleMenuProps
+  { roleMenu, channel, formattedRoles, serverId, updateMenus }: EditRoleMenuProps,
 ) {
   const form = useForm({
     initialValues: roleMenu,
     validateInputOnBlur: true,
-    validate: zodResolver(schema)
+    validate: zodResolver(schema),
   });
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);

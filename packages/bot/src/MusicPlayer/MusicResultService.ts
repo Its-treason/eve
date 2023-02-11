@@ -56,7 +56,7 @@ export default class MusicResultService {
   }
 
   private async findResult(query: string): Promise<yasha.Track.Track[]|null> {
-    let resolveResult: yasha.Track.Track|yasha.Track.TrackPlaylist|null = null
+    let resolveResult: yasha.Track.Track|yasha.Track.TrackPlaylist|null = null;
     try {
       resolveResult = await yasha.Source.resolve(query);
     } catch (error) {

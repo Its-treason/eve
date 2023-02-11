@@ -16,7 +16,7 @@ export default class UserNotBannedValidationHandler extends AbstractValidationHa
 
     if (!this.user) {
       this.next?.handle(command);
-      return
+      return;
     }
 
     try {
