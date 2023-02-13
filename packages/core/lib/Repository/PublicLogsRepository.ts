@@ -23,6 +23,7 @@ export default class PublicLogsRepository {
         relatedServer,
         relatedUser,
         timestamp: dayjs().format(),
+        '@timestamp': dayjs().format(),
       },
     });
   }

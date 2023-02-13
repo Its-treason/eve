@@ -40,7 +40,7 @@
     "tslib": "^2.5.0",
     "tsyringe": "^4.7.0",
     "url-parse": "^1.5.10",
-    "yasha": "https://github.com/ilikdoge/yasha.git",
+    "yasha": "https://github.com/davidzeng0/yasha.git",
     "ytpl": "^2.3.0",
     "ytsr": "^3.6.0",
     "zod": "^3.20.6"

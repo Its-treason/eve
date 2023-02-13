@@ -10692,9 +10692,9 @@ safe-regex-test@^1.0.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-"sange@github:ilikdoge/sange":
+"sange@github:davidzeng0/sange":
   version "1.0.0"
-  resolved "https://codeload.github.com/ilikdoge/sange/tar.gz/5d31553622089e80ae6a10cad7ca5886fd6dbfff"
+  resolved "https://codeload.github.com/davidzeng0/sange/tar.gz/fea27fa2c20600f8cd98d1dc1fcf3dbd77fcacff"
   dependencies:
     bindings "^1.5.0"
     cmake-js "^6.2.1"
@@ -12413,15 +12413,15 @@ yargs@^3.6.0:
     window-size "^0.1.4"
     y18n "^3.2.0"
 
-"yasha@https://github.com/ilikdoge/yasha.git":
+"yasha@https://github.com/davidzeng0/yasha.git":
   version "1.0.0"
-  resolved "https://github.com/ilikdoge/yasha.git#7170120d61b863557140f7f0a41a328e524c9d09"
+  resolved "https://github.com/davidzeng0/yasha.git#9cfef89731086b50335039f9b9dea0a07f26c9ec"
   dependencies:
     "@discordjs/voice" "^0.7.2"
     discord.js "^13.3.0"
     google-protobuf "^3.19.2"
     node-fetch "^2.6.6"
-    sange "github:ilikdoge/sange"
+    sange "github:davidzeng0/sange"
     sodium "^3.0.2"
 
 yauzl@^2.10.0:

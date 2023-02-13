@@ -32,7 +32,7 @@ export default class UtilMiddlewares {
     res.setHeader('Access-Control-Expose-Headers', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, apiKey');
     res.setHeader('Access-Control-Allow-Credentials', 'false');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
     res.setHeader('Access-Control-Max-Age', '86400');
     res.setHeader('Cache-Control', 'no-store');
     next();

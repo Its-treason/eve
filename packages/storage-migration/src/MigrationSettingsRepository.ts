@@ -18,7 +18,7 @@ export default class MigrationSettingsRepository {
 
   public async updateDbMigrationVersion(version: number): Promise<void> {
     const query = `
-      INSERT INTO settings 
+      INSERT INTO settings
         (name, value)
       VALUES
         ('_db_migration', ?)
@@ -28,3 +28,4 @@ export default class MigrationSettingsRepository {
     await this.mysqlClient.query(query, [String(version), String(version)]);
   }
 }
+

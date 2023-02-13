@@ -12,6 +12,7 @@ type ButtonRoleSelectProps = {
 export default function ButtonRoleSelect({ form, index, formattedRoles }: ButtonRoleSelectProps) {
   return (
     <Select
+      withAsterisk
       label={'Role'}
       data={formattedRoles}
       style={{ width: 'clamp(100px, 20%, 250px)' }}

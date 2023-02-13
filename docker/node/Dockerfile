@@ -31,11 +31,14 @@ RUN apk add --no-cache --virtual .build-deps pango-dev jpeg-dev build-base cairo
  && update-ms-fonts \
  && fc-cache -f
 
-RUN rm -rf ./node_modules ./dist \
- && yarn install \
+# Default network timeout is 30 sec, becase building for other arch is kinda slow the timeout hits to early.
+# Setting the timeout to ~16 minutes / disableing it fixes this problem
+RUN rm -rf ./node_modules ./dist ./tmp \
+# && npm i -g protoc-gen-js \
+ && yarn install --network-timeout 100000 \
  && npx nx run-many --target=build --configuration=production --all \
  && rm -rf ./node_modules \
- && yarn install --prod
+ && yarn install --prod --network-timeout 100000
 
 ENV APP_ENV=production
 ENV NODE_ENV=production

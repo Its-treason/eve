@@ -60,12 +60,6 @@ export default class MigrationController1 implements MigrationControllerInterfac
       'index_patterns': [
         'eve-public-logs',
       ],
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Data streams are not implemented for some reason?
-      'data_stream': {
-        'hidden': false,
-        'allow_custom_routing': false,
-      },
     });
   }
 
