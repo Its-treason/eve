@@ -8,7 +8,7 @@ services:
       MARIADB_ROOT_PASSWORD: "1234"
       MARIADB_DATABASE: "eve-dev"
     volumes:
-      - "./mariadb-data:/var/lib/mysql:rw"
+      - "mariadb-data:/var/lib/mysql:rw"
     networks:
       - eve-storage
 
@@ -24,19 +24,19 @@ services:
       - eve-storage
 
   eve-elasticsearch:
-    image: elasticsearch:8.1.2
+    image: elasticsearch:8.6.0
     restart: "no"
     environment:
       discovery.type: "single-node"
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
       xpack.security.enabled: "false"
     volumes:
-      - "./elastic-data:/usr/share/elasticsearch/data:rw"
+      - "elastic-data:/usr/share/elasticsearch/data:rw"
     networks:
       - eve-storage
 
   eve-kibana:
-    image: kibana:8.1.2
+    image: kibana:8.6.0
     ports:
       - "5601:5601"
     restart: "no"
@@ -72,3 +72,7 @@ networks:
   eve-storage:
     driver: "bridge"
     name: eve-storage
+
+volumes:
+  elastic-data:
+  mariadb-data:

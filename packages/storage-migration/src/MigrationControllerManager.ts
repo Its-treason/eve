@@ -1,6 +1,7 @@
 import { singleton } from 'tsyringe';
 import MigrationController1 from './migrations/MigrationController1';
 import MigrationController2 from './migrations/MigrationController2';
+import MigrationController3 from './migrations/MigrationController3';
 import MigrationControllerInterface from './migrations/MigrationControllerInterface';
 
 @singleton()
@@ -10,9 +11,11 @@ export default class MigrationControllerManager {
   constructor(
     controller1: MigrationController1,
     controller2: MigrationController2,
+    controller3: MigrationController3,
   ) {
     this.controller.push(controller1);
     this.controller.push(controller2);
+    this.controller.push(controller3);
   }
 
   public async migrateToVersion(version: number): Promise<void> {

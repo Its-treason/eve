@@ -8,7 +8,12 @@ export default class MigrationSettingsRepository {
   ) {}
 
   public async getCurrentMigration(): Promise<number> {
-    const settingsResult = await this.mysqlClient.query('SELECT value FROM settings WHERE name = "_db_migration"');
+    let settingsResult;
+    try {
+      settingsResult = await this.mysqlClient.query('SELECT value FROM settings WHERE name = "_db_migration"');
+    } catch {
+      return 0;
+    }
     if (settingsResult.length === 0) {
       return 0;
     }
@@ -28,4 +33,3 @@ export default class MigrationSettingsRepository {
     await this.mysqlClient.query(query, [String(version), String(version)]);
   }
 }
-
