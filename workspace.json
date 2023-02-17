@@ -17,7 +17,6 @@
     "panel-feature-server-home": "packages/panel/feature/server-home",
     "panel-feature-server-logs": "packages/panel/feature/server-logs",
     "panel-feature-user-home": "packages/panel/feature/user-home",
-    "storage": "packages/storage",
     "storage-migration": "packages/storage-migration",
     "types-api": "packages/types/api"
   }
