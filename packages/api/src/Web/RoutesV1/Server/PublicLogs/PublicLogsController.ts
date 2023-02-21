@@ -14,7 +14,7 @@ export default class PublicLogsController extends AbstractController {
     super();
   }
 
-  async getAllLogs(req: Request, res: ResponseWithLocals): Promise<void> {
+  async getAllLogs(_req: Request, res: ResponseWithLocals): Promise<void> {
     const rawLogs = await this.publicLogsRepository.getLogsForServer(res.locals.server.id);
 
     const formattedLogs = await this.publicLogsService.formatRawLogs(rawLogs);
@@ -22,3 +22,4 @@ export default class PublicLogsController extends AbstractController {
     this.successResponse(res, formattedLogs);
   }
 }
+

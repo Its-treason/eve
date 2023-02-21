@@ -18,18 +18,28 @@ export default class PublicLogger {
   public async createLog(
     message: string,
     categorie: PublicLogCategories,
-    currentServer: string,
     relatedServer: string[],
     relatedUser: string[],
   ): Promise<void> {
     await this.logsRepository.createLog(message, categorie, relatedServer, relatedUser);
 
+    for (const server in relatedServer) {
+      await this.sendServerMessage(message, categorie, server, relatedServer);
+    }
+  }
+
+  private async sendServerMessage(
+    message: string,
+    categorie: PublicLogCategories,
+    currentServer: string,
+    relatedUser: string[],
+  ): Promise<void> {
     const subscription = await this.serverSettingsRepository.getSetting(
       currentServer, PublicLogsSubscriptionSetting.TOPIC,
     ) as PublicLogsSubscriptionSetting;
 
     const payload = subscription.getPayload();
-    
+
     if (
       !payload.enabled ||
       !payload.wantedCategories.includes(categorie)

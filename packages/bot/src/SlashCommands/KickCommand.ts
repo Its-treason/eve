@@ -54,7 +54,6 @@ export default class KickCommand implements SlashCommandInterface {
     await this.publicLogger.createLog(
       `"${interaction.user.username}" used the "kick" command to kick "${targetUser.username}"`,
       PublicLogCategories.ModerationCommandUsed,
-      interaction.guild!.id,
       [interaction.guild!.id],
       [interaction.user.id, targetUser.id],
     );

@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 export default class PublicLogsRepository {
   constructor(
     private client: Client,
-  ) {}
+  ) { }
 
   public async createLog(
     message: string,
@@ -23,25 +23,27 @@ export default class PublicLogsRepository {
         relatedServer,
         relatedUser,
         timestamp: dayjs().format(),
+        // This field is required because we are wokring with a data-stream
         '@timestamp': dayjs().format(),
       },
     });
   }
 
   public async getLogsForServer(serverId: string): Promise<PublicLogRecord[]> {
-      const response = await this.client.search({
-        index: 'eve-public-logs',
-        sort: [
-          { timestamp: 'desc' },
-        ],
-        query: {
-          match: {
-            relatedServer: serverId,
-          },
+    const response = await this.client.search({
+      index: 'eve-public-logs',
+      sort: [
+        { timestamp: 'desc' },
+      ],
+      size: 10_000,
+      query: {
+        match: {
+          relatedServer: serverId,
         },
-      });
+      },
+    });
 
-      return response.hits.hits.map((hit) => (hit._source as PublicLogRecord));
+    return response.hits.hits.map((hit) => (hit._source as PublicLogRecord));
   }
 
   public async getLogsForUser(userId: string): Promise<PublicLogRecord[]> {

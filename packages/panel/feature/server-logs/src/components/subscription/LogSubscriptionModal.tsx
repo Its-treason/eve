@@ -11,11 +11,12 @@ type LogSubscriptionModalProps = {
 }
 
 const availableCategories = [
-  { label: 'CommandUsed', value: 'command_used' },
-  { label: 'ModerationCommandUsed', value: 'moderation_command_used' },
-  { label: 'AutoActionExecuted', value: 'auto_action_executed' },
-  { label: 'SettingChanged', value: 'setting_changed' },
-  { label: 'ErrorOccurred', value: 'error_occurred' },
+  'CommandUsed',
+  'ModerationCommandUsed',
+  'AutoActionExecuted',
+  'SettingChanged',
+  'ErrorOccurred',
+  'NativeModerationAction',
 ];
 
 export default function LogSubscriptionModal({ serverId, opened, close }: LogSubscriptionModalProps) {

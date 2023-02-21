@@ -63,7 +63,6 @@ export default class MenuInteraction implements ButtonInteractionInterface {
     await this.publicLogger.createLog(
       `"${interactionUser.user.username}" used a role menu to get the "${role.name}" role`,
       PublicLogCategories.AutoActionExecuted,
-      interaction.guildId,
       [interaction.guildId],
       [interactionUser.id],
     );
@@ -97,7 +96,6 @@ export default class MenuInteraction implements ButtonInteractionInterface {
     await this.publicLogger.createLog(
       `"${interactionUser.user.username}" used a role menu to remove the "${role.name}" role`,
       PublicLogCategories.AutoActionExecuted,
-      interaction.guildId,
       [interaction.guildId],
       [interactionUser.id],
     );

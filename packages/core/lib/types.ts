@@ -53,11 +53,12 @@ export interface RoleMenu {
 }
 
 export enum PublicLogCategories {
-  CommandUsed = 'command_used',
-  ModerationCommandUsed = 'moderation_command_used',
-  AutoActionExecuted = 'auto_action_executed',
-  SettingChanged = 'setting_changed',
-  ErrorOccurred = 'error_occurred',
+  CommandUsed = 'CommandUsed',
+  NativeModerationAction = 'NativeModerationAction',
+  ModerationCommandUsed = 'ModerationCommandUsed',
+  AutoActionExecuted = 'AutoActionExecuted',
+  SettingChanged = 'SettingChanged',
+  ErrorOccurred = 'ErrorOccurred',
 }
 
 export type PublicLogRecord = {

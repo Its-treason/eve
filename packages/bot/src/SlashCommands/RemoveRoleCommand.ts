@@ -60,7 +60,6 @@ export default class RemoveRoleCommand implements SlashCommandInterface {
     await this.publicLogger.createLog(
       `"${interaction.user.username}" used the "remove_role" command to remove the role "${role.name}" from all member of "${guild.name}"`,
       PublicLogCategories.ModerationCommandUsed,
-      guild.id,
       [guild.id],
       [interaction.user.id],
     );

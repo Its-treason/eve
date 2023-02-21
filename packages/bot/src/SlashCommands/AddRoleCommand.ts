@@ -60,7 +60,6 @@ export default class AddRoleCommand implements SlashCommandInterface {
     await this.publicLogger.createLog(
       `"${interaction.user.username}" used the "add_role" command to add the role "${role.name}" to all member of "${guild.name}"`,
       PublicLogCategories.ModerationCommandUsed,
-      guild.id,
       [guild.id],
       [interaction.user.id],
     );

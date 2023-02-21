@@ -56,7 +56,6 @@ export default class BanCommand implements SlashCommandInterface {
     await this.publicLogger.createLog(
       `"${interaction.user.username}" used the "ban" command to ban "${targetUser.username}"`,
       PublicLogCategories.ModerationCommandUsed,
-      interaction.guild!.id,
       [interaction.guild!.id],
       [interaction.user.id, targetUser.id],
     );
