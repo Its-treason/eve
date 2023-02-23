@@ -102,7 +102,7 @@ export default class MigrationController2 implements MigrationControllerInterfac
   }
 
   private async moveRoleMenuesToElasticSearch(): Promise<void> {
-    this.elasticClient.indices.putIndexTemplate({
+    await this.elasticClient.indices.putIndexTemplate({
       name: 'role-menus',
       template: {
         mappings: {
@@ -195,6 +195,9 @@ export default class MigrationController2 implements MigrationControllerInterfac
       },
       index_patterns: ['role-menus'],
     });
+    // Create the index
+    await this.elasticClient.index({ index: "role-menus" });
+
 
     // Collect all Role-Menus
     const result = await this.mysqlClient.query('SELECT * FROM `role_menu`');
