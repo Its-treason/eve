@@ -1,4 +1,4 @@
-import { PublicLogCategories, PublicLogger } from '@eve/core';
+import { Logger, PublicLogCategories, PublicLogger } from '@eve/core';
 import { ButtonInteraction, EmbedBuilder, GuildMember, Role } from 'discord.js';
 import { singleton } from 'tsyringe';
 import embedFactory from '../Factory/messageEmbedFactory';
@@ -8,6 +8,7 @@ import ButtonInteractionInterface from './ButtonInteractionInterface';
 export default class MenuInteraction implements ButtonInteractionInterface {
   constructor(
     private publicLogger: PublicLogger,
+    private logger: Logger,
   ) { }
 
   getName(): string {
@@ -23,14 +24,15 @@ export default class MenuInteraction implements ButtonInteractionInterface {
     const guild = interaction.guild;
 
     const roleId = args[1];
-    const role = guild.roles.cache.get(`${BigInt(roleId)}`);
+    const role = await guild.roles.fetch(`${BigInt(roleId)}`);
     const interactionUser = await guild.members.fetch(interaction.user.id);
     if (!interactionUser || !role) {
       return;
     }
 
-    if (interactionUser.roles.cache.find(r => r.id === role.id)) {
+    if (interactionUser.roles.cache.has(role.id)) {
       await this.removeRole(interactionUser, interaction, role, answer);
+      return;
     }
     await this.addRole(interactionUser, interaction, role, answer);
   }
