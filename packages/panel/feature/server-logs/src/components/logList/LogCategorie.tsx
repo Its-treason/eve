@@ -4,11 +4,12 @@ import { Badge } from '@mantine/core';
 import { ReactElement } from 'react';
 
 const categoryMapping: Record<PublicLogCategories, string> = {
-  auto_action_executed: 'Action executed',
-  command_used: 'command used',
-  error_occurred: 'Internal error occurred',
-  moderation_command_used: 'Moderation command used',
-  setting_changed: 'Panel setting changed',
+  AutoActionExecuted: 'Action executed',
+  CommandUsed: 'command used',
+  ErrorOccurred: 'Internal error occurred',
+  ModerationCommandUsed: 'Moderation command used',
+  SettingChanged: 'Panel setting changed',
+  NativeModerationAction: 'Native Moderation Action',
 };
 
 type LogCategoryProps = {

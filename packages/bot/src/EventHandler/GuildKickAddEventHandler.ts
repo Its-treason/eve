@@ -5,7 +5,7 @@ import { GuildMember } from 'discord.js';
 import { AuditLogEvent } from 'discord-api-types/v9';
 
 @injectable()
-export default class WarnEventHandler implements EventHandlerInterface {
+export default class GuildKickEventHandler implements EventHandlerInterface {
   constructor(
     private logger: PublicLogger,
   ) { }
@@ -17,14 +17,14 @@ export default class WarnEventHandler implements EventHandlerInterface {
   public async execute(member: GuildMember): Promise<void> {
     const auditLogEntries = await member.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberKick });
     const auditLogsEntry = auditLogEntries.entries.first();
-    if (!auditLogsEntry) {
+    if (!auditLogsEntry || auditLogsEntry.executor?.bot) {
       return;
     }
 
-    const message = 
-      `"${auditLogsEntry.executor!.username}" used native action to kick "${member.user.username}" for "${auditLogsEntry.reason}"`;
+    const message =
+      `"${auditLogsEntry.executor!.username}" used native action to kick "${member.user.username}" for "${auditLogsEntry.reason || ''}"`;
 
-    this.logger.createLog(
+    await this.logger.createLog(
       message,
       PublicLogCategories.NativeModerationAction,
       [member.guild.id],
@@ -32,3 +32,4 @@ export default class WarnEventHandler implements EventHandlerInterface {
     );
   }
 }
+

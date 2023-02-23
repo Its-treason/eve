@@ -21,7 +21,7 @@ export default class EveClient extends Client {
       intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildVoiceStates,
-        GatewayIntentBits.GuildBans,
+        GatewayIntentBits.GuildModeration,
         GatewayIntentBits.GuildMembers,
       ],
     });

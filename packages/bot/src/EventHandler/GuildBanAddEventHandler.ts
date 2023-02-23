@@ -5,7 +5,7 @@ import { GuildBan } from 'discord.js';
 import { AuditLogEvent } from 'discord-api-types/v9';
 
 @injectable()
-export default class WarnEventHandler implements EventHandlerInterface {
+export default class GuildBanAddEventHandler implements EventHandlerInterface {
   constructor(
     private logger: PublicLogger,
   ) { }
@@ -17,14 +17,14 @@ export default class WarnEventHandler implements EventHandlerInterface {
   public async execute(ban: GuildBan): Promise<void> {
     const auditLogEntries = await ban.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberBanAdd });
     const auditLogsEntry = auditLogEntries.entries.first();
-    if (!auditLogsEntry) {
+    if (!auditLogsEntry || auditLogsEntry.executor?.bot) {
       return;
     }
 
-    const message = 
-      `"${auditLogsEntry.executor!.username}" used native action to ban "${ban.user.username}" for "${ban.reason}"`;
+    const message =
+      `"${auditLogsEntry.executor!.username}" used native action to ban "${ban.user.username}" for "${auditLogsEntry.reason}"`;
 
-    this.logger.createLog(
+    await this.logger.createLog(
       message,
       PublicLogCategories.NativeModerationAction,
       [ban.guild.id],
@@ -32,3 +32,4 @@ export default class WarnEventHandler implements EventHandlerInterface {
     );
   }
 }
+

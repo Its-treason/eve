@@ -15,6 +15,8 @@ RUN apk add --no-cache --virtual .build-deps pango-dev jpeg-dev build-base cairo
  && fc-cache -f \
  && npm i -g nx
 
+USER node
+
 ENV APP_ENV=development
 ENV NODE_ENV=development
 
@@ -61,3 +63,4 @@ ENV APP_ENV=production
 ENV NODE_ENV=production
 
 ENTRYPOINT ["/app/entrypoint.sh"]
+

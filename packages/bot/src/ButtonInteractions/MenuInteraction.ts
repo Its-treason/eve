@@ -8,7 +8,7 @@ import ButtonInteractionInterface from './ButtonInteractionInterface';
 export default class MenuInteraction implements ButtonInteractionInterface {
   constructor(
     private publicLogger: PublicLogger,
-  ) {}
+  ) { }
 
   getName(): string {
     return 'menu';
@@ -24,15 +24,15 @@ export default class MenuInteraction implements ButtonInteractionInterface {
 
     const roleId = args[1];
     const role = guild.roles.cache.get(`${BigInt(roleId)}`);
-    const interactionUser = guild.members.cache.get(interaction.user.id);
+    const interactionUser = await guild.members.fetch(interaction.user.id);
     if (!interactionUser || !role) {
       return;
     }
 
     if (interactionUser.roles.cache.find(r => r.id === role.id)) {
-      this.removeRole(interactionUser, interaction, role, answer);
+      await this.removeRole(interactionUser, interaction, role, answer);
     }
-    this.addRole(interactionUser, interaction, role, answer);
+    await this.addRole(interactionUser, interaction, role, answer);
   }
 
   private async addRole(

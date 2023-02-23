@@ -20,8 +20,7 @@ export default function registerErrorAndShutdownHandler(logger: Logger, client?:
     }
 
     try {
-      // TODO: Fetch something more constant, but idk what
-      await client.fetchInvite('geoxor');
+      await fetch('https://cdn.discordapp.com');
     } catch (e) {
       logger.emergency('Could not fetch from discord, killing container', { error: e });
       shutDown(1);
@@ -33,7 +32,7 @@ export default function registerErrorAndShutdownHandler(logger: Logger, client?:
       });
       shutDown(1);
     }
-  }, 5000);
+  }, 10000);
 
   // Error handling
   let unhandledErrors = 0;

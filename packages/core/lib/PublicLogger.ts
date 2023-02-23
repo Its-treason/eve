@@ -13,8 +13,11 @@ export default class PublicLogger {
     private logsRepository: PublicLogsRepository,
     private serverSettingsRepository: ServerSettingsRepository,
     private apiClient: ApiClient,
-  ) {}
+  ) { }
 
+  /**
+   * @param {string[]} relatedUser These should be in the order, they are named in the message
+   */
   public async createLog(
     message: string,
     categorie: PublicLogCategories,
