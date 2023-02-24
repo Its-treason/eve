@@ -1,5 +1,7 @@
 # EVE - A Discord Bot
 
+See the [Kanboard](https://board.its-treason.com/public/board/cf9ec0539cf9b8b8194a49a789525cd2fb82c194d1c1afb0dd0bae6ff8a0) for upcoming and planed features.
+
 ## Setup - Development
 
 Prerequisites:
@@ -12,6 +14,7 @@ be restart for the changes to take effect.
 
 <details>
 <summary>Infos for all environment variables</summary>
+
 - `DISCORD_TOKEN`: Discord-Bot token. Goto [discord.dev](https://discord.dev) and create an Application to obtain one.
 - `CLIENT_ID`: User Id of the discord bot account.
 - `DB_HOST`: Hostname of the MariaDB server.
@@ -31,6 +34,7 @@ be restart for the changes to take effect.
 - `SPOTIFY_CLIENT_ID`: Client ID of the Spotify-Application. You can create an app here: https://developer.spotify.com/dashboard/applications
 - `SPOTIFY_CLIENT_SECRET`: Client Secret of the Spotify-Application.
 - `GUILD_ID`: Id of the Guild/Server you want to deploy SlashCommands. Only needed for development.
+
 </details>
 
 Start by cloning the repository. Then you can start the database and node.js
