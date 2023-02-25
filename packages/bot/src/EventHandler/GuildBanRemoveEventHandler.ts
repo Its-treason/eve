@@ -1,6 +1,6 @@
 import EventHandlerInterface from './EventHandlerInterface';
 import { injectable } from 'tsyringe';
-import { PublicLogCategories, PublicLogger } from '@eve/core';
+import { PublicLogCategories, PublicLogger, sleep } from '@eve/core';
 import { GuildBan } from 'discord.js';
 import { AuditLogEvent } from 'discord-api-types/v9';
 
@@ -15,6 +15,8 @@ export default class GuildBanRemoveEventHandler implements EventHandlerInterface
   }
 
   public async execute(ban: GuildBan): Promise<void> {
+    await sleep(1);
+
     const auditLogEntries = await ban.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberBanRemove });
     const auditLogsEntry = auditLogEntries.entries.first();
     if (!auditLogsEntry || auditLogsEntry.executor?.bot) {
@@ -22,7 +24,7 @@ export default class GuildBanRemoveEventHandler implements EventHandlerInterface
     }
 
     const message =
-      `"${auditLogsEntry.executor!.username}" used native action to unban "${ban.user.username}", original ban reason "${ban.reason || ''}"`;
+      `"${auditLogsEntry.executor!.username}" used native action to unban "${ban.user.username}"`;
 
     await this.logger.createLog(
       message,

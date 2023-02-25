@@ -1,6 +1,6 @@
 import EventHandlerInterface from './EventHandlerInterface';
 import { injectable } from 'tsyringe';
-import { PublicLogCategories, PublicLogger } from '@eve/core';
+import { PublicLogCategories, PublicLogger, sleep } from '@eve/core';
 import { GuildMember } from 'discord.js';
 import { AuditLogEvent } from 'discord-api-types/v9';
 
@@ -15,6 +15,8 @@ export default class GuildKickEventHandler implements EventHandlerInterface {
   }
 
   public async execute(member: GuildMember): Promise<void> {
+    await sleep(1);
+
     const auditLogEntries = await member.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberKick });
     const auditLogsEntry = auditLogEntries.entries.first();
     if (!auditLogsEntry || auditLogsEntry.executor?.bot) {

@@ -16,6 +16,7 @@ import RoleMenuRepository from './Repository/RoleMenuRepository';
 import ApiClient from './ApiClient';
 import PublicLogger from './PublicLogger';
 import PublicLogsRepository from './Repository/PublicLogsRepository';
+import sleep from './sleep';
 
 export * from './types';
 
@@ -38,4 +39,7 @@ export {
   PlaylistRepository,
   RoleMenuRepository,
   PublicLogsRepository,
+
+  sleep,
 };
+
