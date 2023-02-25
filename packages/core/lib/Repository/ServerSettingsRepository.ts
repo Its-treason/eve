@@ -8,7 +8,7 @@ export default class ServerSettingsRepository {
   constructor(
     private connection: MySQLClient,
     private actionFactory: ActionFactory,
-  ) {}
+  ) { }
 
   public async getSetting(serverId: string, setting: string): Promise<AbstractServerSetting> {
     const sql = 'SELECT payload FROM server_settings WHERE setting = ? AND server_id = ?';
@@ -32,3 +32,4 @@ export default class ServerSettingsRepository {
     await this.connection.query(sql, [setting.getSettingName(), serverId, payload, payload]);
   }
 }
+

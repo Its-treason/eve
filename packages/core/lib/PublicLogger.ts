@@ -26,7 +26,7 @@ export default class PublicLogger {
   ): Promise<void> {
     await this.logsRepository.createLog(message, categorie, relatedServer, relatedUser);
 
-    for (const server in relatedServer) {
+    for (const server of relatedServer) {
       await this.sendServerMessage(message, categorie, server, relatedServer);
     }
   }
