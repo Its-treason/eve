@@ -21,7 +21,7 @@ const availableCategories = [
 
 export default function LogSubscriptionModal({ serverId, opened, close }: LogSubscriptionModalProps) {
   const {
-    error, form, save,
+    error, form, save, loading,
   } = useCreateLogSubscription(serverId);
   const { channel } = useServerChannel(serverId, 'text');
 
@@ -42,20 +42,25 @@ export default function LogSubscriptionModal({ serverId, opened, close }: LogSub
           label={'Categories to subscribe to'}
           data={availableCategories}
           style={{ width: '100%' }}
+          disabled={loading}
           {...form.getInputProps('wantedCategories')}
         />
         <Select
           label={'Channel'}
           style={{ width: '100%' }}
           data={channelSelectData}
+          disabled={loading}
           {...form.getInputProps('channel')}
         />
         <Checkbox
           label={'Enabled'}
+          disabled={loading}
           {...form.getInputProps('enabled', { type: 'checkbox' })}
         />
         <Button
           onClick={() => save().then((success) => success && close())}
+          disabled={loading}
+          loading={loading}
           leftIcon={<DeviceFloppy />}
         >Save</Button>
         {error}
@@ -63,3 +68,4 @@ export default function LogSubscriptionModal({ serverId, opened, close }: LogSub
     </Modal>
   );
 }
+

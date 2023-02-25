@@ -23,13 +23,15 @@ export default function UserFilter({ filteredUser, setFilteredUser, logs }: User
   }, [logs]);
 
   return (
-    <MultiSelect 
+    <MultiSelect
       data={selectItems}
       value={filteredUser}
       onChange={setFilteredUser}
       label={'Filter user'}
+      placeholder={'Username...'}
       searchable
       clearable
     />
   );
 }
+
