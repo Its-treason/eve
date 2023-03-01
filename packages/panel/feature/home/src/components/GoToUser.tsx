@@ -1,8 +1,9 @@
 import { Button, Group, TextInput } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
+import { Pencil } from 'tabler-icons-react';
 
-const idRegex = /\d{18,19}/;
+const idRegex = /\d{18,20}/;
 
 export default function GoToUser() {
   const router = useRouter();
@@ -17,13 +18,15 @@ export default function GoToUser() {
       <TextInput
         label={'Edit another users settings'}
         placeholder={'UserId'}
-        error={idValid ? undefined : 'Invalid UserId!'}
         value={id}
         onChange={(evt) => setId(evt.currentTarget.value)}
         sx={{ flexGrow: 1 }}
+        error={!idValid}
       />
       <Button
-        disabled={!idValid}
+        mt={'xl'}
+        leftIcon={<Pencil />}
+        disabled={!idValid || id.length === 0}
         onClick={() => router.push(`/user/${id}/home`)}
       >
         Edit
