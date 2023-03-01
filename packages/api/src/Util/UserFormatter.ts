@@ -12,9 +12,9 @@ export default class UserFormatter {
     private apiKeyRepository: ApiKeysRepository,
     private permissionRepository: PermissionRepository,
     private discordApiRepository: DiscordApiRepository,
-  ) {}
+  ) { }
 
-  public async getReducedUserFromId(id: string, apiKey: string): Promise<ReducedUser|null> {
+  public async getReducedUserFromId(id: string, apiKey: string): Promise<ReducedUser | null> {
     const fullUser = await this.apiClient.getUser(id);
     if (!fullUser) {
       return null;
@@ -31,20 +31,9 @@ export default class UserFormatter {
 
     const admin = await this.permissionRepository.isUserAdmin(id);
 
-    const mutualGuild: (null|APIGuild)[] = await this.getMutualGuildConcurrent(usersGuilds);
-
-    const server: ReducedServer[] = [];
-    for (const guild of mutualGuild) {
-      if (!guild || (guild.owner_id !== id && !admin)) {
-        continue;
-      }
-
-      server.push({
-        name: guild.name,
-        icon: this.apiClient.getGuildIcon(guild),
-        id: guild.id,
-      });
-    }
+    const server = admin ?
+      await this.getServerForAdmin() :
+      await this.getServerForUser(id, usersGuilds);
 
     return {
       name: fullUser.username,
@@ -55,16 +44,49 @@ export default class UserFormatter {
     };
   }
 
-  private async getMutualGuildConcurrent(usersGuilds: APIGuild[]): Promise<(null|APIGuild)[]> {
-    const multiDownloader = new MultiDownloader<null|APIGuild>();
-    const mutualGuilds: (null|APIGuild)[] = [];
+  private async getServerForAdmin(): Promise<ReducedServer[]> {
+    const apiGuilds = await this.apiClient.getOwnGuilds();
+
+    console.log(apiGuilds);
+
+    return apiGuilds.map((apiGuild) => {
+      return {
+        name: apiGuild.name,
+        icon: this.apiClient.getGuildIcon(apiGuild),
+        id: apiGuild.id,
+      };
+    });
+  }
+
+  private async getServerForUser(id: string, usersGuilds: APIGuild[]): Promise<ReducedServer[]> {
+    const mutualGuild: (null | APIGuild)[] = await this.getMutualGuildConcurrent(usersGuilds);
+
+    const server: ReducedServer[] = [];
+    for (const guild of mutualGuild) {
+      if (!guild || guild.owner_id !== id) {
+        continue;
+      }
+
+      server.push({
+        name: guild.name,
+        icon: this.apiClient.getGuildIcon(guild),
+        id: guild.id,
+      });
+    }
+
+    return server;
+  }
+
+  private async getMutualGuildConcurrent(usersGuilds: APIGuild[]): Promise<(null | APIGuild)[]> {
+    const multiDownloader = new MultiDownloader<null | APIGuild>();
+    const mutualGuilds: (null | APIGuild)[] = [];
 
     for (const userGuild of usersGuilds) {
       mutualGuilds.push(...(await multiDownloader.download(this.apiClient.getGuild(userGuild.id))));
     }
 
     mutualGuilds.push(...(await multiDownloader.flush()));
-  
+
     return mutualGuilds;
   }
 }

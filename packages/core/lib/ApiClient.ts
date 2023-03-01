@@ -1,5 +1,5 @@
 import { RequestData, REST, RouteLike } from '@discordjs/rest';
-import { APIChannel, APIEmoji, APIGuild, APIGuildMember, APIMessage, APIRole, APIUser, Routes } from 'discord-api-types/v9';
+import { APIChannel, APIEmoji, APIGuild, APIGuildMember, APIMessage, APIPartialGuild, APIRole, APIUser, Routes } from 'discord-api-types/v9';
 import type { RedisClientType } from 'redis';
 import { RESTPatchAPIChannelMessageJSONBody, RESTPostAPIChannelMessageJSONBody } from 'discord-api-types/rest/v9/channel';
 import { singleton } from 'tsyringe';
@@ -18,49 +18,60 @@ export default class ApiClient {
     this.restClient = new REST({ version: '9' }).setToken(token);
   }
 
-  public async getChannel(id: string): Promise<APIChannel|null> {
+  public async getChannel(id: string): Promise<APIChannel | null> {
     const redisKey = `eve-channel-${id}`;
 
     return await this.cacheExec<APIChannel>(redisKey, 'GET', Routes.channel(id));
   }
 
-  public async getChannels(id: string): Promise<APIChannel[]|null> {
+  public async getChannels(id: string): Promise<APIChannel[] | null> {
     const redisKey = `eve-channels-${id}`;
 
     return await this.cacheExec<APIChannel[]>(redisKey, 'GET', Routes.guildChannels(id));
   }
 
-  public async getGuild(id: string): Promise<APIGuild|null> {
+  public async getGuild(id: string): Promise<APIGuild | null> {
     const redisKey = `eve-guild-${id}`;
 
     return await this.cacheExec<APIGuild>(redisKey, 'GET', Routes.guild(id));
   }
 
-  public async getUser(id: string): Promise<APIUser|null> {
+  public async getOwnGuilds(): Promise<APIPartialGuild[]> {
+    const redisKey = 'own-guilds';
+
+    const servers = await this.cacheExec<APIPartialGuild[]>(redisKey, 'GET', Routes.userGuilds());
+    if (!servers) {
+      throw new Error('Could not fetch own guilds');
+    }
+
+    return servers;
+  }
+
+  public async getUser(id: string): Promise<APIUser | null> {
     const redisKey = `eve-user-${id}`;
 
     return await this.cacheExec<APIUser>(redisKey, 'GET', Routes.user(id));
   }
 
-  public async getGuildMember(guildId: string, userId: string): Promise<APIGuildMember|null> {
+  public async getGuildMember(guildId: string, userId: string): Promise<APIGuildMember | null> {
     const redisKey = `eve-guild-member-${guildId}-${userId}`;
 
     return await this.cacheExec<APIGuildMember>(redisKey, 'GET', Routes.guildMember(guildId, userId));
   }
 
-  public async getMessage(channelId: string, messageId: string): Promise<APIMessage|null> {
+  public async getMessage(channelId: string, messageId: string): Promise<APIMessage | null> {
     const redisKey = `eve-message-${channelId}-${messageId}`;
 
     return await this.cacheExec<APIMessage>(redisKey, 'GET', Routes.channelMessage(channelId, messageId));
   }
 
-  public async getRoles(guildId: string): Promise<APIRole[]|null> {
+  public async getRoles(guildId: string): Promise<APIRole[] | null> {
     const redisKey = `eve-roles-${guildId}`;
 
     return await this.cacheExec<APIRole[]>(redisKey, 'GET', Routes.guildRoles(guildId));
   }
 
-  public async getRole(guildId: string, roleId: string): Promise<APIRole|null> {
+  public async getRole(guildId: string, roleId: string): Promise<APIRole | null> {
     const roles = await this.getRoles(guildId);
     if (!roles) {
       return null;
@@ -75,13 +86,13 @@ export default class ApiClient {
     return null;
   }
 
-  public async getEmojis(guildId: string): Promise<APIEmoji[]|null> {
+  public async getEmojis(guildId: string): Promise<APIEmoji[] | null> {
     const redisKey = `eve-emojis-${guildId}`;
 
     return await this.cacheExec<APIRole[]>(redisKey, 'GET', Routes.guildEmojis(guildId));
   }
 
-  public async getBotUser(): Promise<APIUser|null> {
+  public async getBotUser(): Promise<APIUser | null> {
     const redisKey = 'eve-bot-user';
 
     return await this.cacheExec<APIUser>(redisKey, 'GET', Routes.user('@me'));
@@ -93,7 +104,7 @@ export default class ApiClient {
       `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator) % 5}.jpg`;
   }
 
-  public getGuildIcon(guild: APIGuild): string {
+  public getGuildIcon(guild: APIGuild | APIPartialGuild): string {
     return guild.icon ?
       `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.jpg` :
       'https://cdn.discordapp.com/embed/avatars/5.jpg';
@@ -103,7 +114,7 @@ export default class ApiClient {
     return (Number(role.permissions) & Number(permission)) === Number(permission);
   }
 
-  public async sendMessage(channelId: string, body: RESTPostAPIChannelMessageJSONBody): Promise<APIMessage|null> {
+  public async sendMessage(channelId: string, body: RESTPostAPIChannelMessageJSONBody): Promise<APIMessage | null> {
     try {
       return await this.restClient.post(Routes.channelMessages(channelId), { body }) as APIMessage;
     } catch (e) {
@@ -122,10 +133,10 @@ export default class ApiClient {
 
   private async cacheExec<T>(
     redisKey: string,
-    method: 'GET'|'POST'|'PATCH',
+    method: 'GET' | 'POST' | 'PATCH',
     route: RouteLike,
     options?: RequestData,
-  ): Promise<T|null> {
+  ): Promise<T | null> {
     const cachedValue = await this.redisClient.get(redisKey);
     if (cachedValue) {
       if (cachedValue === ApiClient.NULL_VALUE || cachedValue === null) {
