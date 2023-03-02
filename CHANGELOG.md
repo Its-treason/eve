@@ -6,6 +6,18 @@ The Format is based on all commits made to this repository using the [Convention
 
 ## [Unreleased]
 
+## [0.0.5] - 2023-03-01
+- fix(Web): Fix styling of goto user input
+- feat(Web): Show all server for admins
+- fix(Bot): Fix name for skipped track not being hightlighted properly
+- feat(panel): Improve UI of Public-Logs
+- fix(Bot): Fix Public Logs Subscriptions not working
+- fix(Bot): Improve logging of native actions
+- chore: Update README
+
+[0.0.5]:https://github.com/Its-treason/eve/compare/0.0.4...0.0.5
+
+
 ## [0.0.4] - 2023-02-24
 - fix(migration): Create empty role-menus index
 - fix(bot): Role menu roles not beign removed properly
