@@ -18,6 +18,7 @@ export default class MigrationController1 implements MigrationControllerInterfac
     await this.createPermissionsTable();
     await this.createRoleMenuTable();
     await this.createSettingsTable();
+    await this.createPlaylistTable();
 
     await this.createInternalLogsIndex();
   }
@@ -91,6 +92,19 @@ export default class MigrationController1 implements MigrationControllerInterfac
         name varchar(32) NOT NULL,
         value varchar(64),
         PRIMARY KEY (name)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `);
+  }
+
+  private async createPlaylistTable(): Promise<void> {
+    await this.mysqlClient.query(`
+      CREATE TABLE playlist (
+        id int(11) NOT NULL AUTO_INCREMENT,
+        name varchar(32) NOT NULL,
+        user_id varchar(20) NOT NULL,
+        queue longtext NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE KEY name (name,user_id) USING BTREE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
   }
