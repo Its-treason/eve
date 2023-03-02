@@ -11,7 +11,7 @@ export default class AuthMiddlewares {
     private discordApiRepository: DiscordApiRepository,
     private permissionRepository: PermissionRepository,
     private apiClient: ApiClient,
-  ) {}
+  ) { }
 
   authMiddleware(mustBeAdmin: boolean) {
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -62,8 +62,7 @@ export default class AuthMiddlewares {
       return;
     }
 
-    const member = await this.apiClient.getGuildMember(server.id, res.locals.user.id);
-    if (!member || (server.owner_id !== res.locals.user.id && !res.locals.isAdmin)) {
+    if (server.owner_id !== res.locals.user.id && !res.locals.isAdmin) {
       this.userUnauthorizedResponse(res);
       return;
     }
@@ -91,7 +90,7 @@ export default class AuthMiddlewares {
   private userUnauthorizedResponse(
     res: Response,
     msg = 'Permission denied',
-  ):void {
+  ): void {
     res.status(401);
     res.json({
       success: false,
