@@ -1,4 +1,4 @@
-import { DateRangePicker } from '@mantine/dates';
+import { DatePickerInput } from '@mantine/dates';
 import { Button, createStyles, Divider, Group } from '@mantine/core';
 import { FileExport } from 'tabler-icons-react';
 import dayjs from 'dayjs';
@@ -26,7 +26,8 @@ function ActivityDatePicker({ from, to, setDate, exportCsvData }: ActivityDatePi
 
   return (
     <Group align="end" className={classes.group}>
-      <DateRangePicker
+      <DatePickerInput
+        type='range'
         className={classes.picker}
         value={[from, to]}
         onChange={(newDate) => {

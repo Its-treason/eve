@@ -8,7 +8,7 @@ export default createStyles((theme) => ({
 
     border: `1px solid ${theme.colors.dark[8]}`,
     gap: theme.spacing.xs,
-    padding: theme.spacing.xs / 2,
+    padding: `calc(${theme.spacing.xs} / 2)`,
     borderRadius: theme.radius.md,
   },
 

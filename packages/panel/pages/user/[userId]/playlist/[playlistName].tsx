@@ -13,12 +13,12 @@ export function EditPlaylist({ user, playlistName }: EditPlaylistProps) {
   const navItems: BreadCrumpItem[] = [
     { label: 'Home', to: '/' },
     { label: user.name, to: `/user/${user.id}/home` },
-    { label: 'Role menu', to: `/user/${user.id}/playlist` },
+    { label: 'Playlist', to: `/user/${user.id}/playlist` },
     { label: playlistName },
   ];
 
   return (
-    <Layout context={user} backTo={`/user/${user.id}/home`} containerSize={'md'} navItems={navItems}>
+    <Layout context={user} backTo={`/user/${user.id}/playlist`} containerSize={'md'} navItems={navItems}>
       <Head><title>{`Playlist ${playlistName} - ${user.name} - EVE`}</title></Head>
       <EditPlaylistPage
         user={user}

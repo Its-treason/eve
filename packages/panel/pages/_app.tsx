@@ -1,8 +1,37 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { MantineProvider } from '@mantine/core';
+import { MantineProvider, MantineTheme, MantineThemeColorsOverride } from '@mantine/core';
 import { RouterTransition } from '@eve/panel/feature/core';
-import { NotificationsProvider } from '@mantine/notifications';
+import { Notifications } from '@mantine/notifications';
+
+const themeOverride: MantineThemeColorsOverride = {
+  colorScheme: 'dark',
+  colors: {
+    dark: [
+      '#FFFFFF',
+      '#A6A7AB',
+      '#909296',
+      '#5c5f66',
+      '#373A40',
+      '#2C2E33',
+      '#36393f',
+      '#2f3136',
+      '#202225',
+      '#101113',
+    ],
+  },
+  components: {
+    Button: {
+      styles: (theme: MantineTheme) => ({
+        root: {
+          '&[data-disabled]': {
+            color: theme.colors.gray[9],
+          },
+        },
+      }),
+    },
+  },
+};
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -17,39 +46,11 @@ export default function App(props: AppProps) {
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
-        theme={{
-          colorScheme: 'dark',
-          colors: {
-            dark: [
-              '#FFFFFF',
-              '#A6A7AB',
-              '#909296',
-              '#5c5f66',
-              '#373A40',
-              '#2C2E33',
-              '#36393f',
-              '#2f3136',
-              '#202225',
-              '#101113',
-            ],
-          },
-          components: {
-            Button: {
-              styles: (theme) => ({
-                root: {
-                  '&[data-disabled]': {
-                    color: theme.colors.gray[9],
-                  },
-                },
-              }),
-            },
-          },
-        }}
+        theme={themeOverride}
       >
         <RouterTransition />
-        <NotificationsProvider>
-          <Component {...pageProps} />
-        </NotificationsProvider>
+        <Notifications />
+        <Component {...pageProps} />
       </MantineProvider>
     </>
   );

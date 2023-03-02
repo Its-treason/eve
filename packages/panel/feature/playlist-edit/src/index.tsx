@@ -35,7 +35,7 @@ export default function PlaylistEdit({ playlistName, user }: PlaylistEditProps):
       title: 'Playlist saved!',
       message: `Your playlist "${playlistName}" was successfully saved!`,
     });
-  }, []);
+  }, [user.id, playlistName, playlistItems]);
 
   const addSongs = useCallback(() => {
     setAddDialogOpen(true);

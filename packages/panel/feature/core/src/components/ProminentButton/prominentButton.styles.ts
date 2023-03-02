@@ -1,6 +1,6 @@
-import { createStyles } from '@mantine/core';
+import { createStyles, getStylesRef } from '@mantine/core';
 
-const styles = createStyles((theme, _params, getRef) => {
+const styles = createStyles((theme, _params) => {
   return {
     button: {
       position: 'relative',
@@ -50,7 +50,7 @@ const styles = createStyles((theme, _params, getRef) => {
         transform: 'translateY(1px)',
       },
 
-      [`&:hover .${getRef('text')}`]: {
+      [`&:hover .${getStylesRef('text')}`]: {
         textDecoration: 'underline',
         userSelect: 'none',
       },
@@ -70,7 +70,7 @@ const styles = createStyles((theme, _params, getRef) => {
     },
 
     text: {
-      ref: getRef('text'),
+      ref: getStylesRef('text'),
       transitionDuration: '.3s',
     },
 
