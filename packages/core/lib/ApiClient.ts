@@ -101,13 +101,13 @@ export default class ApiClient {
   public getUserAvatar(user: APIUser): string {
     return user?.avatar ?
       `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.jpg` :
-      `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator) % 5}.jpg`;
+      `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator) % 5}.png`;
   }
 
   public getGuildIcon(guild: APIGuild | APIPartialGuild): string {
     return guild.icon ?
       `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.jpg` :
-      'https://cdn.discordapp.com/embed/avatars/5.jpg';
+      'https://cdn.discordapp.com/embed/avatars/5.png';
   }
 
   public roleHasPermission(role: APIRole, permission: bigint): boolean {
