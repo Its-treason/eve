@@ -1,12 +1,10 @@
 import dayjs from 'dayjs';
 import ApiClient from './ApiClient';
-import PublicLogger from './PublicLogger'
+import PublicLogger from './PublicLogger';
 import PublicLogsRepository from './Repository/PublicLogsRepository';
 import ServerSettingsRepository from './Repository/ServerSettingsRepository';
 import PublicLogsSubscriptionSetting from './ServerSettings/PublicLogsSubscriptionSetting';
 import { PublicLogCategories } from './types';
-
-
 
 describe('PublicLogger', () => {
   let publicLogger: PublicLogger;
@@ -35,8 +33,8 @@ describe('PublicLogger', () => {
           wantedCategories: [PublicLogCategories.CommandUsed],
           enabled: true,
           channel: '372762707260342273',
-        })
-      })
+        });
+      });
 
       apiClient.sendMessage = jest.fn();
 
@@ -51,7 +49,7 @@ describe('PublicLogger', () => {
         'Jest test',
         PublicLogCategories.CommandUsed,
         ['395676259922739212'],
-        ['492435232071483392', '898676414688145449']
+        ['492435232071483392', '898676414688145449'],
       );
 
       expect(serverSettingsRepository.getSetting)
@@ -65,7 +63,7 @@ describe('PublicLogger', () => {
         ],
         color: parseInt('b4dbe0', 16),
         timestamp: dayjs().toISOString(),
-      }
+      };
 
       expect(apiClient.sendMessage).toBeCalledWith('372762707260342273', { embeds: [embed] });
     });
@@ -94,7 +92,7 @@ describe('PublicLogger', () => {
         'Jest test',
         PublicLogCategories.CommandUsed,
         ['395676259922739212'],
-        ['492435232071483392', '898676414688145449']
+        ['492435232071483392', '898676414688145449'],
       );
 
       expect(serverSettingsRepository.getSetting)
@@ -127,7 +125,7 @@ describe('PublicLogger', () => {
         'Jest test',
         PublicLogCategories.CommandUsed,
         ['395676259922739212'],
-        ['492435232071483392', '898676414688145449']
+        ['492435232071483392', '898676414688145449'],
       );
 
       expect(serverSettingsRepository.getSetting)
