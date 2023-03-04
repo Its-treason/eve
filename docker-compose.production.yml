@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   eve-cli:
-    image: itstreason/eve:0.0.5
+    image: itstreason/eve:0.0.6
     build:
       context: .
       dockerfile: docker/node/Dockerfile

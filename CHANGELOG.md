@@ -6,6 +6,16 @@ The Format is based on all commits made to this repository using the [Convention
 
 ## [Unreleased]
 
+## [0.0.6] - 2023-03-04
+- chore: Lint fixing
+- fix: Change file type for /embed/avatars/X to png
+- chore(Web): Update Mantine to version 6
+- fix(Storage): Create missing Playlist table in Migration1 controller
+- fix(Web): Allow EVE Admins to access any server
+
+[0.0.6]:https://github.com/Its-treason/eve/compare/0.0.5...0.0.6
+
+
 ## [0.0.5] - 2023-03-01
 - fix(Web): Fix styling of goto user input
 - feat(Web): Show all server for admins
