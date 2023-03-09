@@ -5,5 +5,4 @@ export default interface SubSlashCommandInterface {
   execute(interaction: ChatInputCommandInteraction): Promise<void>;
 
   getData(): ApplicationCommandSubCommandData;
-
 }

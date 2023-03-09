@@ -1,5 +1,5 @@
 import {
-  ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, PermissionFlagsBits, PermissionResolvable, User,
+  ApplicationCommandData, ApplicationCommandOptionType, ApplicationCommandType, ChatInputCommandInteraction, PermissionFlagsBits, User,
 } from 'discord.js';
 import embedFactory from '../Factory/messageEmbedFactory';
 import SlashCommandInterface from './SlashCommandInterface';
@@ -24,7 +24,7 @@ export default class BanCommand implements SlashCommandInterface {
     const actionUser = interaction.user;
     const reason = interaction.options.getString('reason', false) || 'No reason given';
 
-    this.commandValidator.validate(
+    await this.commandValidator.validate(
       interaction,
       [
         new NotInDmChannelValidationHandler(),
@@ -33,7 +33,7 @@ export default class BanCommand implements SlashCommandInterface {
         new NotEqualsValidationHandler(actionUser.id, targetUser.id, 'You cannot ban yourself'),
         new NotGuildOwnerValidationHandler(targetUser, 'You cannot ban the server owner'),
       ],
-      () => this.doBan(interaction, targetUser, actionUser, reason),
+      async () => await this.doBan(interaction, targetUser, actionUser, reason),
     );
   }
 
@@ -80,7 +80,7 @@ export default class BanCommand implements SlashCommandInterface {
         },
       ],
       dmPermission: false,
-      defaultMemberPermissions: PermissionFlagsBits.BanMembers.toString() as PermissionResolvable,
+      defaultMemberPermissions: PermissionFlagsBits.BanMembers,
     };
   }
 }

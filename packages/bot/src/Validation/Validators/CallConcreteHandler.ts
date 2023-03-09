@@ -3,16 +3,16 @@ import AbstractValidationHandler from '../AbstractValidationHandler';
 
 export default class CallConcreteHandler extends AbstractValidationHandler {
   constructor(
-    private callback: (command: ChatInputCommandInteraction) => void,
+    private callback: (command: ChatInputCommandInteraction) => void|Promise<void>,
   ) {
     super();
   }
 
-  public handle(command: ChatInputCommandInteraction<CacheType>): void {
+  public async handle(command: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (this.next) {
       throw new Error('"CallConcreteHandler" must be at the end of the chain');
     }
 
-    this.callback(command);
+    await this.callback(command);
   }
 }

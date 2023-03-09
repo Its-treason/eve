@@ -17,6 +17,7 @@ import ApiClient from './ApiClient';
 import PublicLogger from './PublicLogger';
 import PublicLogsRepository from './Repository/PublicLogsRepository';
 import sleep from './sleep';
+import mockClass from './TestUtils/mockClass';
 
 export * from './types';
 
@@ -41,5 +42,6 @@ export {
   PublicLogsRepository,
 
   sleep,
+  mockClass,
 };
 

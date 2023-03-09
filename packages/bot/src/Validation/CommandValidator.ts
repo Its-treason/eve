@@ -6,7 +6,7 @@ export default class CommandValidator {
   async validate(
     interaction: ChatInputCommandInteraction,
     validators: AbstractValidationHandler[],
-    callback: (command: ChatInputCommandInteraction) => void,
+    callback: (command: ChatInputCommandInteraction) => Promise<void>,
   ): Promise<void> {
     validators.push(new CallConcreteHandler(callback));
   
