@@ -22,7 +22,7 @@ export default class KickCommand implements SlashCommandInterface {
     const targetUser = interaction.options.getUser('user', true);
     const reason = interaction.options.getString('reason', false) || 'No reason given';
 
-    this.commandValidator.validate(
+    await this.commandValidator.validate(
       interaction,
       [
         new NotInDmChannelValidationHandler(),
@@ -31,7 +31,7 @@ export default class KickCommand implements SlashCommandInterface {
         new NotEqualsValidationHandler(actionUser.id, targetUser.id, 'You cannot kick yourself'),
         new NotGuildOwnerValidationHandler(targetUser, 'Cannot kick the server owner'),
       ],
-      () => this.doKick(interaction, actionUser, targetUser, reason),
+      async () => await this.doKick(interaction, actionUser, targetUser, reason),
     );
   }
 
@@ -78,7 +78,7 @@ export default class KickCommand implements SlashCommandInterface {
         },
       ],
       dmPermission: false,
-      defaultMemberPermissions: PermissionFlagsBits.KickMembers.toString() as PermissionResolvable,
+      defaultMemberPermissions: PermissionFlagsBits.KickMembers,
     };
   }
 }
