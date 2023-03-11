@@ -1,17 +1,17 @@
 import EventHandlerInterface from './EventHandlerInterface';
 import { injectable } from 'tsyringe';
-import { PublicLogCategories, PublicLogger, sleep } from '@eve/core';
+import { PublicLogCategories, PublicLogger } from '@eve/core';
 import { GuildBan } from 'discord.js';
 import { AuditLogEvent } from 'discord-api-types/v9';
 
 @injectable()
-export default class GuildBanAddEventHandler implements EventHandlerInterface {
+export default class GuildBanAddEventHandler implements EventHandlerInterface<'guildBanAdd'> {
   constructor(
     private logger: PublicLogger,
   ) { }
 
-  public getNameEventName(): string {
-    return 'guildBanAdd';
+  public getEventName() {
+    return 'guildBanAdd' as const;
   }
 
   public async execute(ban: GuildBan): Promise<void> {
@@ -35,4 +35,3 @@ export default class GuildBanAddEventHandler implements EventHandlerInterface {
     );
   }
 }
-

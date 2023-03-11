@@ -4,14 +4,14 @@ import { injectable } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
 
 @injectable()
-export default class GuildDeleteEventHandler implements EventHandlerInterface {
+export default class GuildDeleteEventHandler implements EventHandlerInterface<'guildDelete'> {
   constructor(
     private logger: Logger,
     private channelActivityRepository: ChannelActivityRepository,
   ) {}
 
-  public getNameEventName(): string {
-    return 'guildDelete';
+  public getEventName() {
+    return 'guildDelete' as const;
   }
 
   public async execute(guild: Guild): Promise<void> {

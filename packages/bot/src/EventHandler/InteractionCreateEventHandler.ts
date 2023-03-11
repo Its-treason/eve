@@ -7,15 +7,15 @@ import ButtonInteractionInterface from '../ButtonInteractions/ButtonInteractionI
 import { Logger } from '@eve/core';
 
 @injectable()
-export default class InteractionCreateEventHandler implements EventHandlerInterface {
+export default class InteractionCreateEventHandler implements EventHandlerInterface<'interactionCreate'> {
   constructor(
     @injectAll('SlashCommands') private slashCommands: SlashCommandInterface[],
     @injectAll('ButtonInteractions') private buttonInteractions: ButtonInteractionInterface[],
     private logger: Logger,
   ) {}
 
-  getNameEventName(): string {
-    return 'interactionCreate';
+  getEventName() {
+    return 'interactionCreate' as const;
   }
 
   public async execute(interaction: Interaction): Promise<void> {

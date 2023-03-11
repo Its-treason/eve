@@ -5,15 +5,15 @@ import EventHandlerInterface from './EventHandlerInterface';
 import { AutoRolesSetting, JoinMessageSetting, Logger, ServerSettingsRepository } from '@eve/core';
 
 @injectable()
-export default class GuildMemberAddEventHandler implements EventHandlerInterface {
+export default class GuildMemberAddEventHandler implements EventHandlerInterface<'guildMemberAdd'> {
   constructor(
     private logger: Logger,
     private serverSettingsRepository: ServerSettingsRepository,
     private mustacheReplace: MustacheReplace,
   ) {}
 
-  public getNameEventName(): string {
-    return 'guildMemberAdd';
+  public getEventName() {
+    return 'guildMemberAdd' as const;
   }
 
   public async execute(member: GuildMember): Promise<void> {

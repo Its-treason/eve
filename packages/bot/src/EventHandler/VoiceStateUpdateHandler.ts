@@ -4,13 +4,13 @@ import { injectable } from 'tsyringe';
 import { ChannelActivityRepository } from '@eve/core';
 
 @injectable()
-export default class VoiceStateUpdateHandler implements EventHandlerInterface {
+export default class VoiceStateUpdateHandler implements EventHandlerInterface<'voiceStateUpdate'> {
   constructor(
     private channelActivityRepository: ChannelActivityRepository,
   ) {}
 
-  getNameEventName(): string {
-    return 'voiceStateUpdate';
+  getEventName() {
+    return 'voiceStateUpdate' as const;
   }
 
   public async execute(oldState: VoiceState, newState: VoiceState): Promise<void> {

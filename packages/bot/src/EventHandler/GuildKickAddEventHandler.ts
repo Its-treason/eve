@@ -5,13 +5,13 @@ import { GuildMember } from 'discord.js';
 import { AuditLogEvent } from 'discord-api-types/v9';
 
 @injectable()
-export default class GuildKickEventHandler implements EventHandlerInterface {
+export default class GuildKickEventHandler implements EventHandlerInterface<'guildMemberRemove'> {
   constructor(
     private logger: PublicLogger,
   ) { }
 
-  public getNameEventName(): string {
-    return 'guildMemberRemove';
+  public getEventName() {
+    return 'guildMemberRemove' as const;
   }
 
   public async execute(member: GuildMember): Promise<void> {

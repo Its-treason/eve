@@ -4,13 +4,13 @@ import { injectable } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
 
 @injectable()
-export default class GuildCreateEventHandler implements EventHandlerInterface {
+export default class GuildCreateEventHandler implements EventHandlerInterface<'guildCreate'> {
   constructor(
     private logger: Logger,
   ) {}
 
-  getNameEventName(): string {
-    return 'guildCreate';
+  getEventName() {
+    return 'guildCreate' as const;
   }
 
   public async execute(guild: Guild): Promise<void> {

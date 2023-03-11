@@ -1,6 +1,8 @@
-export default interface EventHandlerInterface {
-  getNameEventName(): string;
+import { ClientEvents } from 'discord.js';
 
-  execute(...payload: unknown[]): Promise<void>;
+export default interface EventHandlerInterface<K extends keyof ClientEvents> {
+  getEventName(): K;
+
+  execute(...payload: ClientEvents[K]): Promise<void>;
 // eslint-disable-next-line semi
 }

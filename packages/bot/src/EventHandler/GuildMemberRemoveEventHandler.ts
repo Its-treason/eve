@@ -5,15 +5,15 @@ import EventHandlerInterface from './EventHandlerInterface';
 import { LeaveMessageSetting, Logger, ServerSettingsRepository } from '@eve/core';
 
 @injectable()
-export default class GuildMemberRemoveEventHandler implements EventHandlerInterface {
+export default class GuildMemberRemoveEventHandler implements EventHandlerInterface<'guildMemberRemove'> {
   constructor(
     private logger: Logger,
     private actionRepository: ServerSettingsRepository,
     private mustacheParser: MustacheReplace,
   ) {}
 
-  public getNameEventName(): string {
-    return 'guildMemberRemove';
+  public getEventName() {
+    return 'guildMemberRemove' as const;
   }
 
   public async execute(member: GuildMember): Promise<void> {

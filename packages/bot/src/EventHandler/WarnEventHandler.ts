@@ -3,13 +3,13 @@ import { injectable } from 'tsyringe';
 import { Logger } from '@eve/core';
 
 @injectable()
-export default class WarnEventHandler implements EventHandlerInterface {
+export default class WarnEventHandler implements EventHandlerInterface<'warn'> {
   constructor(
     private logger: Logger,
   ) {}
 
-  public getNameEventName(): string {
-    return 'warn';
+  public getEventName() {
+    return 'warn' as const;
   }
 
   public async execute(info: string): Promise<void> {

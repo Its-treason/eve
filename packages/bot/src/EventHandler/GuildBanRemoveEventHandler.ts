@@ -5,13 +5,13 @@ import { GuildBan } from 'discord.js';
 import { AuditLogEvent } from 'discord-api-types/v9';
 
 @injectable()
-export default class GuildBanRemoveEventHandler implements EventHandlerInterface {
+export default class GuildBanRemoveEventHandler implements EventHandlerInterface<'guildBanRemove'> {
   constructor(
     private logger: PublicLogger,
   ) { }
 
-  public getNameEventName(): string {
-    return 'guildBanRemove';
+  public getEventName() {
+    return 'guildBanRemove' as const;
   }
 
   public async execute(ban: GuildBan): Promise<void> {
