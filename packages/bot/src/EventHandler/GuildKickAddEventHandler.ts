@@ -34,4 +34,3 @@ export default class GuildKickEventHandler implements EventHandlerInterface<'gui
     );
   }
 }
-
