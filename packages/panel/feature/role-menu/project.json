@@ -1,4 +1,5 @@
 {
+  "name": "panel-feature-role-menu",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/panel/feature/role-menu/src",
   "projectType": "library",
@@ -18,7 +19,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/packages/panel/feature/role-menu"
+        "{workspaceRoot}/coverage/packages/panel/feature/role-menu"
       ],
       "options": {
         "jestConfig": "packages/panel/feature/role-menu/jest.config.ts",

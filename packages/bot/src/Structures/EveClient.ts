@@ -9,12 +9,12 @@ import { Logger } from '@eve/core';
 @singleton()
 export default class EveClient extends Client {
   private readonly slashCommands: SlashCommandInterface[];
-  private readonly eventHandler: EventHandlerInterface[];
+  private readonly eventHandler: EventHandlerInterface<any>[];
   private readonly logger: Logger;
 
   constructor(
     @injectAll('SlashCommands') slashCommands: SlashCommandInterface[],
-    @injectAll('EventHandler') eventHandler: EventHandlerInterface[],
+    @injectAll('EventHandler') eventHandler: EventHandlerInterface<never>[],
     logger: Logger,
   ) {
     super({
@@ -31,7 +31,7 @@ export default class EveClient extends Client {
     this.logger = logger;
   }
 
-  public async run(): Promise<void|never> {
+  public async run(): Promise<void | never> {
     this.registerEventHandler();
     await this.registerSlashCommands();
 
@@ -45,7 +45,7 @@ export default class EveClient extends Client {
 
   registerEventHandler(): void {
     this.eventHandler.forEach((eventHandler): void => {
-      this.on(eventHandler.getNameEventName(), (...payload: unknown[]) => eventHandler.execute(...payload));
+      this.on(eventHandler.getEventName(), (...payload: unknown[]) => eventHandler.execute(...payload));
     });
   }
 

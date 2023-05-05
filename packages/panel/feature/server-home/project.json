@@ -1,4 +1,5 @@
 {
+  "name": "panel-feature-server-home",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/panel/feature/server-home/src",
   "projectType": "library",
@@ -18,7 +19,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/packages/panel/feature/server-home"
+        "{workspaceRoot}/coverage/packages/panel/feature/server-home"
       ],
       "options": {
         "jestConfig": "packages/panel/feature/server-home/jest.config.ts",

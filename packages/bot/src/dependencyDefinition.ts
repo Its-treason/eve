@@ -26,7 +26,6 @@ import WhoisCommand from './SlashCommands/WhoisCommand';
 import MenuInteraction from './ButtonInteractions/MenuInteraction';
 import GuildCreateEventHandler from './EventHandler/GuildCreateEventHandler';
 import GuildDeleteEventHandler from './EventHandler/GuildDeleteEventHandler';
-import RateLimitEventHandler from './EventHandler/RateLimitEventHandler';
 import VoiceStateUpdateHandler from './EventHandler/VoiceStateUpdateHandler';
 import WarnEventHandler from './EventHandler/WarnEventHandler';
 import GuildMemberAddEventHandler from './EventHandler/GuildMemberAddEventHandler';
@@ -40,7 +39,6 @@ import GuildKickEventHandler from './EventHandler/GuildKickAddEventHandler';
 
 container.register('EventHandler', { useClass: GuildCreateEventHandler });
 container.register('EventHandler', { useClass: GuildDeleteEventHandler });
-container.register('EventHandler', { useClass: RateLimitEventHandler });
 container.register('EventHandler', { useClass: VoiceStateUpdateHandler });
 container.register('EventHandler', { useClass: WarnEventHandler });
 container.register('EventHandler', { useClass: GuildMemberAddEventHandler });

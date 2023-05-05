@@ -6,11 +6,16 @@ import registerErrorAndShutdownHandler from './Util/registerErrorAndShutdownHand
 import { Logger } from '@eve/core';
 import StorageMigrator from '@eve/storage-migration';
 
+// Hack for BigInt serializtion
+(BigInt.prototype as any).toJSON = function() {
+  return this.toString();
+};
+
 (async () => {
   const logger = container.resolve(Logger);
   const client = container.resolve(EveClient);
 
-  const migrator = container.resolve(StorageMigrator); 
+  const migrator = container.resolve(StorageMigrator);
   await migrator.migrateToLatest();
 
   registerErrorAndShutdownHandler(logger, client);

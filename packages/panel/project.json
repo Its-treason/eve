@@ -1,4 +1,5 @@
 {
+  "name": "panel",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/panel",
   "projectType": "application",
@@ -50,7 +51,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/packages/panel"
+        "{workspaceRoot}/coverage/packages/panel"
       ],
       "options": {
         "jestConfig": "packages/panel/jest.config.ts",

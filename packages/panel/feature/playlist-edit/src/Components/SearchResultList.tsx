@@ -1,6 +1,6 @@
 import { ReactElement, MouseEvent } from 'react';
 import { Checkbox, Group, Paper, Stack, Text, UnstyledButton } from '@mantine/core';
-import produce from 'immer';
+import { produce } from 'immer';
 import DisplayPlaylistItem from './DisplayPlaylistItem';
 import { CheckablePlaylistItem } from '@eve/types/api';
 

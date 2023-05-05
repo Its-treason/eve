@@ -68,7 +68,7 @@ export default function AddSongDialog({ open, close, append, userId }: AddSongDi
           value={query}
           onChange={(event) => setQuery(event.currentTarget.value)}
           disabled={loading}
-          sx={{ flex: 1 }}
+          sx={{ flexGrow: 1 }}
         />
         <Button
           onClick={search}

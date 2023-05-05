@@ -1,4 +1,5 @@
 {
+  "name": "storage-migration",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/storage-migration/src",
   "projectType": "library",
@@ -17,7 +18,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/packages/storage-migration"
+        "{workspaceRoot}/coverage/packages/storage-migration"
       ],
       "options": {
         "jestConfig": "packages/storage-migration/jest.config.ts",

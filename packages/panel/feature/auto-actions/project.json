@@ -1,4 +1,5 @@
 {
+  "name": "panel-feature-auto-actions",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/panel/feature/auto-actions/src",
   "projectType": "library",
@@ -18,7 +19,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/packages/panel/feature/auto-actions"
+        "{workspaceRoot}/coverage/packages/panel/feature/auto-actions"
       ],
       "options": {
         "jestConfig": "packages/panel/feature/auto-actions/jest.config.ts",
