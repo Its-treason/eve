@@ -16,16 +16,22 @@ function TemplateLegendModal({ opened, close }: PlaceholderLegendDialogProps): R
     >
       <Text>
         In certain texts you can use Placeholder that are replaced to the specific value, when bot sends the a message.
+        Mustache is used the render the templates. So all variables surrounded with <Code>{'{{'} {'}}'}</Code> will be
+        replaced.
       </Text>
+      <Space h={'md'} />
       <Text>
-        Mustache is used the render the templates. So all variables surrounded with
-        <Code>{'{{'} {'}}'}</Code> will be replaced. For example <Code>Welcome {'{{ '}
-        user.name {'}}'}#{'{{ '}
-        user.discriminator {'}}'} to the Server!</Code> will become <Code>Welcome SuperCoolUser#1337 to the Server!</Code>.
+        Example:
+        <br />
+        <Code>Welcome {'{{ '} user.name {'}}'}#{'{{ '} user.discriminator {'}}'} to the Server!</Code>
+        <br />
+        will become:
+        <br />
+        <Code>Welcome SuperCoolUser#1337 to the Server!</Code>
       </Text>
       <Space h={'md'} />
       <Title order={5}>User</Title>
-      <Text><Code>user</Code> Will become an @User (Ping). Note that the User will not be pinged</Text>
+      <Text><Code>user</Code> Will become an @User (Mention) but without pinging the user.</Text>
       <Text><Code>user.name</Code> Name of the user</Text>
       <Text><Code>user.discriminator</Code> The 4 digits at the end of all users</Text>
       <Text><Code>user.id</Code> The unique Id of a user</Text>

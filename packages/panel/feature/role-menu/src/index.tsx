@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState } from 'react';
 import useRoleMenus from './hooks/useRoleMenus';
 import { Accordion, Button, Text } from '@mantine/core';
@@ -50,7 +52,7 @@ function RoleMenu({ server, initialRoleMenus }: RoleMenuProps) {
       />
       <Text color={'red'}>{roleMenuError}</Text>
       <Text color={'red'}>{channelError}</Text>
-      {(roleMenus.length === 0 && !loading) && 
+      {(roleMenus.length === 0 && !loading) &&
         <EmptyState
           text={'Looks like you haven\'t have any role menus created yet'}
           subText={'Create a role menu by clicking the button in the top left corner'}

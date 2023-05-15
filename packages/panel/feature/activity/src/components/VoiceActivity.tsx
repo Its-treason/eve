@@ -10,8 +10,8 @@ type VoiceActivityProps = {
   toDate: Date,
   setDate: (dates: [Date, Date]) => void,
   doExport: () => void,
-  error: string|false,
-  type: 'User'|'Server',
+  error: string | false,
+  type: 'User' | 'Server',
 }
 
 export default function VoiceActivity(
@@ -29,7 +29,7 @@ export default function VoiceActivity(
           exportCsvData={doExport}
         />
       </Container>
-      <Container size={'xl'} sx={{ height: 'calc(100vh - 210px)', overflowY: 'scroll' }}>
+      <Container size={'xl'} sx={{ height: 'calc(100vh - 260px)', overflowY: 'scroll' }}>
         <ActivityTable items={items} type={type} />
       </Container>
     </>

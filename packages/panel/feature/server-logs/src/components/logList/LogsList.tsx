@@ -9,7 +9,7 @@ type LogsListProps = {
 
 export default function LogsList({ items }: LogsListProps): ReactElement {
   const elements = items.map((item) => {
-    return <LogRow item={item} />;
+    return <LogRow item={item} key={item.timestamp} />;
   });
 
   return (

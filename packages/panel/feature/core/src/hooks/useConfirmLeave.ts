@@ -1,3 +1,5 @@
+'use client';
+
 import { UseFormReturnType } from '@mantine/form';
 import router from 'next/router';
 import { useEffect } from 'react';

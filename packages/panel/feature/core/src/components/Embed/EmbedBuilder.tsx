@@ -1,3 +1,5 @@
+'use client';
+
 import { ReducedEmbed } from '@eve/types/api';
 import { useEffect } from 'react';
 import { useForm, zodResolver } from '@mantine/form';

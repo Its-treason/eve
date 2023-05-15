@@ -1,30 +1,29 @@
-import { getCookie } from 'cookies-next';
 import { useState } from 'react';
-import { deleteRoleMenu as deleteRoleMenuCall } from '@eve/panel/feature/core';
+import { Ajax } from '@eve/panel/feature/core';
 
 interface UseDeleteRoleMenuData {
   deleteRoleMenuLoading: boolean,
-  deleteRoleMenuError: string|null,
+  deleteRoleMenuError: string | null,
   deleteRoleMenu: (roleMenuId: string) => Promise<boolean>,
 }
 
 export default function useDeleteRoleMenu(serverId: string): UseDeleteRoleMenuData {
   const [deleteRoleMenuLoading, setDeleteRoleMenuLoading] = useState<boolean>(false);
-  const [deleteRoleMenuError, setDeleteRoleMenuError] = useState<string|null>(null);
+  const [deleteRoleMenuError, setDeleteRoleMenuError] = useState<string | null>(null);
 
   async function deleteRoleMenu(roleMenuId: string): Promise<boolean> {
+    setDeleteRoleMenuError(null);
     setDeleteRoleMenuLoading(true);
 
-    const apiKey = String(getCookie('apiKey'));
-    const result = await deleteRoleMenuCall(serverId, roleMenuId, apiKey);
+    const body = JSON.stringify({ roleMenu: roleMenuId });
+    const response = await Ajax.post(`/v1/server/${serverId}/roleMenu/delete`, body);
 
     setDeleteRoleMenuLoading(false);
-    if (typeof result === 'string') {
-      setDeleteRoleMenuError(result);
+    if (response.error) {
+      setDeleteRoleMenuError(response.error);
       return false;
     }
 
-    setDeleteRoleMenuError(null);
     return true;
   }
 

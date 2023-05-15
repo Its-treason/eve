@@ -1,19 +1,20 @@
 import { Alert } from '@mantine/core';
-import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
 import { AlertTriangle } from 'tabler-icons-react';
 
 export default function DisplayInvalidPlaylistError() {
-  const [dismissed, setDismissed] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleOnClose = useCallback(() => {
-    setDismissed(true);
-
-    router.push(window.location.pathname, undefined, { shallow: true });
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('invalidName');
+    router.push(pathname + '?' + params.toString());
   }, []);
 
-  if (dismissed) {
+  if (!searchParams.has('invalidName')) {
     return null;
   }
 
@@ -23,7 +24,7 @@ export default function DisplayInvalidPlaylistError() {
       icon={<AlertTriangle />}
       color={'red'}
       withCloseButton
-      closeButtonLabel={''}
+      closeButtonLabel={'Dismiss'}
       onClose={handleOnClose}
       sx={{ margin: '8px 4px 24px 4px' }}
     >

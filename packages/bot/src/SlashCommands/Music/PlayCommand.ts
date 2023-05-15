@@ -48,9 +48,6 @@ export default class PlayCommand extends AbstractMusicCommand {
       return;
     }
 
-    console.log(result);
-    
-
     if (result === false) {
       const answer = embedFactory(interaction.client, 'Error!');
       answer.setDescription('No results for your query found!');

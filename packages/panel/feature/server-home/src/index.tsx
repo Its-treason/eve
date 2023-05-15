@@ -1,3 +1,5 @@
+'use client';
+
 import { ReducedServer } from '@eve/types/api';
 import { Stack } from '@mantine/core';
 import ActionList from './components/ActionList';

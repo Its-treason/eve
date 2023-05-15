@@ -7,3 +7,6 @@ mariadb-data
 elastic-data
 .next
 node_modules
+coverage
+.idea
+.vscode

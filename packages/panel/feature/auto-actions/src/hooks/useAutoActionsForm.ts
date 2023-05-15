@@ -1,7 +1,6 @@
-import { loadSetting, saveSetting } from '@eve/panel/feature/core';
+import { Ajax } from '@eve/panel/feature/core';
 import { useForm, UseFormReturnType, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
-import { getCookie } from 'cookies-next';
 import { useCallback, useEffect, useState } from 'react';
 import { z } from 'zod';
 
@@ -30,20 +29,24 @@ export default function useAutoActionsForm<K extends AbstractPayload, T extends 
   });
 
   useEffect(() => {
-    const apiKey = String(getCookie('apiKey'));
     const abortController = new AbortController();
 
     (async () => {
+      setError(null);
       setLoading(true);
-      const result = await loadSetting(actionType, serverId, apiKey, abortController);
+      const searchParams = { type: actionType };
+      const response = await Ajax.get<K>(
+        `/v1/server/${serverId}/setting`,
+        searchParams,
+        { signal: abortController.signal },
+      );
       setLoading(false);
-      if (typeof result === 'string') {
-        setError(result);
+      if (!response.data) {
+        setError(response.error);
         return;
       }
 
-      setError(null);
-      form.setValues(result as K);
+      form.setValues(response.data);
       form.resetDirty();
     })();
 
@@ -53,18 +56,18 @@ export default function useAutoActionsForm<K extends AbstractPayload, T extends 
   }, [serverId, actionType]);
 
   const save = useCallback(async () => {
-    const apiKey = String(getCookie('apiKey'));
-
+    setError(null);
     setLoading(true);
-    const result = await saveSetting(actionType, serverId, form.values, apiKey);
+    const body = JSON.stringify({ payload: form.values, type: actionType });
+    const response = await Ajax.put(`/v1/server/${serverId}/setting`, body);
     setLoading(false);
 
-    setError(null);
-    if (result !== true) {
-      setError(result);
+    if (response.error) {
+      setError(response.error);
       showNotification({
         title: 'An error occurred while saving action',
-        message: result,
+        message: response.error,
+        color: 'red',
       });
       return;
     }

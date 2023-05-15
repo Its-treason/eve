@@ -1,36 +1,36 @@
-import { ReducedRole } from '@eve/types/api';
-import { getCookie } from 'cookies-next';
-import { useEffect, useState } from 'react';
-import { getRoles } from '../api/ServerApi';
+'use client';
+
+import { ReducedRole, RoleListApiResponseData } from '@eve/types/api';
+import { useCallback, useEffect, useState } from 'react';
+import Ajax from '../api/Ajax';
 
 interface UseServerRolesData {
   roles: ReducedRole[],
   rolesLoading: boolean,
-  rolesError: string|null,
+  rolesError: string | null,
   fetchRoles: () => Promise<void>,
 }
 
 function useServerRoles(serverId: string): UseServerRolesData {
   const [roles, setRoles] = useState<ReducedRole[]>([]);
   const [rolesLoading, setRolesLoading] = useState(true);
-  const [rolesError, setRolesError] = useState<string|null>(null);
+  const [rolesError, setRolesError] = useState<string | null>(null);
 
-  async function fetchRoles() {
+  const fetchRoles = useCallback(async () => {
+    setRolesError(null);
+
     setRolesLoading(true);
+    const response = await Ajax.get<RoleListApiResponseData>(`/v1/server/${serverId}/roleList`);
+    setRolesLoading(false);
 
-    const apiKey = String(getCookie('apiKey'));
-    const newRoles = await getRoles(serverId, apiKey);
-
-    if (typeof newRoles === 'string') {
-      setRolesError(newRoles);
+    if (!response.data) {
+      setRolesError(response.error);
       setRolesLoading(false);
       return;
     }
 
-    setRoles(newRoles);
-    setRolesError(null);
-    setRolesLoading(false);
-  }
+    setRoles(response.data);
+  }, [serverId]);
 
   useEffect(() => {
     fetchRoles();

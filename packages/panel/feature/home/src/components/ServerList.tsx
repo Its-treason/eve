@@ -16,12 +16,12 @@ export default function ServerList({ servers, inviteLink }: ServerListProps) {
   const list = useMemo(() => {
     return servers.map((server) => (
       <ProminentButton
-          key={server.id}
-          to={`/server/${server.id}/home`}
-          text={server.name}
-          icon={server.icon}
-          subtext={'Configure server settings'}
-        />
+        key={server.id}
+        to={`/server/${server.id}/home`}
+        text={server.name}
+        icon={server.icon}
+        subtext={'Configure server settings'}
+      />
     ));
   }, [servers]);
 
@@ -29,7 +29,7 @@ export default function ServerList({ servers, inviteLink }: ServerListProps) {
     return (
       <EmptyState
         text={'You don\'t have any Server to edit'}
-        subText={'Invite the bot to your server to edit settings'}
+        subText={'Invite the bot to your server to edit any settings'}
         action={{ callback: openInvite, text: 'Invite EVE' }}
       />
     );

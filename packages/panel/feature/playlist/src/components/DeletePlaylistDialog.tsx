@@ -1,9 +1,7 @@
 import { ReactElement, useState } from 'react';
 import { Button, Group, Modal, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { deletePlaylist as doDeletePlaylist } from '@eve/panel/feature/core';
-import { getCookie } from 'cookies-next';
-import { Trash } from 'tabler-icons-react';
+import { Ajax } from '@eve/panel/feature/core';
 
 interface CreatePlaylistDialogProps {
   open: boolean,
@@ -18,18 +16,16 @@ export default function DeletePlaylistDialog(
   const [loading, setLoading] = useState<boolean>(false);
 
   async function deletePlaylist() {
-    const apiKey = String(getCookie('apiKey'));
-
     setLoading(true);
-    const answer = await doDeletePlaylist(userId, name, apiKey);
+    const body = JSON.stringify({ name });
+    const response = await Ajax.post(`/v1/user/${userId}/playlist/delete`, body);
     setLoading(false);
-    if (answer !== true) {
+    if (response.error) {
       showNotification({
         title: 'An error occurred while deleting the playlist',
-        message: answer,
+        message: response.error,
         color: 'red',
       });
-      close();
       return;
     }
 
@@ -44,13 +40,12 @@ export default function DeletePlaylistDialog(
     <Modal
       opened={open}
       onClose={close}
-      title={'Delete a Playlist'}
+      title={'Delete playlist'}
     >
-      <Text>Are you sure you want to delete your playlist "{name}"? The playlist will then be gone forever.</Text>
-      <Group grow mt={16}>
-        <Button variant={'outline'} onClick={close}>Cancel</Button>
+      <Text>Are you sure you want to delete your playlist "{name}"?</Text>
+      <Group mt={16} position={'right'}>
+        <Button variant={'subtle'} onClick={close}>Cancel</Button>
         <Button
-          leftIcon={<Trash />}
           disabled={loading}
           onClick={deletePlaylist}
           color={'red'}

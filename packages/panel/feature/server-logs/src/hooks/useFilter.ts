@@ -13,7 +13,7 @@ export default function useFilter(logs: FormattedPublicLogRecord[]): LogFilterDa
   const [search, setSearch] = useState('');
   const [filteredUser, setFilteredUser] = useState<string[]>([]);
 
-  const filteredLogs: FormattedPublicLogRecord[] = useMemo(()=> {
+  const filteredLogs: FormattedPublicLogRecord[] = useMemo(() => {
     return logs.filter((log) => {
       if (!log.message.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
         return false;

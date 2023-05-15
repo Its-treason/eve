@@ -1,30 +1,30 @@
 import { ReducedServer, ReducedUser } from '@eve/types/api';
 import { Button, Container, Group, Image, Text } from '@mantine/core';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { ArrowBack } from 'tabler-icons-react';
 
 type SubHeadingProps = {
   backTo?: string,
-  context?: ReducedServer|ReducedUser,
+  context?: ReducedServer | ReducedUser,
 }
 
 export default function SubHeading({ backTo, context }: SubHeadingProps) {
-  const router = useRouter();
 
   return (
     <Container
       sx={(theme) => ({
         backgroundColor: theme.colors.dark[8],
         padding: '8px 0',
-        width: '100 hw',
+        width: '100hw',
+        height: 52,
         maxWidth: 'unset',
         boxShadow: theme.shadows.sm,
       })}
     >
-      <Group 
+      <Group
         position={'apart'}
         spacing={'xl'}
-        sx={(theme) => ({
+        sx={() => ({
           maxWidth: 1320,
           width: '100%',
           margin: '0 auto',
@@ -33,9 +33,10 @@ export default function SubHeading({ backTo, context }: SubHeadingProps) {
       >
         {backTo ? (
           <Button
+            component={Link}
             variant={'subtle'}
             leftIcon={<ArrowBack />}
-            onClick={() => router.push(backTo)}
+            href={backTo}
           >
             Back
           </Button>

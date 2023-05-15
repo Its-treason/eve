@@ -47,8 +47,6 @@ export default class UserFormatter {
   private async getServerForAdmin(): Promise<ReducedServer[]> {
     const apiGuilds = await this.apiClient.getOwnGuilds();
 
-    console.log(apiGuilds);
-
     return apiGuilds.map((apiGuild) => {
       return {
         name: apiGuild.name,

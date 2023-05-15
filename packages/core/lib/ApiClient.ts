@@ -118,7 +118,6 @@ export default class ApiClient {
     try {
       return await this.restClient.post(Routes.channelMessages(channelId), { body }) as APIMessage;
     } catch (e) {
-      console.log(e);
       return null;
     }
   }

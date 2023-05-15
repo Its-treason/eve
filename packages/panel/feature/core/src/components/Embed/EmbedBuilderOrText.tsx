@@ -1,3 +1,5 @@
+'use client';
+
 import { ReducedEmbed } from '@eve/types/api';
 import { Group, Stack, Switch, Text, Textarea } from '@mantine/core';
 import { useCallback } from 'react';

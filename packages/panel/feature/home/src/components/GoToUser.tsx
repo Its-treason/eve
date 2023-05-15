@@ -1,5 +1,5 @@
 import { Button, Group, TextInput } from '@mantine/core';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { Pencil } from 'tabler-icons-react';
 

@@ -6,6 +6,9 @@ The Format is based on all commits made to this repository using the [Convention
 
 ## [Unreleased]
 
+- feat(panel): Migrate to Next.js Appdir
+- chore: Update dependencies
+
 ## [0.0.6] - 2023-03-04
 - chore: Lint fixing
 - fix: Change file type for /embed/avatars/X to png

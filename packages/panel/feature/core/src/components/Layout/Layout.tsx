@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactElement } from 'react';
 import { AppShell, Avatar, Container, createStyles, Group, Header, MantineNumberSize, Title } from '@mantine/core';
 import NavigationBreadcrumbs from './NavigationBreadcrumbs';
@@ -16,13 +18,13 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface LayoutProps {
-  children: ReactElement|ReactElement[],
+  children: ReactElement | ReactElement[],
   navItems?: BreadCrumpItem[],
-  rightHeaderChildren?: ReactElement|ReactElement[],
+  rightHeaderChildren?: ReactElement | ReactElement[],
   showLogoutBtn?: boolean,
   backTo?: string,
   containerSize?: MantineNumberSize,
-  context?: ReducedServer|ReducedUser,
+  context?: ReducedServer | ReducedUser,
 }
 
 export default function Layout({
@@ -39,7 +41,8 @@ export default function Layout({
   if (!containerSize) {
     containerSize = 'xl';
   }
-  const showSubHeading = (backTo || context);
+  // TODO: Fix the sub-heading problem
+  const showSubHeading = (backTo || context || true);
 
   return (
     <AppShell

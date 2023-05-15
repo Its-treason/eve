@@ -1,3 +1,5 @@
+'use client';
+
 import { ReducedEmoji } from '@eve/types/api';
 import { createStyles, Popover, UnstyledButton, Text, Tabs, ActionIcon, SimpleGrid } from '@mantine/core';
 import { ReactElement, useContext, useState } from 'react';

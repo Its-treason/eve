@@ -1,7 +1,6 @@
-import { getPlaylistItems } from '@eve/panel/feature/core';
+import { Ajax } from '@eve/panel/feature/core';
 import { PlaylistItem } from '@eve/types/api';
-import { getCookie } from 'cookies-next';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface usePlaylistItemsData {
@@ -18,17 +17,16 @@ export default function usePlaylistItems(playlistName: string, userId: string): 
     const abortController = new AbortController();
 
     (async () => {
-      const apiKey = String(getCookie('apiKey'));
-
       setLoading(true);
-      const result = await getPlaylistItems(userId, playlistName, apiKey);
-      if (typeof result === 'string') {
+      const body = JSON.stringify({ name: playlistName });
+      const response = await Ajax.post<PlaylistItem[]>(`/v1/user/${userId}/playlist/view`, body);
+      if (!response.data) {
         setFetchedPlaylistItems([]);
         router.push(`/user/${userId}/playlist?invalidName=true`);
         return;
       }
       setLoading(false);
-      setFetchedPlaylistItems(result);
+      setFetchedPlaylistItems(response.data);
     })();
 
     return () => {

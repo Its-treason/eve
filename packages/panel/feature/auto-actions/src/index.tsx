@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useState } from 'react';
 import { Tabs, Text, Title } from '@mantine/core';
 import JoinMessage from './components/JoinMessage';

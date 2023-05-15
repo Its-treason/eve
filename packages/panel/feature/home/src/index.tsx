@@ -1,3 +1,5 @@
+'use client';
+
 import { ReducedUser } from '@eve/types/api';
 import { Stack } from '@mantine/core';
 import GoToUser from './components/GoToUser';

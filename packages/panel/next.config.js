@@ -10,6 +10,9 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  experimental: {
+    appDir: true,
+  },
   publicRuntimeConfig: {
     authUrl: process.env.NEXT_PUBLIC_AUTH_URL,
     internalApiHost: process.env.INTERNAL_API_HOST,

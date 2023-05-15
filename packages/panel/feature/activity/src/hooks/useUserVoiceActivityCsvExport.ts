@@ -1,6 +1,6 @@
-import { getUserActivityCsv } from '@eve/panel/feature/core';
-import { getCookie } from 'cookies-next';
-import { useState } from 'react';
+import { Ajax } from '@eve/panel/feature/core';
+import { showNotification } from '@mantine/notifications';
+import { useCallback, useState } from 'react';
 
 type UseUserVoiceActivityCsvExportData = {
   loading: boolean,
@@ -12,14 +12,22 @@ export default function useUserVoiceActivityCsvExport(
 ): UseUserVoiceActivityCsvExportData {
   const [loading, setLoading] = useState(false);
 
-  async function doExport() {
+  const doExport = useCallback(async () => {
     setLoading(true);
-    const apiKey = String(getCookie('apiKey'));
 
-    const csvData = await getUserActivityCsv(userId, start, end, apiKey);
+    const body = JSON.stringify({ startDate: start.toISOString(), endDate: end.toISOString() });
+    const response = await Ajax.post<string>(`/v1/user/${userId}/activityCsv`, body);
+    if (!response.data) {
+      showNotification({
+        title: 'Failed to export',
+        message: `An error occurred while while creating the csv: ${response.error}`,
+        color: 'red',
+      });
+      return;
+    }
 
     const downloadElem = document.createElement('a');
-    const url = window.URL.createObjectURL(new Blob([csvData]));
+    const url = window.URL.createObjectURL(new Blob([response.data]));
     downloadElem.setAttribute('href', url);
     downloadElem.setAttribute('download', `voice_activity_${userId}.csv`);
 
@@ -28,7 +36,7 @@ export default function useUserVoiceActivityCsvExport(
     downloadElem.remove();
 
     setLoading(false);
-  }
+  }, [start, end, userId]);
 
   return {
     loading,

@@ -1,7 +1,4 @@
-import getConfig from 'next/config';
-
-// Only holds serverRuntimeConfig and publicRuntimeConfig
-const { publicRuntimeConfig } = getConfig();
+import ApiKey from '../util/ApiKey';
 
 type ApiResponse<T> = {
   code: number,
@@ -11,55 +8,69 @@ type ApiResponse<T> = {
   code: number,
   data: null,
   error: string,
+} | {
+  code: 0,
+  data: null,
+  error: 'Aborted',
 }
 
-const hostPublic = publicRuntimeConfig.publicApiHost;
-const hostInternal = publicRuntimeConfig.internalApiHost;
+type FetchOptions = Partial<{
+  apiKey?: string | false,
+  cache: 'force-cache' | 'no-store',
+  next: {
+    revalidate: false | 0 | number,
+  },
+}> & RequestInit;
 
-// if window is undefined we are in server
+// When on the Server the can use the API_URL -> The Container name
+const hostPublic = process.env.NEXT_PUBLIC_API_HOST;
+const hostInternal = process.env.INTERNAL_API_HOST;
+
+// If window is undefined we are in server
 const host = typeof window === 'undefined' ? hostInternal : hostPublic;
 
 export default class Ajax {
-  public static async get<T = unknown>(
-    url: string,
-    params: Record<string, string> = {},
-    apiKey?: string,
-    abortController?: AbortController,
-  ): Promise<ApiResponse<T>> {
-    const options: RequestInit = {
-      method: 'GET',
-    };
+  private static async doRequest<T>(requestUrl: string, options: FetchOptions): Promise<ApiResponse<T>> {
+    const existingHeaders = options.headers || {};
 
-    const paramsString = new URLSearchParams(params).toString();
-    if (abortController) {
-      options.signal = abortController.signal;
-    }
-    if (typeof apiKey === 'string') {
-      options.headers = { apiKey };
+    const cookieApiKey = ApiKey.getApiKey();
+    if (options.apiKey === undefined && cookieApiKey) {
+        options.headers = {
+          ...existingHeaders,
+          apiKey: cookieApiKey,
+        };
+    } else if (typeof options.apiKey === 'string') {
+        options.headers = {
+          ...existingHeaders,
+          apiKey: options.apiKey,
+        };
     }
 
     try {
-      const requestUrl = host + url + (paramsString !== '' ? `?${paramsString}` : '');
       const response = await fetch(requestUrl, options);
-      const data = await response.json();
+      const responseJson = await response.json();
 
-      if (response.status !== 200 || !data.success) {
+      if (response.status !== 200 || !responseJson.success) {
         return {
           code: response.status,
           data: null,
-          error: data.error,
+          error: responseJson.error,
         };
       }
 
       return {
         code: response.status,
-        data: data.data,
+        data: responseJson.data,
         error: null,
       };
     } catch (error) {
-      console.error('Ajax-Get Error:', error);
-
       if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          console.info(`Ajax aborted: ${requestUrl}`);
+          return { code: 0, data: null, error: 'Aborted' } as const;
+        }
+
+        console.error(`Ajax Error: ${requestUrl}`, error);
         return {
           code: -1,
           data: null,
@@ -73,84 +84,50 @@ export default class Ajax {
         error: 'Unknown error',
       };
     }
+  }
+
+  public static async get<T = unknown>(
+    url: string,
+    params: Record<string, string> = {},
+    options: FetchOptions = {},
+  ): Promise<ApiResponse<T>> {
+    options.method = 'GET';
+
+    const paramsString = new URLSearchParams(params).toString();
+
+    const requestUrl = host + url + (paramsString !== '' ? `?${paramsString}` : '');
+    return Ajax.doRequest(requestUrl, options);
   }
 
   public static async put<T = unknown>(
     url: string,
     body: BodyInit,
-    apiKey?: string,
-    abortController?: AbortController,
+    options: FetchOptions = {},
   ): Promise<ApiResponse<T>> {
-    return this.doBodyRequest(url, 'PUT', body, apiKey, abortController);
+    options.method = 'PUT';
+    return this.doBodyRequest(url, body, options);
   }
 
   public static async post<T = unknown>(
     url: string,
     body: BodyInit,
-    apiKey?: string,
-    abortController?: AbortController,
+    options: FetchOptions = {},
   ): Promise<ApiResponse<T>> {
-    return this.doBodyRequest(url, 'POST', body, apiKey, abortController);
+    options.method = 'POST';
+    return this.doBodyRequest(url, body, options);
   }
 
   private static async doBodyRequest<T = unknown>(
     url: string,
-    method: string,
     body: BodyInit,
-    apiKey?: string,
-    abortController?: AbortController,
+    options: FetchOptions,
   ): Promise<ApiResponse<T>> {
-    const options: RequestInit = {
-      body,
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    options.body = body;
+    options.headers = {
+      'Content-Type': 'application/json',
     };
 
-    if (abortController) {
-      options.signal = abortController.signal;
-    }
-    if (typeof apiKey === 'string') {
-      options.headers = {
-        'Content-Type': 'application/json',
-        apiKey,
-      };
-    }
-
-    try {
-      const response = await fetch(host + url, options);
-      const data = await response.json();
-
-      if (response.status !== 200 || !data.success) {
-        return {
-          code: response.status,
-          data: null,
-          error: data.error,
-        };
-      }
-
-      return {
-        code: response.status,
-        data: data.data,
-        error: null,
-      };
-    } catch (error) {
-      console.error('Ajax-Post Error:', error);
-
-      if (error instanceof Error) {
-        return {
-          code: -1,
-          data: null,
-          error: error.message,
-        };
-      }
-
-      return {
-        code: -1,
-        data: null,
-        error: 'Unknown error',
-      };
-    }
+    const requestUrl = host + url;
+    return Ajax.doRequest(requestUrl, options);
   }
 }

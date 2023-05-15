@@ -3,6 +3,8 @@ import { createStyles, getStylesRef } from '@mantine/core';
 const styles = createStyles((theme, _params) => {
   return {
     button: {
+      textDecoration: 'none',
+      color: 'unset',
       position: 'relative',
       background: `
         radial-gradient(
@@ -70,11 +72,13 @@ const styles = createStyles((theme, _params) => {
     },
 
     text: {
+      textDecoration: 'none',
       ref: getStylesRef('text'),
       transitionDuration: '.3s',
     },
 
     subText: {
+      textDecoration: 'none',
       userSelect: 'none',
     },
   };

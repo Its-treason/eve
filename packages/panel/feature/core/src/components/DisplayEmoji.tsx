@@ -1,3 +1,5 @@
+'use client';
+
 import { ReducedEmoji } from '@eve/types/api';
 import { Image, Tooltip } from '@mantine/core';
 import { ReactElement } from 'react';

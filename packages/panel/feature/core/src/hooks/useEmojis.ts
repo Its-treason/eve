@@ -1,22 +1,25 @@
-import { getCookie } from 'cookies-next';
+'use client';
+
 import { useEffect, useState } from 'react';
-import { getEmojis } from '../api/ServerApi';
+import Ajax from '../api/Ajax';
 import { EmojiContextType } from '../context/EmojiContext';
 
 export default function useEmojis(serverId: string): EmojiContextType {
   const [emojis, setEmojis] = useState<EmojiContextType>({ guildEmojis: [], generalEmojis: [] });
 
   useEffect(() => {
-    const apiKey = String(getCookie('apiKey'));
-
     const abortController = new AbortController();
 
     (async () => {
-      const emojiResult = await getEmojis(serverId, apiKey, abortController);
-      if (typeof emojiResult === 'string') {
-        throw new Error(emojiResult);
+      const response = await Ajax.get<EmojiContextType>(
+        `/v1/server/${serverId}/emojiList`,
+        {},
+        { signal: abortController.signal },
+      );
+      if (!response.data) {
+        throw new Error(response.error);
       }
-      setEmojis(emojiResult);
+      setEmojis(response.data);
     })();
 
     return () => {

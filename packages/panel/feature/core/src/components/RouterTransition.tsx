@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { usePathname, useSearchParams } from 'next/navigation';
 import {
   startNavigationProgress,
   resetNavigationProgress,
@@ -7,22 +9,23 @@ import {
 } from '@mantine/nprogress';
 
 export default function RouterTransition() {
-  const router = useRouter();
-
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+ 
   useEffect(() => {
-    const handleStart = (url: string) => url !== router.asPath && startNavigationProgress();
-    const handleComplete = () => resetNavigationProgress();
+    // TODO: Old router.events are not supported as of 13.4.1. Check if this changes in a further version
+    // Documentation: https://nextjs.org/docs/app/api-reference/functions/use-router#router-events
+    startNavigationProgress();
 
-    router.events.on('routeChangeStart', handleStart);
-    router.events.on('routeChangeComplete', handleComplete);
-    router.events.on('routeChangeError', handleComplete);
+    const timeoutRef = setTimeout(() => {
+      resetNavigationProgress();
+    }, 500);
 
     return () => {
-      router.events.off('routeChangeStart', handleStart);
-      router.events.off('routeChangeComplete', handleComplete);
-      router.events.off('routeChangeError', handleComplete);
+      clearTimeout(timeoutRef);
+      resetNavigationProgress();
     };
-  }, [router.asPath]);
+  }, [pathname, searchParams]);
 
   return <NavigationProgress />;
 }

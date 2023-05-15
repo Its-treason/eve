@@ -1,5 +1,5 @@
-import { getAllPlaylists } from '@eve/panel/feature/core';
-import { getCookie } from 'cookies-next';
+import { Ajax } from '@eve/panel/feature/core';
+import { PlaylistListApiResponseData } from '@eve/types/api';
 import { useState } from 'react';
 
 interface UseListPlaylist {
@@ -13,18 +13,16 @@ export default function useListPlaylist(userId: string, initialPlaylists: string
   const [loading, setLoading] = useState(false);
 
   const loadPlaylist = async () => {
-    const apiKey = String(getCookie('apiKey'));
-
     setLoading(true);
-    const response = await getAllPlaylists(userId, apiKey);
-    if (response === false) {
+    const response = await Ajax.get<PlaylistListApiResponseData>(`/v1/user/${userId}/playlist/list`, {});
+    setLoading(false);
+
+    if (!response.data) {
       setPlaylists([]);
-      setLoading(false);
       return;
     }
 
-    setPlaylists(response);
-    setLoading(false);
+    setPlaylists(response.data);
   };
 
   return { playlists, loading, loadPlaylist };

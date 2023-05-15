@@ -25,7 +25,7 @@ const initialValues = {
 };
 
 function JoinMessage({ serverId }: AutoRolesProps) {
-  const { 
+  const {
     loading: actionLoading, error, save, form,
   } = useAutoActionsForm<AutoRolesPayload, typeof schema>('auto-roles', serverId, initialValues, schema);
   const { roles, rolesLoading } = useServerRoles(serverId);
@@ -53,8 +53,8 @@ function JoinMessage({ serverId }: AutoRolesProps) {
       />
       <Text color={'dimmed'}>
         Note roles with <Code>[M]</Code> have moderation permissions and roles with <Code>[A]</Code> have
-        administrator permission. Please be careful when using this roles. Also be make sure that the bot
-        has permission to manage roles.
+        administrator permission. Please be careful when using these roles. Also be make sure that the bot
+        has permission to manage these roles.
       </Text>
       <Checkbox
         label="Enabled"

@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import usePlaylistItems from './hooks/usePlaylistItems';
 import { Text, Button, Group, Title } from '@mantine/core';
@@ -7,8 +9,7 @@ import PlaylistItemTable from './Components/PlaylistItemTable';
 import { showNotification } from '@mantine/notifications';
 import { DeviceFloppy, PlaylistAdd } from 'tabler-icons-react';
 import { PlaylistItem, ReducedUser } from '@eve/types/api';
-import { Loading, savePlaylist } from '@eve/panel/feature/core';
-import { getCookie } from 'cookies-next';
+import { Ajax, Loading } from '@eve/panel/feature/core';
 
 type PlaylistEditProps = {
   playlistName: string,
@@ -26,11 +27,19 @@ export default function PlaylistEdit({ playlistName, user }: PlaylistEditProps):
   }, [fetchedPlaylistItems]);
 
   const save = useCallback(async () => {
-    const apiKey = String(getCookie('apiKey'));
-
     setSaving(true);
-    await savePlaylist(user.id, playlistName, playlistItems, apiKey);
+    const body = JSON.stringify({ name: playlistName, playlistItems });
+    const response = await Ajax.post(`/v1/user/${user.id}/playlist/save`, body);
     setSaving(false);
+
+    if (response.error) {
+      showNotification({
+        title: 'Failed to save',
+        message: `An error occurred while saving your playlist: ${response.error}`,
+        color: 'red',
+      });
+    }
+
     showNotification({
       title: 'Playlist saved!',
       message: `Your playlist "${playlistName}" was successfully saved!`,
@@ -51,17 +60,17 @@ export default function PlaylistEdit({ playlistName, user }: PlaylistEditProps):
       />
       <Title>Edit Playlist</Title>
       <Text>Current Playlist: {playlistName}</Text>
-      <Group grow mt={16}>
-        <Button
-          leftIcon={<PlaylistAdd />}
-          onClick={addSongs}
-          disabled={saving}
-        >Add Songs</Button>
+      <Group mt={16}>
         <Button
           leftIcon={<DeviceFloppy />}
           onClick={save}
           disabled={saving}
         >Save</Button>
+        <Button
+          leftIcon={<PlaylistAdd />}
+          onClick={addSongs}
+          disabled={saving}
+        >Add Songs</Button>
       </Group>
       {loading ? (
         <Loading />

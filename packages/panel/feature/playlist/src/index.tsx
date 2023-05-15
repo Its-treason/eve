@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactElement, useState } from 'react';
 import useListPlaylist from './hooks/useListPlaylist';
 import { Button, Divider, Title } from '@mantine/core';
@@ -12,15 +14,14 @@ import { Plus } from 'tabler-icons-react';
 type PlaylistHomeProps = {
   user: ReducedUser,
   initialPlaylists: string[],
-  showInvalidPlaylistError: boolean,
 }
 
 export default function PlaylistHome(
-  { user, initialPlaylists, showInvalidPlaylistError }: PlaylistHomeProps,
+  { user, initialPlaylists }: PlaylistHomeProps,
 ): ReactElement {
   const { playlists, loading, loadPlaylist } = useListPlaylist(user.id, initialPlaylists);
   const [createDialogOpen, setCreateDialogOpen] = useState<boolean>(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState<false|string>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<false | string>(false);
 
   const closeCreateDialog = async () => {
     setCreateDialogOpen(false);
@@ -47,11 +48,11 @@ export default function PlaylistHome(
         name={deleteDialogOpen || ''}
       />
       <Title>Playlists</Title>
-      {showInvalidPlaylistError && <DisplayInvalidPlaylistError />}
+      <DisplayInvalidPlaylistError />
       <Divider
         labelPosition={'right'}
         label={
-          <Button 
+          <Button
             onClick={() => setCreateDialogOpen(true)}
             leftIcon={<Plus />}
           >
@@ -76,7 +77,7 @@ export default function PlaylistHome(
             userId={user.id}
             setDeleteDialogOpen={setDeleteDialogOpen}
           />
-        ) 
+        )
       }
     </>
   );

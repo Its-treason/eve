@@ -1,7 +1,6 @@
-import { loadSetting, saveSetting } from '@eve/panel/feature/core';
+import { Ajax } from '@eve/panel/feature/core';
 import { useForm, UseFormReturnType, zodResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
-import { getCookie } from 'cookies-next';
 import { useCallback, useEffect, useState } from 'react';
 import { z } from 'zod';
 
@@ -29,20 +28,20 @@ export default function useCreateLogSubscription(serverId: string): CreateLogSub
   });
 
   useEffect(() => {
-    const apiKey = String(getCookie('apiKey'));
     const abortController = new AbortController();
 
     (async () => {
       setLoading(true);
-      const result = await loadSetting('public-logs-subscription', serverId, apiKey, abortController);
+      const body = { type: 'public-logs-subscription' };
+      const response = await Ajax.get<Record<string, unknown>>(`/v1/server/${serverId}/setting`, body, { signal: abortController.signal });
       setLoading(false);
-      if (typeof result === 'string') {
-        setError(result);
+      if (!response.data) {
+        setError(response.error);
         return;
       }
 
       setError(null);
-      form.setValues(result);
+      form.setValues(response.data);
       form.resetDirty();
     })();
 
@@ -52,18 +51,17 @@ export default function useCreateLogSubscription(serverId: string): CreateLogSub
   }, [serverId]);
 
   const save = useCallback(async () => {
-    const apiKey = String(getCookie('apiKey'));
-
     setLoading(true);
-    const result = await saveSetting('public-logs-subscription', serverId, form.values, apiKey);
+    const body = JSON.stringify({ payload: form.values, type: 'public-logs-subscription' });
+    const response = await Ajax.put(`/v1/server/${serverId}/setting`, body);
     setLoading(false);
 
     setError(null);
-    if (result !== true) {
-      setError(result);
+    if (response.error) {
+      setError(response.error);
       showNotification({
         title: 'An error occurred while saving subscription',
-        message: result,
+        message: response.error,
       });
       return false;
     }

@@ -1,22 +1,26 @@
-import { ReactElement, useCallback } from 'react';
+import { ReactElement, useCallback, useState } from 'react';
 import { Button } from '@mantine/core';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { deleteCookie } from 'cookies-next';
 import { Logout } from 'tabler-icons-react';
-import { logout } from '../../api/LoginApi';
+import { LogoutApiResponseData } from '@eve/types/api';
+import Ajax from '../../api/Ajax';
 
 export function LogoutButton(): ReactElement {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const doLogout = useCallback(() => {
-    logout().then(() => {
-      deleteCookie('apiKey');
-      router.push('/loginFirst');
-    });
+  const doLogout = useCallback(async () => {
+    setLoading(true);
+    await Ajax.get<LogoutApiResponseData>('/v1/login/logout');
+
+    deleteCookie('apiKey');
+    router.push('/loginFirst');
   }, []);
 
   return (
     <Button
+      disabled={loading}
       color={'red'}
       onClick={doLogout}
       leftIcon={<Logout />}

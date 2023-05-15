@@ -1,3 +1,5 @@
+'use client';
+
 import { DisplayDate } from '@eve/panel/feature/core';
 import { FormattedPublicLogRecord } from '@eve/types/api';
 import { Paper, Text } from '@mantine/core';

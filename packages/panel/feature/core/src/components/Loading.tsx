@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactElement } from 'react';
 import { createStyles, Image, Loader, Text } from '@mantine/core';
 

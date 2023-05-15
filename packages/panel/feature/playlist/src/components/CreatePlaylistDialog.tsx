@@ -1,8 +1,8 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useMemo, useState } from 'react';
 import { Button, Group, Modal, TextInput } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { savePlaylist } from '@eve/panel/feature/core';
-import { getCookie } from 'cookies-next';
+import { Ajax } from '@eve/panel/feature/core';
+import { PlaylistListApiResponseData } from '@eve/types/api';
 
 interface CreatePlaylistDialogProps {
   open: boolean,
@@ -14,24 +14,24 @@ interface CreatePlaylistDialogProps {
 export default function CreatePlaylistDialog(
   { open, close, playlists, userId }: CreatePlaylistDialogProps,
 ): ReactElement {
-  const [name, setName] = useState<string>('');
-  const [nameError, setNameError] = useState<null | string>(null);
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  async function createPlaylist() {
-    const apiKey = String(getCookie('apiKey'));
-
+  const createPlaylist = useCallback(async () => {
     setLoading(true);
-    const answer = await savePlaylist(userId, name, [], apiKey);
+    const body = JSON.stringify({ name, playlistItems: [] });
+    const response = await Ajax.post<PlaylistListApiResponseData>(`/v1/user/${userId}/playlist/save`, body);
     setLoading(false);
-    if (answer !== true) {
+
+    setName('');
+    close();
+
+    if (response.code !== 200) {
       showNotification({
         title: 'An error occurred while creating the playlist',
-        message: answer,
+        message: response.data,
         color: 'red',
       });
-      setName('');
-      close();
       return;
     }
 
@@ -39,21 +39,17 @@ export default function CreatePlaylistDialog(
       title: 'Playlist created',
       message: `Your playlist "${name}" was successfully created!`,
     });
-    setName('');
-    close();
-  }
+  }, [name, userId]);
 
-  useEffect(() => {
+  const nameError = useMemo(() => {
     if (playlists.includes(name)) {
-      setNameError('Playlist already exists!');
-      return;
+      return 'Playlist already exists!';
     }
     if (name.trim().length === 0) {
-      setNameError('The playlist name must not be empty!');
-      return;
+      return 'The playlist name must not be empty!';
     }
 
-    setNameError(null);
+    return null;
   }, [name, playlists]);
 
   return (
@@ -64,15 +60,16 @@ export default function CreatePlaylistDialog(
     >
       <TextInput
         placeholder="Name"
-        label="Playlist Name"
+        label="Playlist name"
         value={name}
         onChange={event => setName(event.currentTarget.value)}
         error={nameError}
         required
         disabled={loading}
+        autoFocus
       />
-      <Group mt={16} grow>
-        <Button variant={'outline'} onClick={close}>Cancel</Button>
+      <Group mt={16} position='right'>
+        <Button variant={'subtle'} onClick={close}>Cancel</Button>
         <Button
           disabled={nameError !== null || loading}
           onClick={createPlaylist}

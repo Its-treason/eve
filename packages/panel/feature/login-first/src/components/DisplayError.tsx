@@ -1,3 +1,5 @@
+'use client';
+
 import { Alert } from '@mantine/core';
 import { useCallback, useState } from 'react';
 import { AlertTriangle } from 'tabler-icons-react';

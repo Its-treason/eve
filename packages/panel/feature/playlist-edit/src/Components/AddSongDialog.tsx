@@ -2,10 +2,9 @@ import { ReactElement, useEffect, useState } from 'react';
 import { TextInput, Button, Modal, Group } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import SearchResultList from './SearchResultList';
-import { CheckablePlaylistItem, PlaylistItem } from '@eve/types/api';
-import { Loading, musicSearch } from '@eve/panel/feature/core';
+import { CheckablePlaylistItem, PlaylistItem, SearchApiResponseData } from '@eve/types/api';
+import { Ajax, Loading } from '@eve/panel/feature/core';
 import { Plus, Search } from 'tabler-icons-react';
-import { getCookie } from 'cookies-next';
 
 interface AddSongDialogProps {
   open: boolean,
@@ -21,25 +20,24 @@ export default function AddSongDialog({ open, close, append, userId }: AddSongDi
   const [checkedItems, setCheckedItems] = useState<PlaylistItem[]>([]);
 
   async function search(): Promise<void> {
-    const apiKey = String(getCookie('apiKey'));
-
     setLoading(true);
-    const result = await musicSearch(query, userId, apiKey);
+    const body = JSON.stringify({ query });
+    const response = await Ajax.post<SearchApiResponseData>(`/v1/user/${userId}/playlist/search/search`, body);
     setLoading(false);
 
-    if (typeof result === 'string') {
+    if (!response.data) {
       showNotification({
         title: 'An error occurred while searching',
-        message: result,
+        message: response.error,
         color: 'red',
       });
       return;
     }
 
-    setNewItems(result.playlistItems.map((item) => {
+    setNewItems(response.data.playlistItems.map((item) => {
       return {
         item,
-        checked: result.allChecked,
+        checked: response.data.allChecked,
       };
     }));
   }
@@ -84,7 +82,6 @@ export default function AddSongDialog({ open, close, append, userId }: AddSongDi
       <Button
         mt={16}
         leftIcon={<Plus />}
-        fullWidth
         onClick={() => {
           append(...checkedItems);
           setNewItems([]);

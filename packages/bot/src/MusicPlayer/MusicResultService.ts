@@ -48,7 +48,6 @@ export default class MusicResultService {
     }
 
     for (const result of searchResults) {
-      console.log(result);
       return result;
     }
 

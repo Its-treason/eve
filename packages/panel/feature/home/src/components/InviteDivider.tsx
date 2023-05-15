@@ -1,4 +1,4 @@
-import { ActionIcon, Divider, Tooltip } from '@mantine/core';
+import { Button, Divider } from '@mantine/core';
 import { useCallback } from 'react';
 import { UserPlus } from 'tabler-icons-react';
 
@@ -15,11 +15,7 @@ export default function InviteDivider({ inviteLink }: InviteDividerProps) {
     <Divider
       labelPosition={'right'}
       label={
-        <Tooltip label={'Invite the Bot!'}>
-          <ActionIcon variant="outline" onClick={openInvite}>
-            <UserPlus size={'20'} />
-          </ActionIcon>
-        </Tooltip>
+        <Button leftIcon={<UserPlus />} variant="outline" onClick={openInvite}>Invite EVE</Button>
       }
     />
   );
