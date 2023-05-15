@@ -6,6 +6,7 @@ The Format is based on all commits made to this repository using the [Convention
 
 ## [Unreleased]
 
+- test(bot): fix VoiceStateUpdateHandler Test
 - feat(panel): Migrate to Next.js Appdir
 - chore: Update dependencies
 

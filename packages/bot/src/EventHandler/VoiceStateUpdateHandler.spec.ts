@@ -1,6 +1,5 @@
 import { ChannelActivityRepository, mockClass } from '@eve/core';
 import { VoiceState } from 'discord.js';
-import { handleSmoothScroll } from 'next/dist/shared/lib/router/router';
 import VoiceStateUpdateHandler from './VoiceStateUpdateHandler';
 
 describe('VoiceStateUpdateHandler', () => {
