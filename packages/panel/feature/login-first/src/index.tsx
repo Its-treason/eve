@@ -12,8 +12,6 @@ type LoginFirstProps = {
 export default function LoginFirst({ error }: LoginFirstProps): ReactElement {
   const authUrl = process.env.NEXT_PUBLIC_AUTH_URL;
 
-  console.log(authUrl);
-
   return (
     <Container size={'xs'}>
       <Title>Greetings!</Title>

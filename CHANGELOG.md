@@ -6,9 +6,12 @@ The Format is based on all commits made to this repository using the [Convention
 
 ## [Unreleased]
 
-- test(bot): fix VoiceStateUpdateHandler Test
+## [0.0.7] - 2023-03-04
 - feat(panel): Migrate to Next.js Appdir
 - chore: Update dependencies
+
+[0.0.7]:https://github.com/Its-treason/eve/compare/0.0.6...0.0.7
+
 
 ## [0.0.6] - 2023-03-04
 - chore: Lint fixing

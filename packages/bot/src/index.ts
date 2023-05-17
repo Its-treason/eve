@@ -22,12 +22,6 @@ import StorageMigrator from '@eve/storage-migration';
 
   try {
     await client.run();
-
-    const channel = await client.channels.fetch('558316518602178563');
-    if (!channel || !channel.isTextBased()) {
-      return;
-    }
-    console.log(await channel.messages.fetch('1105589554582401074'));
   } catch (error) {
     logger.emergency('Could not start client', { error });
     return;
