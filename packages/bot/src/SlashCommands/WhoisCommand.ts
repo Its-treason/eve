@@ -18,15 +18,24 @@ export default class WhoisCommand implements SlashCommandInterface {
   }
 
   private static async sendWhoIs(user: User, interaction: ChatInputCommandInteraction) {
-    const answer = embedFactory(interaction.client, `WhoIs: ${user.username}#${user.discriminator}`);
+    // TODO: After the name convertion is done, remove this
+    let discriminator = '';
+    if (user.discriminator !== '0') {
+      discriminator = `#${user.discriminator}`;
+    }
+
+    const answer = embedFactory(interaction.client, `Who is: ${user.username}${discriminator}`);
     answer.setDescription(`${user}`);
-    answer.setThumbnail(user.avatarURL({ extension: 'png', size: 4096 }));
+    answer.setThumbnail(user.avatarURL({ extension: 'webp', size: 256 }));
     answer.addFields([
-      { name: 'User-Id:', value: user.id },
-      { name: 'Account Created:', value: user.createdAt.toUTCString() },
-      { name: 'Account Age:', value: formatSeconds(Math.floor((Date.now() - user.createdTimestamp) / 1000)) },
+      { name: 'User id:', value: user.id },
+      // TODO: When display name is in Discord.js uncomment this line
+      //{ name: 'Disply name', value: user.displayName },
+      { name: 'Account created:', value: user.createdAt.toUTCString() },
+      { name: 'Account age:', value: formatSeconds(Math.floor((Date.now() - user.createdTimestamp) / 1000)) },
     ]);
 
+    await WhoisCommand.getBadges(user, answer);
     await WhoisCommand.getAttributes(user, answer, interaction);
     await interaction.reply({ embeds: [answer], allowedMentions: { users: [] } });
   }
@@ -50,6 +59,49 @@ export default class WhoisCommand implements SlashCommandInterface {
 
     answer.addFields([
       { name: 'Attributes:', value: '```yml\n' + attributes.join('\n') + '```' },
+    ]);
+  }
+
+  private static async getBadges(user: User, answer: EmbedBuilder): Promise<void> {
+    const flags = user.flags?.toArray();
+
+    if (flags === undefined || flags.length === 0) {
+      return;
+    }
+
+    // See: https://discord.com/developers/docs/resources/user#user-object-user-flags
+    // and: https://discord-api-types.dev/api/discord-api-types-v10/enum/UserFlags
+    const message = flags.map((flag) => {
+      switch (flag) {
+        case 'Staff':
+          return 'Staff (Discord Employee)';
+        case 'Partner':
+          return 'Partner (Partnered Server Owner)';
+        case 'Hypesquad':
+          return 'Hypesquad (HypeSquad Events Member)';
+        case 'HypeSquadOnlineHouse1':
+          return 'HypeSquadOnlineHouse1 (House Bravery Member)';
+        case 'HypeSquadOnlineHouse2':
+          return 'HypeSquadOnlineHouse2 (House Brilliance Member)';
+        case 'HypeSquadOnlineHouse3':
+          return 'HypeSquadOnlineHouse3 (House Balance Member)';
+        case 'PremiumEarlySupporter':
+          return 'PremiumEarlySupporter (Early Nitro Supporter)';
+        case 'TeamPseudoUser':
+          return 'TeamPseudoUser (User is a team)';
+        case 'VerifiedDeveloper':
+          return 'VerifiedDeveloper (Early Verfified Bot Developer)';
+        case 'CertifiedModerator':
+          return 'CertifiedModerator (Moderator Programs Alumni)';
+        case 'BotHTTPInteractions':
+          return 'BotHTTPInteractions (Bot uses only HTTP interactions and is shown in the online member list)';
+        default:
+          return flag;
+      }
+    }).join('\n');
+
+    answer.addFields([
+      { name: 'Flags:', value: '```yml\n' + message + '```' },
     ]);
   }
 
