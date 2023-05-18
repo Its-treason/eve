@@ -17,23 +17,41 @@ export default class WhoisCommand implements SlashCommandInterface {
     await WhoisCommand.sendWhoIs(targetUser, interaction);
   }
 
-  private static async sendWhoIs(user: User, interaction: ChatInputCommandInteraction) {
+  private static async sendWhoIs(unfetchedUser: User, interaction: ChatInputCommandInteraction) {
+    // Some values are only present, when the user is force fetched (e.g. banner)
+    let user = await unfetchedUser.fetch(true);
+    if (!user) {
+      user = unfetchedUser;
+    }
+
     // TODO: After the name convertion is done, remove this
     let discriminator = '';
     if (user.discriminator !== '0') {
       discriminator = `#${user.discriminator}`;
     }
 
+    const createdUnixTimestamp = Math.floor(user.createdTimestamp / 1000);
+
     const answer = embedFactory(interaction.client, `Who is: ${user.username}${discriminator}`);
     answer.setDescription(`${user}`);
-    answer.setThumbnail(user.avatarURL({ extension: 'webp', size: 256 }));
+    answer.setThumbnail(user.avatarURL({ extension: 'webp', size: 256 }) || user.defaultAvatarURL);
     answer.addFields([
-      { name: 'User id:', value: user.id },
+      { name: 'User id', value: user.id },
       // TODO: When display name is in Discord.js uncomment this line
       //{ name: 'Disply name', value: user.displayName },
-      { name: 'Account created:', value: user.createdAt.toUTCString() },
-      { name: 'Account age:', value: formatSeconds(Math.floor((Date.now() - user.createdTimestamp) / 1000)) },
+      { name: 'Account created', value: `On <t:${createdUnixTimestamp}> around <t:${createdUnixTimestamp}:R>` },
+      { name: 'Avatar url:', value: user.avatarURL({ size: 256 }) || `${user.defaultAvatarURL}\n(Default avatar)` },
     ]);
+
+    const bannerUrl = user.bannerURL({ size: 256 });
+    if (bannerUrl) {
+      answer.addFields([{ name: 'Banner url', value: bannerUrl }]);
+    }
+
+    const accentColor = user.hexAccentColor;
+    if (accentColor) {
+      answer.addFields([{ name: 'Accent color', value: `\`${accentColor}\`` }]);
+    }
 
     await WhoisCommand.getBadges(user, answer);
     await WhoisCommand.getAttributes(user, answer, interaction);
@@ -108,7 +126,7 @@ export default class WhoisCommand implements SlashCommandInterface {
   getData(): ApplicationCommandData {
     return {
       name: 'whois',
-      description: 'Get info about user',
+      description: 'Get info about a user',
       type: ApplicationCommandType.ChatInput,
       options: [
         {
