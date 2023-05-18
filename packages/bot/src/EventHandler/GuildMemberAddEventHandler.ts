@@ -85,7 +85,6 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
     const replacer = {
       'user': `${member.user}`,
       'user.name': member.user.username,
-      'user.discriminator': member.user.discriminator,
       'user.id': member.user.id,
       'server.name': member.guild.name,
       'server.id': member.guild.id,

@@ -10,7 +10,7 @@ export default class GuildMemberRemoveEventHandler implements EventHandlerInterf
     private logger: Logger,
     private actionRepository: ServerSettingsRepository,
     private mustacheParser: MustacheReplace,
-  ) {}
+  ) { }
 
   public getEventName() {
     return 'guildMemberRemove' as const;
@@ -53,7 +53,6 @@ export default class GuildMemberRemoveEventHandler implements EventHandlerInterf
     const replacer = {
       'user': `${member.user}`,
       'user.name': member.user.username,
-      'user.discriminator': member.user.discriminator,
       'user.id': member.user.id,
       'server.name': member.guild.name,
       'server.id': member.guild.id,

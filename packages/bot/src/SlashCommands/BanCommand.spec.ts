@@ -38,7 +38,6 @@ describe('BanCommand', () => {
         },
         user: {
           username: 'action-username',
-          discriminator: '1337',
           id: 'action-user-id',
         },
         guild: {

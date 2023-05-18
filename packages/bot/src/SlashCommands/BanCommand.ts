@@ -17,7 +17,7 @@ export default class BanCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
     private publicLogger: PublicLogger,
-  ) {}
+  ) { }
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const targetUser = interaction.options.getUser('user', true);
@@ -45,7 +45,7 @@ export default class BanCommand implements SlashCommandInterface {
   ): Promise<void> {
     await interaction.guild?.members.ban(
       targetUser.id,
-      { reason: `"${reason}" by "${actionUser.username}#${actionUser.discriminator}" using EVE` },
+      { reason: `"${reason}" by "${actionUser.username}" using EVE` },
     );
 
     const answer = embedFactory(interaction.client, 'Banned');

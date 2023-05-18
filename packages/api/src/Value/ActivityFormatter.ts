@@ -11,7 +11,7 @@ interface NameWithIcon {
 export default class ActivityFormatter {
   private static readonly UNKNOWN_ICON = '/assets/question-mark.png';
   private static readonly UNKNOWN_NAME = 'Not available';
-  
+
   private readonly channelCache: Record<string, string> = {};
   private readonly guildCache: Record<string, NameWithIcon> = {};
   private readonly userCache: Record<string, NameWithIcon> = {};
@@ -21,7 +21,7 @@ export default class ActivityFormatter {
   constructor(
     private client: ApiClient,
     private formattingHelper: FormattingHelper,
-  ) {}
+  ) { }
 
   private async resolveUserName(userId: string): Promise<NameWithIcon> {
     if (this.userCache[userId] !== undefined) {
@@ -39,7 +39,7 @@ export default class ActivityFormatter {
     }
 
     this.userCache[userId] = {
-      name: user.username + '#' + user.discriminator,
+      name: user.username,
       icon: this.client.getUserAvatar(user),
     };
     return this.userCache[userId];
@@ -84,7 +84,7 @@ export default class ActivityFormatter {
       const { name: userName, icon: userIcon } = await this.resolveUserName(row.userId);
       const { name: guildName, icon: guildIcon } = await this.resolveGuildName(row.guildId);
 
-      let length: null|string = null;
+      let length: null | string = null;
       if (row.leftAt !== null) {
         length = this.formattingHelper.formatSeconds(
           ~~((row.leftAt.getTime() - row.joinedAt.getTime()) / 1000),

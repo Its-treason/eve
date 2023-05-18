@@ -15,7 +15,7 @@ export default class KickCommand implements SlashCommandInterface {
   constructor(
     private commandValidator: CommandValidator,
     private publicLogger: PublicLogger,
-  ) {}
+  ) { }
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const actionUser = interaction.user;
@@ -43,7 +43,7 @@ export default class KickCommand implements SlashCommandInterface {
   ): Promise<void> {
     await interaction.guild?.members.kick(
       targetUser,
-      `"${reason}" by "${actionUser.username}#${actionUser.discriminator}" using EVE`,
+      `"${reason}" by "${actionUser.username}" using EVE`,
     );
 
     const answer = embedFactory(interaction.client, 'Kicked');

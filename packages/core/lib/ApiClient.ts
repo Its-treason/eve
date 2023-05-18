@@ -99,9 +99,10 @@ export default class ApiClient {
   }
 
   public getUserAvatar(user: APIUser): string {
+    // TODO: The default avatar might need to be changed when https://github.com/discord/discord-api-docs/pull/6130 is merged
     return user?.avatar ?
       `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.jpg` :
-      `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator) % 5}.png`;
+      `https://cdn.discordapp.com/embed/avatars/${(Number(user.id) >> 22) % 5}.png`;
   }
 
   public getGuildIcon(guild: APIGuild | APIPartialGuild): string {
