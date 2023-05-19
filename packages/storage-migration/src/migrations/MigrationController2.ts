@@ -99,6 +99,9 @@ export default class MigrationController2 implements MigrationControllerInterfac
         'eve-public-logs',
       ],
     });
+
+    // Create the index
+    await this.elasticClient.indices.createDataStream({ name: 'eve-public-logs' });
   }
 
   private async moveRoleMenuesToElasticSearch(): Promise<void> {
