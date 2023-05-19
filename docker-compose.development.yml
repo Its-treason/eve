@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   eve-mariadb:
-    image: mariadb:10.8.2
+    image: mariadb:10.11.3
     restart: "no"
     environment:
       MARIADB_ROOT_PASSWORD: "1234"
@@ -13,7 +13,7 @@ services:
       - eve-storage
 
   eve-phpmyadmin:
-    image: phpmyadmin:5.1.1
+    image: phpmyadmin:5.2.1
     ports:
       - "8000:80"
     restart: "no"
@@ -24,7 +24,7 @@ services:
       - eve-storage
 
   eve-elasticsearch:
-    image: elasticsearch:8.6.0
+    image: elasticsearch:8.7.1
     restart: "no"
     environment:
       discovery.type: "single-node"
@@ -36,7 +36,7 @@ services:
       - eve-storage
 
   eve-kibana:
-    image: kibana:8.6.0
+    image: kibana:8.7.1
     ports:
       - "5601:5601"
     restart: "no"
