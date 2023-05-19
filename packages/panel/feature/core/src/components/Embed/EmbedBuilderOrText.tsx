@@ -6,8 +6,8 @@ import { useCallback } from 'react';
 import EmbedBuilder from './EmbedBuilder';
 
 type EmbedBuilderOrTextProps = {
-  value: ReducedEmbed|string,
-  onChange: (embed: ReducedEmbed|string, isValid: boolean) => void,
+  value: ReducedEmbed | string,
+  onChange: (embed: ReducedEmbed | string, isValid: boolean) => void,
 }
 
 export default function EmbedBuilderOrText({ value, onChange }: EmbedBuilderOrTextProps) {
@@ -27,7 +27,7 @@ export default function EmbedBuilderOrText({ value, onChange }: EmbedBuilderOrTe
   }, []);
 
   return (
-    <Stack>
+    <Stack w={'100%'}>
       <Group position={'apart'}>
         <Text>Message</Text>
         <Switch

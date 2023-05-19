@@ -1,4 +1,4 @@
-import { GuildMember, TextChannel } from 'discord.js';
+import { APIEmbed, GuildMember, TextChannel } from 'discord.js';
 import MustacheReplace from '../Util/MustacheReplace';
 import { injectable } from 'tsyringe';
 import EventHandlerInterface from './EventHandlerInterface';
@@ -10,7 +10,7 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
     private logger: Logger,
     private serverSettingsRepository: ServerSettingsRepository,
     private mustacheReplace: MustacheReplace,
-  ) {}
+  ) { }
 
   public getEventName() {
     return 'guildMemberAdd' as const;
@@ -93,9 +93,25 @@ export default class GuildMemberAddEventHandler implements EventHandlerInterface
 
     const message = this.mustacheReplace.replace(joinAction.getPayload().message, replacer);
 
+    const embeds: APIEmbed[] = [];
+    let embed = joinAction.getPayload().embed;
+    if (embed) {
+      embed = this.mustacheReplace.replaceReducedEmbed(embed, replacer);
+      embeds.push({
+        title: embed.title,
+        description: embed.description,
+        fields: embed.fields,
+        color: Number.parseInt(embed.color.replace('#', ''), 16),
+        footer: {
+          text: embed.footer,
+        },
+      });
+    }
+
     try {
       await channel.send({
         content: message,
+        embeds,
         allowedMentions: {
           users: [],
           parse: [],

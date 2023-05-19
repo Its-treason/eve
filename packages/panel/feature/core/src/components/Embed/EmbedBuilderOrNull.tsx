@@ -6,8 +6,8 @@ import { useCallback } from 'react';
 import EmbedBuilder from './EmbedBuilder';
 
 type EmbedBuilderOrNullProps = {
-  value: ReducedEmbed|null,
-  onChange: (embed: ReducedEmbed|null, isValid: boolean) => void,
+  value: ReducedEmbed | null,
+  onChange: (embed: ReducedEmbed | null, isValid: boolean) => void,
 }
 
 export default function EmbedBuilderOrNull({ value, onChange }: EmbedBuilderOrNullProps) {
@@ -27,7 +27,7 @@ export default function EmbedBuilderOrNull({ value, onChange }: EmbedBuilderOrNu
   }, [value]);
 
   return (
-    <Stack>
+    <Stack w={'100%'}>
       <Group>
         <Text>Embed</Text>
         <Switch

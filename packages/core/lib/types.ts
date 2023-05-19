@@ -1,4 +1,6 @@
 import { APIPartialEmoji, ButtonStyle } from 'discord-api-types/v9';
+import { z } from 'zod';
+import { reducedEmbedScheme } from './zodSchemes';
 
 export type PlaylistItem = {
   ytId: string,
@@ -8,8 +10,8 @@ export type PlaylistItem = {
 }
 
 export interface DiscordAccessToken {
-  accessToken: string|null,
-  tokenType: string|null,
+  accessToken: string | null,
+  tokenType: string | null,
 }
 
 export interface QueryResult {
@@ -48,7 +50,7 @@ export interface RoleMenu {
   messageId: string,
   entries: RoleMenuEntry[],
   message: string,
-  embed: ReducedEmbed|null,
+  embed: ReducedEmbed | null,
   name: string,
 }
 
@@ -69,13 +71,7 @@ export type PublicLogRecord = {
   relatedUser: string[],
 }
 
-export type ReducedEmbed = {
-  title: string,
-  description: string,
-  color: string,
-  footer: string,
-  fields: ReducedEmbedField[],
-}
+export type ReducedEmbed = z.infer<typeof reducedEmbedScheme>
 
 export type ReducedEmbedField = {
   name: string,
