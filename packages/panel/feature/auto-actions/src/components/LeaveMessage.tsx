@@ -39,7 +39,7 @@ function LeaveMessage({ serverId, openDocs }: LeaveMessageProps) {
 
   return (
     <Group>
-      <Text>A message that is automatically send when a new member leaves the Server!</Text>
+      <Text>A message that is automatically send when a member leaves the Server!</Text>
       <Text>
         Available template objects are: <Code>user</Code> & <Code>guild</Code>.
         Click <Anchor onClick={openDocs}>here</Anchor> for help about templates.
