@@ -196,8 +196,7 @@ export default class MigrationController2 implements MigrationControllerInterfac
       index_patterns: ['role-menus'],
     });
     // Create the index
-    await this.elasticClient.index({ index: "role-menus" });
-
+    await this.elasticClient.indices.create({ index: "role-menus" });
 
     // Collect all Role-Menus
     const result = await this.mysqlClient.query('SELECT * FROM `role_menu`');
