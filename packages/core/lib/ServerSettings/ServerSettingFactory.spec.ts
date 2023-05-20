@@ -2,7 +2,7 @@ import { ServerSettingsFactory } from '..';
 
 describe('ServerSettingFactory', () => {
   const factory = new ServerSettingsFactory();
- 
+
   describe('createAction', () => {
     it('With auto-roles', () => {
       const topic = 'auto-roles';
@@ -22,6 +22,7 @@ describe('ServerSettingFactory', () => {
         message: 'Hello World!',
         channel: '789456213789',
         enabled: true,
+        embed: null,
       };
 
       const action = factory.createAction(topic, payload);
@@ -35,6 +36,7 @@ describe('ServerSettingFactory', () => {
         message: 'Hello World!',
         channel: '789456213789',
         enabled: true,
+        embed: null,
       };
 
       const action = factory.createAction(topic, payload);
