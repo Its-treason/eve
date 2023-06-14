@@ -33,9 +33,7 @@ import GuildMemberRemoveEventHandler from './EventHandler/GuildMemberRemoveEvent
 import InteractionCreateEventHandler from './EventHandler/InteractionCreateEventHandler';
 import AddRoleCommand from './SlashCommands/AddRoleCommand';
 import RemoveRoleCommand from './SlashCommands/RemoveRoleCommand';
-import GuildBanAddEventHandler from './EventHandler/GuildBanAddEventHandler';
-import GuildBanRemoveEventHandler from './EventHandler/GuildBanRemoveEventHandler';
-import GuildKickEventHandler from './EventHandler/GuildKickAddEventHandler';
+import GuildAuditLogEntryCreate from './EventHandler/GuildAuditLogEntryCreateEventHandler';
 
 container.register('EventHandler', { useClass: GuildCreateEventHandler });
 container.register('EventHandler', { useClass: GuildDeleteEventHandler });
@@ -44,9 +42,7 @@ container.register('EventHandler', { useClass: WarnEventHandler });
 container.register('EventHandler', { useClass: GuildMemberAddEventHandler });
 container.register('EventHandler', { useClass: GuildMemberRemoveEventHandler });
 container.register('EventHandler', { useClass: InteractionCreateEventHandler });
-container.register('EventHandler', { useClass: GuildBanAddEventHandler });
-container.register('EventHandler', { useClass: GuildBanRemoveEventHandler });
-container.register('EventHandler', { useClass: GuildKickEventHandler });
+container.register('EventHandler', { useClass: GuildAuditLogEntryCreate });
 
 container.register('SlashCommands', AddRoleCommand);
 container.register('SlashCommands', PlaylistCommand);
