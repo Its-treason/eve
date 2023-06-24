@@ -26,6 +26,8 @@ function CreateRoleMenu({ opened, close, serverId }: CreateRoleMenuProps): React
     setChannelId('');
   }
 
+  const disableCreate = createRoleMenuLoading || name.trim().length === 0 || channelId === '';
+
   return (
     <Modal opened={opened} onClose={cancelCreate} title={'Create role menu'}>
       <Group>
@@ -50,7 +52,7 @@ function CreateRoleMenu({ opened, close, serverId }: CreateRoleMenuProps): React
         <Text color={'red'}>{createRoleMenuError}</Text>
         <Button
           fullWidth
-          disabled={createRoleMenuLoading}
+          disabled={disableCreate}
           onClick={() => createRoleMenu(name, channelId).then(result => {
             if (result) {
               close(true);
