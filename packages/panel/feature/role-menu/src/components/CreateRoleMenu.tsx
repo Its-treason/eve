@@ -51,7 +51,13 @@ function CreateRoleMenu({ opened, close, serverId }: CreateRoleMenuProps): React
         />
         <Text color={'red'}>{createRoleMenuError}</Text>
         <Button
-          fullWidth
+          ml={'auto'}
+          variant={'subtle'}
+          color={'red'}
+          disabled={createRoleMenuLoading}
+          onClick={cancelCreate}
+        >Cancel</Button>
+        <Button
           disabled={disableCreate}
           onClick={() => createRoleMenu(name, channelId).then(result => {
             if (result) {
@@ -61,12 +67,6 @@ function CreateRoleMenu({ opened, close, serverId }: CreateRoleMenuProps): React
             }
           })}
         >Create</Button>
-        <Button
-          fullWidth
-          color={'red'}
-          disabled={createRoleMenuLoading}
-          onClick={cancelCreate}
-        >Cancel</Button>
       </Group>
     </Modal>
   );
