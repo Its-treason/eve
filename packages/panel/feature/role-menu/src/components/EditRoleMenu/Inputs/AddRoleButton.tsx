@@ -18,7 +18,8 @@ export default function AddRoleButton({ form }: AddRoleButtonProps) {
     <Button
       onClick={handleClick}
       leftIcon={<Plus />}
+      w={130}
       disabled={form.values.entries.length >= 25}
-    >Add Role</Button>
+    >Add role</Button>
   );
 }

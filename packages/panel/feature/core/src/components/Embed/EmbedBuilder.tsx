@@ -103,6 +103,9 @@ export default function EmbedBuilder({ embed, onChange }: EmbedBuilderProps) {
         <Textarea
           withAsterisk
           label={'Value'}
+          autosize
+          minRows={2}
+          maxRows={6}
           {...form.getInputProps(`fields.${index}.value`)}
         />
       </Stack>
@@ -126,6 +129,9 @@ export default function EmbedBuilder({ embed, onChange }: EmbedBuilderProps) {
         <Textarea
           withAsterisk
           label={'Description'}
+          autosize
+          minRows={2}
+          maxRows={6}
           {...form.getInputProps('description')}
         />
         <TextInput

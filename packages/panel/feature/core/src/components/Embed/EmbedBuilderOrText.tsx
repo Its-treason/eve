@@ -37,7 +37,13 @@ export default function EmbedBuilderOrText({ value, onChange }: EmbedBuilderOrTe
         />
       </Group>
       {typeof value === 'string' ? (
-        <Textarea value={value} onChange={(evt) => onChange(evt.currentTarget.value, true)} rows={4} />
+        <Textarea 
+          value={value}
+          onChange={(evt) => onChange(evt.currentTarget.value, true)}
+          autosize
+          minRows={2}
+          maxRows={6}
+        />
       ) : (
         <EmbedBuilder embed={value} onChange={onChange} />
       )}

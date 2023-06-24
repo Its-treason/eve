@@ -10,6 +10,9 @@ export default function Message({ form }: MessageProps) {
   return (
     <Textarea
       label={'Message'}
+      autosize
+      minRows={2}
+      maxRows={6}
       {...form.getInputProps('message')}
     />
   );

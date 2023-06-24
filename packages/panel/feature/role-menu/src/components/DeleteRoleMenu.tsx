@@ -19,11 +19,15 @@ function DeleteRoleMenu({ opened, close, serverId, roleMenuId }: DeleteRoleMenuP
   return (
     <Modal opened={opened} onClose={cancelDelete} title={'Delete role menu'}>
       <Group>
-        <Text>The role menu will be permanently deleted and the message hopefully too.</Text>
         <Text color={'dimmed'}>In case the message is not deleted, you can just delete it on your own</Text>
         <Text color={'red'}>{deleteRoleMenuError}</Text>
         <Button
-          fullWidth
+          ml={'auto'}
+          variant={'subtle'}
+          disabled={deleteRoleMenuLoading}
+          onClick={cancelDelete}
+        >Cancel</Button>
+        <Button
           color={'red'}
           disabled={deleteRoleMenuLoading}
           onClick={() => deleteRoleMenu(roleMenuId).then(result => {
@@ -32,11 +36,6 @@ function DeleteRoleMenu({ opened, close, serverId, roleMenuId }: DeleteRoleMenuP
             }
           })}
         >Delete</Button>
-        <Button
-          fullWidth
-          disabled={deleteRoleMenuLoading}
-          onClick={cancelDelete}
-        >Cancel</Button>
       </Group>
     </Modal>
   );
