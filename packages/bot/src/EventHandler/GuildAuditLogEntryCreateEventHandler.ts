@@ -38,7 +38,7 @@ export default class GuildAuditLogEntryCreate implements EventHandlerInterface<'
       `"${executor!.username}" used native action to kick "${target!.username}" for "${event.reason || ''}"`,
       PublicLogCategories.NativeModerationAction,
       [guild.id],
-      [target.id, executor.id],
+      [executor.id, target.id],
     );
   }
 
@@ -53,7 +53,7 @@ export default class GuildAuditLogEntryCreate implements EventHandlerInterface<'
       `"${executor.username}" used native action to ban "${target.username}" for "${event.reason}"`,
       PublicLogCategories.NativeModerationAction,
       [guild.id],
-      [target.id, executor.id],
+      [executor.id, target.id],
     );
   }
 
@@ -68,7 +68,7 @@ export default class GuildAuditLogEntryCreate implements EventHandlerInterface<'
       `"${executor.username}" used native action to unban "${target.username}"`,
       PublicLogCategories.NativeModerationAction,
       [guild.id],
-      [target.id, executor.id],
+      [executor.id, target.id],
     );
   }
 
