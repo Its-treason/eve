@@ -22,6 +22,7 @@ export { default as useConfirmLeave } from './hooks/useConfirmLeave';
 export { default as useEmojis } from './hooks/useEmojis';
 export { default as useServerChannel } from './hooks/useServerChannel';
 export { default as useServerRoles } from './hooks/useServerRoles';
+export { default as useQueryParams } from './hooks/useQueryParams';
 
 // util Exports
 export { default as ApiKey } from './util/ApiKey';

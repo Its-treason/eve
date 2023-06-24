@@ -7,8 +7,8 @@ import LeaveMessage from './components/LeaveMessage';
 import AutoRoles from './components/AutoRoles';
 import TemplateLegendModal from './components/TemplateLegendDialog';
 import { ReducedServer } from '@eve/types/api';
-import { useHash } from '@mantine/hooks';
-import { EmptyState } from '@eve/panel/feature/core';
+import { EmptyState, useQueryParams } from '@eve/panel/feature/core';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 type AutoActionsProps = {
   server: ReducedServer,
@@ -16,7 +16,6 @@ type AutoActionsProps = {
 
 function AutoActions({ server }: AutoActionsProps) {
   const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
-  const [hash, setHash] = useHash();
 
   const openDocs = useCallback(() => {
     setTemplateDialogOpen(true);
@@ -24,6 +23,8 @@ function AutoActions({ server }: AutoActionsProps) {
   const closeDocs = useCallback(() => {
     setTemplateDialogOpen(false);
   }, []);
+
+  const { updateParam, queryParams } = useQueryParams()
 
   return (
     <>
@@ -34,8 +35,8 @@ function AutoActions({ server }: AutoActionsProps) {
       <Tabs
         orientation={'vertical'}
         mt={'xl'}
-        value={hash.replace('#', '') || 'default'}
-        onTabChange={(value) => setHash(value ?? 'default')}
+        value={queryParams.get('tab') || 'default'}
+        onTabChange={(value) => updateParam('tab', value || 'default')}
       >
         <Tabs.List>
           <Tabs.Tab value={'join-message'}>Join Message</Tabs.Tab>
