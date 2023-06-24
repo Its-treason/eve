@@ -121,7 +121,7 @@ export default class RoleMenuService {
       return false;
     }
 
-    const message = await this.apiClient.getMessage(channelId, messageId);
+    const message = await this.apiClient.getMessage(channelId, messageId, true);
     if (message === null) {
       return false;
     }

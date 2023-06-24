@@ -7,7 +7,7 @@ import { singleton } from 'tsyringe';
 @singleton()
 export default class ApiClient {
   private static readonly NULL_VALUE = 'NIL';
-  private static readonly CACHE_TTL = 300;
+  private static readonly CACHE_TTL = 120;
 
   private readonly restClient: REST;
 
@@ -59,8 +59,12 @@ export default class ApiClient {
     return await this.cacheExec<APIGuildMember>(redisKey, 'GET', Routes.guildMember(guildId, userId));
   }
 
-  public async getMessage(channelId: string, messageId: string): Promise<APIMessage | null> {
+  public async getMessage(channelId: string, messageId: string, skipCache = false): Promise<APIMessage | null> {
     const redisKey = `eve-message-${channelId}-${messageId}`;
+
+    if (skipCache) {
+      await this.redisClient.del(redisKey);
+    }
 
     return await this.cacheExec<APIMessage>(redisKey, 'GET', Routes.channelMessage(channelId, messageId));
   }
