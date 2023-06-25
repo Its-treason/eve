@@ -3,6 +3,8 @@ import { MusicResult } from '../types';
 import shuffleArray from '../Util/shuffleArray';
 import messageEmbedFactory from '../Factory/messageEmbedFactory';
 import yasha from 'yasha';
+import { container } from 'tsyringe';
+import { Logger } from '@eve/core';
 
 export class MusicPlayer {
   public destroyed = false;
@@ -180,6 +182,9 @@ export class MusicPlayer {
   }
 
   private async handleError(error: Error): Promise<void> {
+    const logger = container.resolve(Logger);
+    logger.error('Music player error', { error });
+
     let msg = 'Internal Player Error';
     if (error instanceof yasha.Source.Error) {
       msg = error.message;

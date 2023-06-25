@@ -72,7 +72,7 @@ export default class PlayCommand extends AbstractMusicCommand {
       `\`${firstResult.title}\` uploaded by \`${firstResult.uploader}\` ${hasMoreText} added to queue.`,
     );
     answer.addFields([{ name: 'Link', value: firstResult.url }]);
-    answer.setImage(`https://img.youtube.com/vi/${firstResult.ytId}/0.jpg`);
+    answer.setImage(`https://img.youtube.com/vi/${firstResult.ytId}/mqdefault.jpg`);
     await interaction.editReply({ embeds: [answer] });
 
     for (const resultItem of result) {

@@ -25,7 +25,7 @@ export default class SkipCommand extends AbstractMusicCommand {
         { name: 'Link', value: nowPlaying.url },
         { name: 'Skipped', value: `\`${skipped.title}\` uploaded by \`${skipped.uploader}\` was skipped!` },
       ]);
-      answer.setImage(`https://img.youtube.com/vi/${nowPlaying.ytId}/0.jpg`);
+      answer.setImage(`https://img.youtube.com/vi/${nowPlaying.ytId}/mqdefault.jpg`);
     }
 
     await interaction.reply({ embeds: [answer] });

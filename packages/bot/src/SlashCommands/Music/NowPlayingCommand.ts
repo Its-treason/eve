@@ -9,7 +9,7 @@ export default class NowPlayingCommand extends AbstractMusicCommand {
   protected sameVc = false;
 
   async doExecute(interaction: CommandInteraction, player: MusicPlayer): Promise<void> {
-    const item = await player.getCurrentPlaying();
+    const item = player.getCurrentPlaying();
     const pointer = player.getPointer();
 
     const answer = embedFactory(interaction.client, 'Currently playing track');
@@ -18,7 +18,7 @@ export default class NowPlayingCommand extends AbstractMusicCommand {
       { name: 'Current position', value: item.url },
       { name: 'Link', value: `\`${pointer + 1}\`` },
     ]);
-    answer.setImage(`https://img.youtube.com/vi/${item.ytId}/0.jpg`);
+    answer.setImage(`https://img.youtube.com/vi/${item.ytId}/mqdefault.jpg`);
 
     await interaction.reply({ embeds: [answer] });
   }

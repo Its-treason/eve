@@ -18,7 +18,7 @@ export default class GotoCommand extends AbstractMusicCommand {
       const answer = embedFactory(interaction.client, `Changed position to ${position}!`);
       answer.setDescription(`Now playing \`${nowPlaying.title}\` uploaded by \`${nowPlaying.uploader}\``);
       answer.addFields([{ name: 'Link', value: nowPlaying.url }]);
-      answer.setImage(`https://img.youtube.com/vi/${nowPlaying.ytId}/0.jpg`);
+      answer.setImage(`https://img.youtube.com/vi/${nowPlaying.ytId}/mqdefault.jpg`);
       await interaction.editReply({ embeds: [answer] });
       return;
     }
