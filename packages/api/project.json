@@ -12,6 +12,7 @@
         "target": "node",
         "compiler": "tsc",
         "outputPath": "dist/packages/api",
+        "outputFileName": "index.js",
         "main": "packages/api/src/index.ts",
         "tsConfig": "packages/api/tsconfig.app.json",
         "isolatedConfig": true,
@@ -19,11 +20,13 @@
       },
       "configurations": {
         "development": {},
-        "production": {}
+        "production": {
+          "optimization": true
+        }
       }
     },
     "dev": {
-      "executor": "@nx/node:node",
+      "executor": "@nx/js:node",
       "options": {
         "buildTarget": "api:build"
       },
@@ -35,20 +38,14 @@
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "packages/api/**/*.ts"
-        ]
+        "lintFilePatterns": ["packages/api/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/packages/api"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/packages/api"],
       "options": {
         "jestConfig": "packages/api/jest.config.ts",
         "passWithNoTests": true

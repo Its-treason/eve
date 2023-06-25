@@ -13,6 +13,8 @@ export const metadata = {
   title: 'Login - EVE',
 };
 
+export const dynamic = 'force-dynamic'
+
 export default async function DoLogin({ searchParams }: DoLoginProps) {
   if (!searchParams.code) {
     redirect('/loginFirst');

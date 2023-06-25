@@ -11,7 +11,6 @@
       ],
       "defaultConfiguration": "production",
       "options": {
-        "root": "packages/panel",
         "outputPath": "dist/packages/panel",
         "buildLibsFromSource": true
       },

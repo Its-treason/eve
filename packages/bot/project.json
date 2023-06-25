@@ -12,6 +12,7 @@
         "target": "node",
         "compiler": "tsc",
         "outputPath": "dist/packages/bot",
+        "outputFileName": "index.js",
         "main": "packages/bot/src/index.ts",
         "tsConfig": "packages/bot/tsconfig.app.json",
         "isolatedConfig": true,
@@ -19,11 +20,13 @@
       },
       "configurations": {
         "development": {},
-        "production": {}
+        "production": {
+          "optimization": true
+        }
       }
     },
     "dev": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nrwl/js:node",
       "options": {
         "buildTarget": "bot:build"
       },

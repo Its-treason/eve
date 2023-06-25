@@ -11,6 +11,8 @@ export const metadata = {
   title: 'Login - EVE',
 };
 
+export const dynamic = 'force-dynamic'
+
 export default function LoginFirst({ searchParams }: LoginFirstProps) {
   return (
     <Layout showLogoutBtn={false}>
