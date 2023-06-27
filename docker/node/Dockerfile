@@ -1,10 +1,27 @@
-FROM node:18.7.0-alpine AS base
+FROM alpine:3.18 AS protoc-js
+
+WORKDIR /tmp
+
+RUN echo "@edge-testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+ && apk add --no-cache \
+    bazel5@edge-testing \
+    build-base \
+    git \
+ && git clone --branch v3.21.2 https://github.com/protocolbuffers/protobuf-javascript \
+ && cd protobuf-javascript \
+ && bazel build plugin_files \
+ && install -o root -g root -m 0755 bazel-bin/generator/protoc-gen-js -t /tmp
+
+
+FROM node:20.3-alpine AS base
 
 RUN mkdir /app
 WORKDIR /app
 
 ################################################################################
 FROM base AS development
+
+COPY --from=protoc-js /tmp/protoc-gen-js /usr/local/bin
 
 ENV PYTHONUNBUFFERED=1
 RUN apk add --no-cache --virtual .build-deps pango-dev jpeg-dev build-base cairo-dev giflib-dev python3 libsodium-dev libtool cmake g++ gcc ffmpeg-dev make git autoconf automake opus-dev libuv-dev protoc msttcorefonts-installer \
