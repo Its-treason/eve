@@ -54,7 +54,7 @@ function RoleMenu({ server, initialRoleMenus }: RoleMenuProps) {
       <Text color={'red'}>{channelError}</Text>
       {(roleMenus.length === 0 && !loading) &&
         <EmptyState
-          text={'Looks like you haven\'t have any role menus created yet'}
+          text={'Looks like you haven\'t created any role menus yet'}
           subText={'Create a role menu by clicking the button in the top left corner'}
           action={{
             callback: () => setCreateRoleMenuDialogOpen(true),
