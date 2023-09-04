@@ -12,8 +12,8 @@ RUN echo "@edge-testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /
  && bazel build plugin_files \
  && install -o root -g root -m 0755 bazel-bin/generator/protoc-gen-js -t /tmp
 
-
-FROM node:20.3-alpine AS base
+################################################################################
+FROM node:18.7-alpine AS base
 
 RUN mkdir /app
 WORKDIR /app
@@ -53,7 +53,7 @@ RUN apk add --no-cache --virtual .build-deps pango-dev jpeg-dev build-base cairo
 # && npm i -g protoc-gen-js \
 # Default network timeout is 30 sec, becase building for other arch is kinda slow the timeout hits to early.
 # Setting the timeout to ~16 minutes / disableing it fixes this problem
- && yarn install --network-timeout 100000 \
+ && yarn install --ignore-engines --network-timeout 100000 \
  && npx nx run-many --target=build --configuration=production --all
 
 ENV APP_ENV=production
@@ -66,7 +66,7 @@ COPY --from=build --chown=1000:1000 /app /app
 COPY --from=build /usr/share/fonts/truetype/msttcorefonts/Impact.ttf /usr/share/fonts/Impact.ttf
 COPY --chmod=755 docker/node/entrypoint.sh /app/entrypoint.sh
 
-RUN apk add --no-cache pango jpeg cairo giflib libsodium ffmpeg opus libuv \
+RUN apk add --no-cache pango jpeg cairo giflib libsodium ffmpeg ffmpeg-libs ffmpeg-libs opus libuv \
  && fc-cache -f
 
 USER node

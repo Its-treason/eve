@@ -105,6 +105,7 @@ export default class PlaylistLoadCommand implements SubSlashCommandInterface {
 
   private async fetchMusicResult(playlistItem: PlaylistItem, requestedBy: string): Promise<MusicResult|null> {
     // Getting the Track will sometimes throw an random error, this try catch mess will retry it once
+    // @ts-expect-error
     let track: yasha.api.Youtube.Track | null;
     try {
       track = await yasha.api.Youtube.get(playlistItem.ytId);

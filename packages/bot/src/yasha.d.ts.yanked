@@ -230,7 +230,7 @@ declare module 'yasha' {
     static get(guild): VoiceConnection
 
     static disconnect(guild, options?: Partial<JoinConfig>): boolean|never
-    
+
     public subscribe(player: AudioPlayer|TrackPlayer): PlayerSubscription | undefined
   }
 }

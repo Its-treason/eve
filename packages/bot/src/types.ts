@@ -6,5 +6,5 @@ export interface MusicResult {
   title: string,
   ytId: string,
   requestedBy: string,
-  track: yasha.Track.Track,
+  track: yasha.Track,
 }

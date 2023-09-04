@@ -186,7 +186,7 @@ export class MusicPlayer {
     logger.error('Music player error', { error });
 
     let msg = 'Internal Player Error';
-    if (error instanceof yasha.Source.Error) {
+    if (error instanceof yasha.UnplayableError) {
       msg = error.message;
     }
 
